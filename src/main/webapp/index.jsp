@@ -21,8 +21,7 @@
         </header>
         <nav>
             <ul>
-
-               
+                <li><a href="profile.jsp"> Profile </li>
                 <li><a href="upload.jsp">Upload</a></li>
                     <%
                         
