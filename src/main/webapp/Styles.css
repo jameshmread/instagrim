@@ -14,3 +14,12 @@ nav {
     border: 2px;
     float: right;
 }
+
+#instagrimHeader{
+    text-align: center;
+    font: arial;
+    background-color: #0066ff;
+}
+#navBar{
+    background-color: #0066ff;
+}

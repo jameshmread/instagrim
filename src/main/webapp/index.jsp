@@ -10,22 +10,25 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <% LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn"); %>
         <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
         <header>
-            <h1>InstaGrim ! </h1>
+            <h1 id="instagrimHeader"> InstaGrim ! </h1>
             <h2>Your world in Black and White</h2>
         </header>
         <nav>
-            <ul>
-                <li><a href="profile.jsp"> Profile </li>
-                <li><a href="upload.jsp">Upload</a></li>
+            <ul id="navBar">
+                <li><a href="gallery.jsp"> Browse</a> </li>
+                <% if(lg != null)
+                {%>
+                <li><a href="profile.jsp"> Profile</a> </li>
+                <li><a href="upload.jsp"> Upload</a></li>
+                <%}%>
                     <%
-                        
-                        LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
                         if (lg != null) {
                             String UserName = lg.getUsername();
                             if (lg.getlogedin()) {
