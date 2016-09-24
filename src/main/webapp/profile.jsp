@@ -13,6 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
               <%LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");%>
               <%String username = "NULL"; %>
+              <%ProfileInfo profileInfo = new ProfileInfo();  %>
               
               <title>Profile</title>       
         <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
@@ -28,8 +29,8 @@
                 } }%>
         Welcome <%=username%>
         
-        <img src = "/imageLocationHere.jpg" alt="Profile Picture" style="width:300px;height:300px;"> 
-        
+        <img src <%profileInfo.getProfilePicture(); %> alt="Profile Picture" style="width:300px;height:300px;"> 
+        <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>
         <h2> A Little bit about yourself</h2>
         
                 <footer>
