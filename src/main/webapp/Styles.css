@@ -9,17 +9,58 @@ and open the template in the editor.
 */
 
 
-nav {
-    text-align: left;
-    border: 2px;
-    float: right;
+body{
+    background-color: #FFFFFF;
+}
+
+header{
+    background-color: #72d4fe;
+    /*blend colour from top header colour to nav bar colour
+    colour scheme designer
+    */
+    color: white;
 }
 
 #instagrimHeader{
     text-align: center;
     font: arial;
-    background-color: #0066ff;
+    colour: white;
+    background-color: #72d4fe;
+    font-size: 40pt;
 }
-#navBar{
-    background-color: grey;
+#instagrimSubheader{
+    background-color: #72d4fe;
+    color: #FFFFFF;
+    font-size: 25pt;
+    text-align: center;
+}
+#sideNavBar {
+    background-color: #00b3fd;
+    font-size: 30pt;
+    list-style: none;
+    overflow: auto;
+    text-align: center;
+    border: 2px;
+    float: center;
+    
+}
+
+li {
+   color: white;
+   text-decoration: none;
+   display: inline;
+   padding: 0px 2%;
+}
+
+a:link{
+    text-decoration: none;
+    color: white;
+}
+
+a:visited{
+    color: white;
+}
+
+a:hover{
+    color: #99ffff
 }

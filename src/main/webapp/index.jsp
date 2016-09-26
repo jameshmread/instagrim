@@ -18,10 +18,11 @@
     <body>
         <header>
             <h1 id="instagrimHeader"> InstaGrim ! </h1>
-            <h2>Your world in Black and White</h2>
+            <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
-        <nav>
-            <ul id="navBar">
+        
+        
+            <ul id="sideNavBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <% if(lg != null)
                 {%>
@@ -40,15 +41,17 @@
                                 %>
                  <li><a href="register.jsp">Register</a></li>
                 <li><a href="login.jsp">Login</a></li>
+                <li class="footer"><a href="/Instagrim">Home</a></li>
                 <%
                                         
                             
                     }%>
             </ul>
-        </nav>
+        
+        
         <footer>
             <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                
                 <li>&COPY; Andy C</li>
             </ul>
         </footer>
