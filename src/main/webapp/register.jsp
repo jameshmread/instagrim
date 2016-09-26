@@ -15,7 +15,7 @@
     <body>
         <header>
         <h1>InstaGrim ! </h1>
-        <h2>Your world in Black and White</h2>
+        <h2>On a budget</h2>
         </header>
         <nav>
             <ul>
