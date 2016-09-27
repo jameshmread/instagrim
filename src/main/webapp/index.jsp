@@ -22,12 +22,17 @@
         </header>
         
         
-            <ul id="sideNavBar">
+            <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <% if(lg != null)
                 {%>
                 <li><a href="profile.jsp"> Profile</a> </li>
                 <li><a href="upload.jsp"> Upload</a></li>
+                <li> <form method="POST"  action="LogOut">
+                        <a href=""> Log Out </a>
+                    </form>
+                    
+                </li>
                 <%}%>
                     <%
                         if (lg != null) {

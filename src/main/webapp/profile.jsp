@@ -25,7 +25,7 @@
         <%username = lg.getUsername(); 
         } 
         else {
-            username = "No Username found";
+    %><p>No Username found</p><%
                 } }%>
         Welcome <%=username%>
         
