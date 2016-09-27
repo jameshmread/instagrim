@@ -28,7 +28,7 @@
                 {%>
                 <li><a href="profile.jsp"> Profile</a> </li>
                 <li><a href="upload.jsp"> Upload</a></li>
-                <li> <form method="POST"  action="LogOut">
+                <li> <form method="GET"  action="LogOut">
                         <a href=""> Log Out </a>
                     </form>
                     
