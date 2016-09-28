@@ -17,7 +17,7 @@
     </head>
     <body>
         <header>
-            <h1 id="instagrimHeader"> InstaGrim ! </h1>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
         
@@ -29,14 +29,14 @@
                 <li><a href="profile.jsp"> Profile</a> </li>
                 <li><a href="upload.jsp"> Upload</a></li>
                 <li> <form method="GET"  action="LogOut">
-                        <a href=""> Log Out </a>
+                        <a href="/Instagrim"> Log Out </a>
                     </form>
                     
                 </li>
                 <%}%>
                     <%
                         if (lg != null) {
-                            String UserName = lg.getUsername();
+                           // String UserName = lg.getUsername();
                             if (lg.getlogedin()) {
                     %>
 
@@ -47,10 +47,7 @@
                  <li><a href="register.jsp">Register</a></li>
                 <li><a href="login.jsp">Login</a></li>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
-                <%
-                                        
-                            
-                    }%>
+                <%}%>
             </ul>
         
         

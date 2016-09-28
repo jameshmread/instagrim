@@ -20,6 +20,9 @@
         
     </head>
     <body>
+        
+        
+        
         <% if(lg != null) {
          if (lg.getlogedin()) {%>
         <%username = lg.getUsername(); 

@@ -64,3 +64,13 @@ a:visited{
 a:hover{
     color: #99ffff
 }
+
+footer{
+    background-color: #00b3fd;
+    font-size: 30pt;
+    list-style: none;
+    overflow: auto;
+    text-align: center;
+   
+    float: center;
+}

@@ -17,16 +17,20 @@
     <body>
         <header>
         
-        <h1>InstaGrim ! </h1>
-        <h2>Your world in Black and White</h2>
+        <header>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </h1>
+            <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
-        
-        <nav>
-            <ul>
-                <li class="nav"><a href="/Instagrim/upload.jsp">Upload</a></li>
-                <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
-            </ul>
-        </nav>
+       
+        <ul id="navBar">
+                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="register.jsp">Register</a></li>
+                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
+                <li class="footer"><a href="/Instagrim">Home</a></li>
+                <%-- no profile nor upload --%>
+                <%-- Removed 'your images' as no user will be logged in to view 'their' images on this page--%>
+                <%--Login/logout link removed as this action is not possible on this page--%>        
+        </ul>
  
         <article>
             <h1>Your Pics</h1>
