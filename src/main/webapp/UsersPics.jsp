@@ -13,6 +13,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
+        
+        
     </head>
     <body>
         <header>
@@ -24,13 +26,16 @@
        
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
-                <li><a href="register.jsp">Register</a></li>
-                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
+                <li><a href="profile.jsp"> Profile</a> </li>
+                <li><a href="upload.jsp"> Upload</a></li>
+                <li> <form method="POST"  action="LogOut">
+                        <a href="/Instagrim"> Log Out </a>
+                    </form>
+                    
+                </li>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
-                <%-- no profile nor upload --%>
-                <%-- Removed 'your images' as no user will be logged in to view 'their' images on this page--%>
-                <%--Login/logout link removed as this action is not possible on this page--%>        
-        </ul>
+                
+            </ul>
  
         <article>
             <h1>Your Pics</h1>

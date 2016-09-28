@@ -19,6 +19,22 @@
         <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         
     </head>
+    
+        <header>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </h1>
+            <h2 id="instagrimSubheader"> Your world in Black and White</h2>
+        </header>
+       
+        <ul id="navBar">
+                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li class="footer"><a href="/Instagrim">Home</a></li>
+                                <li> <a  href="profile" method="GET">  Log Out </a>
+                    
+                </li>
+                
+                
+                <%--Login link removed as this action is not possible on this page--%>        
+        </ul>
     <body>
         
         
@@ -35,6 +51,9 @@
         <img src <%profileInfo.getProfilePicture(); %> alt="Profile Picture" style="width:300px;height:300px;"> 
         <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>
         <h2> A Little bit about yourself</h2>
+        
+        <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
+        
         
                 <footer>
             <ul>

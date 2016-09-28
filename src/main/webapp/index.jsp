@@ -7,6 +7,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,9 +29,9 @@
                 {%>
                 <li><a href="profile.jsp"> Profile</a> </li>
                 <li><a href="upload.jsp"> Upload</a></li>
-                <li> <form method="GET"  action="LogOut">
-                        <a href="/Instagrim"> Log Out </a>
-                    </form>
+                <li> 
+                    <a href="/Instagrim"> Log Out <form method="POST"  action="LogOut"></form></a>
+                    
                     
                 </li>
                 <%}%>
