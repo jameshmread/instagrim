@@ -29,11 +29,7 @@
                 {%>
                 <li><a href="profile.jsp"> Profile</a> </li>
                 <li><a href="upload.jsp"> Upload</a></li>
-                <li> 
-                    <a href="/Instagrim"> Log Out <form method="POST"  action="LogOut"></form></a>
-                    
-                    
-                </li>
+                <li> <a  href="profile" method="GET">  Log Out </a></li>   
                 <%}%>
                     <%
                         if (lg != null) {
