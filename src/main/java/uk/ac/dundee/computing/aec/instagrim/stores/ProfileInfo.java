@@ -31,6 +31,7 @@ public class ProfileInfo {
         //server get profile picture
         //return profile picture
         //should return a string as thats what is put in the <img tag>
+        //or use a file stream shich takes from database
         return userProfilePicture;
     }
     public void setProfilePicture(){

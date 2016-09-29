@@ -17,21 +17,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
-
+import uk.ac.dundee.computing.aec.instagrim.stores.*;
+import uk.ac.dundee.computing.aec.instagrim.models.*;
 /**
  *
  * @author James
  */
-@WebServlet(name = "profile", urlPatterns = {"/profile"})
+@WebServlet(name = "profile", urlPatterns = {"/profile" ,"/profile/*"})
 public class profile extends HttpServlet {
 
     Cluster cluster=null;
-
+    HttpSession session;
+    ProfileInfo profileInfo = new ProfileInfo();
     
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -47,25 +49,7 @@ public class profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String logOut = null;
-        logOut = request.getParameter("LogOut");
-        HttpSession session=request.getSession();
-        
-        LoggedIn lg= new LoggedIn();
-        lg.setLogedout();
-        session.invalidate();
-            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-	    rd.forward(request,response);
-            System.out.println("<header> Logged Out </header>");
-        if(logOut !=null)
-        {
-            request.setAttribute(logOut, lg);
-            
-            session.invalidate();
-            //RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-	    rd.forward(request,response);
-            
-    }
+
     }
 
     /**
@@ -80,23 +64,19 @@ public class profile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         /*
-        String logOut = null;
-        logOut = request.getParameter("LogOut");
-        HttpSession session=request.getSession();
+        User user = new User();
+        String usernameRequest = request.getParameter("username");
+        String passwordRequest = request.getParameter("password");
         
-        LoggedIn lg= new LoggedIn();
-        lg.setLogedout();
-        if(logOut !=null)
-        {
-            request.setAttribute(logOut, lg);
-            //cluster.close();
-            session.invalidate();
-            //RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-	    //rd.forward(request,response);
-            
+        boolean userExists = user.IsValidUser(usernameRequest, passwordRequest);
+        
+        session = request.getSession();
+        if(userExists){
+        RequestDispatcher rd = request.getRequestDispatcher("/profile/"+usernameRequest);
         }
+        else
+        response.sendRedirect("/Instagrim/Redirect");
         */
-        
     }
 
     /**

@@ -36,6 +36,26 @@ public class Login extends HttpServlet {
         cluster = CassandraHosts.getCluster();
     }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session;
+        System.out.println("doGet in LOGIN called");
+        String logOut = null;
+        logOut = request.getParameter("profile");
+        session=request.getSession();
+        
+        LoggedIn lg= new LoggedIn();
+        lg.setLogedout();
+        session.invalidate();
+        
+        RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
+        rd.forward(request,response);
+        System.out.println("<header> Logged Out </header>");
+        
+    }
+
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *

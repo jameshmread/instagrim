@@ -28,7 +28,7 @@
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
-                <li> <a  href="profile" method="GET">  Log Out </a></li>                
+                <li> <a  href="Login" method="GET">  Log Out </a></li>                
                 <%--Login link removed as this action is not possible on this page--%>        
         </ul>
     <body>
@@ -45,7 +45,14 @@
         Welcome <%=username%>
         
         <img id="profilePic" src <%profileInfo.getProfilePicture(); %> alt="Profile Picture" style="width:300px;height:300px;"> 
-        
+        <p>            
+            <form method="POST" enctype="multipart/form-data" action="Image">
+                Select Picture <input type="file" name=""><br/>
+
+                <br/>
+                <input type="submit" value="Press"> Set Profile Picture
+            </form>
+        </p>
         <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>
         <h2> A Little bit about yourself</h2>
         
