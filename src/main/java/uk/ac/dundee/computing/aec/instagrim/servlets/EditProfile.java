@@ -5,6 +5,8 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 /**
  *
@@ -22,6 +26,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 @WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
 public class EditProfile extends HttpServlet {
 
+    
+        Cluster cluster =null;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -74,20 +81,35 @@ public class EditProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("EditProfile dopost called");
+           
         HttpSession session = request.getSession();
-        String username = (String)session.getAttribute("username");
-        
             LoggedIn lg= new LoggedIn();
-            lg.setLogedin();
+            User us = new User();
+            //cluster = CassandraHosts.getCluster();
+            //cluster.connect("instagrim");
+            
+        String username = (String)session.getAttribute("username");
+        String bio = (String)session.getAttribute("bio");
+        //new stuff 2 lines
+        LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
+        String oldUsername = loggedIn.getUsername();
+        
+        System.out.println("Origional Username: " + oldUsername);
+            
             lg.setUsername(username);
-            request.setAttribute("LoggedIn", lg);
+            lg.setBio(bio);
             
             session.setAttribute("LoggedIn", lg);
+            session.setAttribute("LoggedIn", lg);
+            System.out.println("Modified username: " + lg.getUsername());
+       // System.out.println("Changed username" + us.getUser();
+            
+            
             System.out.println("Session in servlet "+session);
             RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
 	    rd.forward(request,response);
             //muck about with cassandra
+        
     }
 
     /**
