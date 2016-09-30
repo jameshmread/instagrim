@@ -44,7 +44,7 @@
                 } }%>
         Welcome <%=username%>
         
-        <img id="profilePic" src <%profileInfo.getProfilePicture(); %> alt="Profile Picture" style="width:300px;height:300px;"> 
+        <img id="profilePic" src="profile" method="GET" alt="Profile Picture" style="width:300px;height:300px;">
         <p>            
             <form method="POST" enctype="multipart/form-data" action="Image">
                 Select Picture <input type="file" name=""><br/>
@@ -54,7 +54,8 @@
             </form>
         </p>
         <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>
-        <h2> A Little bit about yourself</h2>
+        <h2 id="bio"> A Little bit about yourself</h2>
+        <h2 id="bioEdit"><a href="editProfile.jsp"> Edit Profile</h2>
         
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
         

@@ -40,7 +40,7 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session;
-        System.out.println("doGet in LOGIN called");
+        
         String logOut = null;
         logOut = request.getParameter("profile");
         session=request.getSession();
@@ -70,7 +70,7 @@ public class Login extends HttpServlet {
         
         String username=request.getParameter("username");
         String password=request.getParameter("password");
-        
+        System.out.println("Login doPost");
         User us=new User();
         us.setCluster(cluster);
         boolean isValid=us.IsValidUser(username, password);

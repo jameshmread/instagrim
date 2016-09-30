@@ -49,7 +49,10 @@ public class profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+                System.out.println("Returned profile pic");
+               
+                
+                
         
     }
 
@@ -80,6 +83,11 @@ public class profile extends HttpServlet {
         response.sendRedirect("/Instagrim/Redirect");
         */
     }
+    
+    public void getProfilePic(){
+        System.out.println("Returned profile pic");
+    }
+        
 
     /**
      * Returns a short description of the servlet.
