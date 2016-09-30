@@ -29,6 +29,7 @@ public class profile extends HttpServlet {
     Cluster cluster=null;
     HttpSession session;
     ProfileInfo profileInfo = new ProfileInfo();
+
     
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
@@ -49,9 +50,27 @@ public class profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                System.out.println("Returned profile pic");
+                //System.out.println("Returned profile pic");
                
-                
+                       
+        User user = new User();
+        //String usernameRequest = request.getParameter("username");
+        //String passwordRequest = request.getParameter("password");
+        session = request.getSession();
+        LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
+        String username = loggedIn.getUsername();
+        
+        System.out.println(username);
+        if(loggedIn.getlogedin()){
+            System.out.println("user should be logged in");
+        RequestDispatcher rd = request.getRequestDispatcher("profile.jsp");        
+        rd.forward(request, response);
+        
+        }
+        else
+        //response.sendRedirect("/Instagrim/Redirect");
+            System.out.println("user clearly not logged in");
+        
                 
         
     }

@@ -26,8 +26,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 @WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
 public class EditProfile extends HttpServlet {
 
-    
         Cluster cluster =null;
+        
+
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -83,26 +84,29 @@ public class EditProfile extends HttpServlet {
             throws ServletException, IOException {
            
         HttpSession session = request.getSession();
-            LoggedIn lg= new LoggedIn();
+           
             User us = new User();
             //cluster = CassandraHosts.getCluster();
             //cluster.connect("instagrim");
             
-        String username = (String)session.getAttribute("username");
-        String bio = (String)session.getAttribute("bio");
-        //new stuff 2 lines
-        LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
-        String oldUsername = loggedIn.getUsername();
+        String username = (String)request.getParameter("username");
+        String bio = (String)request.getParameter("bio");
         
-        System.out.println("Origional Username: " + oldUsername);
+        LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
+        
+        String oldUsername = loggedIn.getUsername();
+        String oldBio = loggedIn.getBio();
+        
+            System.out.println("Origional Username: " + oldUsername);
+            System.out.println("Origional Bio: " + oldBio);
             
-            lg.setUsername(username);
-            lg.setBio(bio);
+            //actual commands that change the store
+            loggedIn.setUsername(username);
+            loggedIn.setBio(bio);
             
-            session.setAttribute("LoggedIn", lg);
-            session.setAttribute("LoggedIn", lg);
-            System.out.println("Modified username: " + lg.getUsername());
-       // System.out.println("Changed username" + us.getUser();
+            System.out.println("Modified username: " + loggedIn.getUsername());
+            System.out.println("Modified bio: " + loggedIn.getBio());
+
             
             
             System.out.println("Session in servlet "+session);
