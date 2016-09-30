@@ -50,6 +50,7 @@ public class profile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        
     }
 
     /**
@@ -64,6 +65,7 @@ public class profile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         /*
+        //POSSIBLY MOVE TO DOGET METHOD
         User user = new User();
         String usernameRequest = request.getParameter("username");
         String passwordRequest = request.getParameter("password");

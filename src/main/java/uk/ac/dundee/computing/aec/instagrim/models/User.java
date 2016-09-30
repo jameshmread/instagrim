@@ -15,7 +15,9 @@ import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.aec.instagrim.stores.*;
+import javax.servlet.http.HttpSession;
+
 
 /**
  *
@@ -23,11 +25,14 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
  */
 public class User {
     Cluster cluster;
+    String username = null;
+    
     public User(){
         
     }
     
     public boolean RegisterUser(String username, String Password){
+        this.username = username;
         AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
         String EncodedPassword=null;
         try {
@@ -79,6 +84,22 @@ public class User {
     
     return false;  
     }
+    
+    //create find/return user method here which is called by profile.java
+    //this method returns the username of the user
+    public String getUser(Session session)
+    {       
+        //NEEDS TO BE CHANGED/LOOKED AT
+        
+        session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT FROM userprofiles WHERE login="+ username);
+       
+        BoundStatement boundStatement = new BoundStatement(ps);
+        session.execute(boundStatement.bind());
+        
+        return username;
+    }
+    
        public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }

@@ -39,7 +39,7 @@
                    
                 </ul>
                 <br/>
-                <input type="submit" value="Login"> 
+                <input type="submit" value="Login">
             </form>
 
         </article>
