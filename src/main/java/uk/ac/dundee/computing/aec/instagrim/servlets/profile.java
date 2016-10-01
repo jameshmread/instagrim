@@ -124,7 +124,8 @@ public class profile extends HttpServlet {
     
     public void getUserPictures(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-         System.out.print("Attempting to get user pictures");
+         System.out.println("Attempting to get user pictures");
+         response.setContentType("text/html");
          PrintWriter pw = response.getWriter();
          
             java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics"); //Pics
@@ -140,11 +141,11 @@ public class profile extends HttpServlet {
                 Pic p = (Pic) iterator.next();
                 //pw.println("<img id='userPic' src='" + iterator.next() + "' alt='userImage' style='width:100px;height:100px'>");
                 System.out.print("Iterating");
-                pw.println("<a href='/Instagrim/Image/" + p.getSUUID());
-                pw.println("<img id='userPic' src='/Instagrim/Thumb/" + p.getSUUID() + "' alt'userImage' </a><br/>");
+                pw.println("<a href='/Instagrim/Image/" + p.getSUUID() + "<img id='userPic' src='/Instagrim/Thumb/" + p.getSUUID() + "' alt'userImage' </a><br/>");
 
             }
             }
+            
         
     }
         
