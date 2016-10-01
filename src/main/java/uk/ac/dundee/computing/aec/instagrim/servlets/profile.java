@@ -61,7 +61,7 @@ public class profile extends HttpServlet {
         
                getProfilePic(request, response);
                DisplayImageList(username, request, response);
-               getUserPictures(request, response);
+               //getUserPictures(request, response);
         
         System.out.println(username);
         if(loggedIn.getlogedin()){
@@ -116,7 +116,7 @@ public class profile extends HttpServlet {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // /UsersPics.jsp
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // do i need this?
         request.setAttribute("Pics", lsPics);
         rd.forward(request, response);
 
@@ -141,11 +141,14 @@ public class profile extends HttpServlet {
                 Pic p = (Pic) iterator.next();
                 //pw.println("<img id='userPic' src='" + iterator.next() + "' alt='userImage' style='width:100px;height:100px'>");
                 System.out.print("Iterating");
-                pw.println("<a href='/Instagrim/Image/" + p.getSUUID() + "<img id='userPic' src='/Instagrim/Thumb/" + p.getSUUID() + "' alt'userImage' </a><br/>");
+                pw.println("<p><a href='/Instagrim/Image/" + p.getSUUID() + "<img id='userPic' src='/Instagrim/Thumb/" + p.getSUUID() + "' alt'userImage' </a></p><br/>");
 
             }
             }
-            
+            pw.flush();
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // /UsersPics.jsp
+        request.setAttribute("Pics", lsPics);
+        rd.forward(request, response);  
         
     }
         
