@@ -59,8 +59,25 @@
         <h2 id="bioEdit"><a href="editProfile.jsp"> Edit Profile</h2>
         
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
-        <%--<img id="userPic" src="profile" method="getUserPictures" alt="userImage" style="width:100px;height:100px">--%>
-        <%--<img href="/Instagrim/Images/<%=lg.getUsername()%>" method="GET">Your Images</a></li>--%>
+        <%
+            java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
+            if (lsPics == null) {
+        %>
+        <p>No Pictures found</p>
+        <%
+        } else {
+            Iterator<Pic> iterator;
+            iterator = lsPics.iterator();
+            while (iterator.hasNext()) {
+                Pic p = (Pic) iterator.next();
+
+        %>
+        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
+            
+            }
+            }
+       %>
+        <%-- if there is a way to forward the SUIDD to page, then i may be able to take the java out --%>
                 <footer>
             <ul>
                 <li class="footer"><a href="/Instagrim">Home</a></li>

@@ -12,9 +12,9 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  */
 public class LoggedIn {
     private boolean logedin=false;
-    private String Username=null;
-    private String bio=null;
-    private String userProfilePicture=null;
+    private String Username, userProfilePicture, first_name, last_name, email = null;
+    private String bio= "Say something about yourself";
+    
     
     public void LogedIn(){
         
@@ -35,6 +35,26 @@ public class LoggedIn {
         return bio;
     }
     
+    public void setFirst_name(String first_name){
+        this.first_name = first_name;
+    }
+    public String getFirst_name(){
+        return first_name;
+    }
+    
+        public void setLast_name(String last_name){
+        this.last_name = last_name;
+    }
+    public String getLast_name(){
+        return last_name;
+    }
+    
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public String getEmail(){
+        return email;
+    }
         public String getProfilePicture(){
         //server get profile picture
         //return profile picture
