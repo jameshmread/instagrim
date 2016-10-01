@@ -44,6 +44,7 @@
                 } }%>
         Welcome <%=username%>
         
+        
         <img id="profilePic" src="profile" method="GET" alt="Profile Picture" style="width:300px;height:300px;">
         <p>            
             <form method="POST" enctype="multipart/form-data" action="Image">
@@ -58,8 +59,8 @@
         <h2 id="bioEdit"><a href="editProfile.jsp"> Edit Profile</h2>
         
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
-        
-        
+        <%--<img id="userPic" src="profile" method="getUserPictures" alt="userImage" style="width:100px;height:100px">--%>
+        <%--<img href="/Instagrim/Images/<%=lg.getUsername()%>" method="GET">Your Images</a></li>--%>
                 <footer>
             <ul>
                 <li class="footer"><a href="/Instagrim">Home</a></li>

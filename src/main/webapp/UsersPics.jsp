@@ -28,14 +28,10 @@
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <li><a href="profile.jsp"> Profile</a> </li>
                 <li><a href="upload.jsp"> Upload</a></li>
-                <li> <form method="POST"  action="LogOut">
-                        <a href="/Instagrim"> Log Out </a>
-                    </form>
-                    
-                </li>
+                <li> <a href="/Instagrim" method="GET"  action="Login"> Log Out </a> </li>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
                 
-            </ul>
+        </ul>
  
         <article>
             <h1>Your Pics</h1>
@@ -56,7 +52,7 @@
 
             }
             }
-        %>
+       %>
         </article>
         <footer>
             <ul>

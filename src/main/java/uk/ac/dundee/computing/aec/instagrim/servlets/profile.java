@@ -8,6 +8,7 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -50,15 +51,17 @@ public class profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                //System.out.println("Returned profile pic");
-               
-                       
-        User user = new User();
+                //System.out.println("Returned profile pic");                       
+        //User user = new User();
         //String usernameRequest = request.getParameter("username");
         //String passwordRequest = request.getParameter("password");
         session = request.getSession();
         LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
         String username = loggedIn.getUsername();
+        
+               getProfilePic(request, response);
+               DisplayImageList(username, request, response);
+               getUserPictures(request, response);
         
         System.out.println(username);
         if(loggedIn.getlogedin()){
@@ -68,7 +71,7 @@ public class profile extends HttpServlet {
         
         }
         else
-        //response.sendRedirect("/Instagrim/Redirect");
+        response.sendRedirect("/Instagrim");
             System.out.println("user clearly not logged in");
         
                 
@@ -103,8 +106,46 @@ public class profile extends HttpServlet {
         */
     }
     
-    public void getProfilePic(){
+    public void getProfilePic(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
         System.out.println("Returned profile pic");
+        
+    }
+        //taken from Image.java servlet
+        private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PicModel tm = new PicModel();
+        tm.setCluster(cluster);
+        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // /UsersPics.jsp
+        request.setAttribute("Pics", lsPics);
+        rd.forward(request, response);
+
+    }
+    
+    public void getUserPictures(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+         System.out.print("Attempting to get user pictures");
+         PrintWriter pw = response.getWriter();
+         
+            java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics"); //Pics
+            if (lsPics == null) {
+        
+        System.out.println("request for pics:" + lsPics);
+        
+        } else {
+            Iterator<Pic> iterator;
+            iterator = lsPics.iterator();
+            while (iterator.hasNext()) {
+                
+                Pic p = (Pic) iterator.next();
+                //pw.println("<img id='userPic' src='" + iterator.next() + "' alt='userImage' style='width:100px;height:100px'>");
+                System.out.print("Iterating");
+                pw.println("<a href='/Instagrim/Image/" + p.getSUUID());
+                pw.println("<img id='userPic' src='/Instagrim/Thumb/" + p.getSUUID() + "' alt'userImage' </a><br/>");
+
+            }
+            }
+        
     }
         
 
