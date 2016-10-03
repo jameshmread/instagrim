@@ -7,35 +7,59 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
 
 /**
  *
- * @author James Read
+ * @author James
  */
 public class ProfileInfo {
-    private String username=null;
-    private String userBio=null;
-    private String userProfilePicture=null;
-    public ProfileInfo(){
-}
-    public String getUsername(){
-        return this.username;
+    
+    private String userProfilePicture = "NULL";
+    private String first_name = "NULL";
+    private String last_name = "NULL";
+    private String email = "NULL";
+    private String bio = "Say something about yourself";
+    
+    public void ProfileInfo(){
+        
     }
-    public void setUsername(String newUsername){
-        this.username=newUsername;
+    
+    public void setBio(String bio)
+    {
+        this.bio = bio;
     }
-    public String getUserBio(){
-        return this.userBio;
+    public String getBio()
+    {
+        return this.bio;
     }
-    public void setUserBio(String newUserBio){
-        this.userBio=newUserBio;
+    
+    public void setFirst_name(String first_name){
+        System.out.println("First name set");
+        this.first_name = first_name;
     }
-    public String getProfilePicture(){
+    public String getFirst_name(){
+        return this.first_name;
+    }
+    
+        public void setLast_name(String last_name){
+        this.last_name = last_name;
+    }
+    public String getLast_name(){
+        return this.last_name;
+    }
+    
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public String getEmail(){
+        return this.email;
+    }
+        public String getProfilePicture(){
         //server get profile picture
         //return profile picture
         //should return a string as thats what is put in the <img tag>
         //or use a file stream shich takes from database
-        return userProfilePicture;
+        return this.userProfilePicture;
     }
     public void setProfilePicture(){
         //upload picture stored and then set
         //choose existing picture from server and set
     }
-}  
+}
