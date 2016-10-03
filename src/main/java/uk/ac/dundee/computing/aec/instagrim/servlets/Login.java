@@ -84,6 +84,9 @@ public class Login extends HttpServlet {
             
             session.setAttribute("LoggedIn", lg);
             System.out.println("Session in servlet "+session);
+            
+            //need to call model server.getifo then set the store to those return values
+            
             RequestDispatcher rd=request.getRequestDispatcher("index.jsp"); //index.jsp
 	    rd.forward(request,response);
             

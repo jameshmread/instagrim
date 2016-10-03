@@ -25,13 +25,17 @@ import javax.servlet.http.HttpSession;
  */
 public class User {
     Cluster cluster;
+    HttpSession session;
+    ProfileInfo profile = new ProfileInfo();
+    
     String username = null;
     
     public User(){
         
     }
     
-    public boolean RegisterUser(String username, String Password){
+    public boolean RegisterUser(String username, String Password, String first_name, String last_name, String email){
+        
         this.username = username;
         AeSimpleSHA1 sha1handler=  new AeSimpleSHA1();
         String EncodedPassword=null;
@@ -42,14 +46,14 @@ public class User {
             return false;
         }
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
+        PreparedStatement ps = session.prepare("insert into userprofiles (login,password,first_name,last_name,email) Values(?,?,?,?,?)");
        
         BoundStatement boundStatement = new BoundStatement(ps);
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        username,EncodedPassword));
+                        username,EncodedPassword,first_name,last_name,email));
         //We are assuming this always works.  Also a transaction would be good here !
-        
+        setUserInfo(first_name, last_name, email);
         return true;
     }
     
@@ -85,19 +89,16 @@ public class User {
     return false;  
     }
     
-    //create find/return user method here which is called by profile.java
-    //this method returns the username of the user
-    public String getUser(Session session)
-    {       
-        //NEEDS TO BE CHANGED/LOOKED AT
+    
+    public void setUserInfo(String first_name, String last_name, String email){
+        System.out.println(first_name);
+        System.out.println(last_name);
+        System.out.println(email);
+        profile.setFirst_name(first_name);
+        profile.setLast_name(last_name);
+        profile.setEmail(email);
         
-        session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT FROM userprofiles WHERE login="+ username);
-       
-        BoundStatement boundStatement = new BoundStatement(ps);
-        session.execute(boundStatement.bind());
         
-        return username;
     }
     
        public void setCluster(Cluster cluster) {

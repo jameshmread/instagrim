@@ -36,7 +36,7 @@
                     <li id="register">Confirm Password <input type="password" name="confirmPassword"></li></br>
                     
                     <div id="error" name="error"> <% if((String)request.getAttribute("error") != null) {%> Passwords do not match <%} else {} %></div>
-                    
+                    <%-- IF time store the users info apart from mismatched passwords (convenience) --%>
                     <li id="register">First Name <input type="text" name="first_name"></li>
                     <li id="register">Last Name <input type="text" name="last_name"></li>
                     <li id="register">Email <input type="text" name="email"></li>

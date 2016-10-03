@@ -26,6 +26,8 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
 @WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
     Cluster cluster=null;
+    User us;
+    
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
@@ -53,13 +55,16 @@ public class Register extends HttpServlet {
         String last_name=request.getParameter("last_name");
         String email=request.getParameter("email");
         
-        if(password.equals(confirmPassword))
+        if(password.equals(confirmPassword)) 
+        //SHOULD I HAVE THIS HERE OR IN MODEL SINCE SUCH SMALL AMOUNT OF CODE
         {
-        User us=new User();
-        us.setCluster(cluster);
-        us.RegisterUser(username, password);
+        us=new User();
         
-	response.sendRedirect("/Instagrim");
+        us.setCluster(cluster);
+        us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
+        //us.setUserInfo(first_name, last_name, email); //sets store with user information
+        
+	response.sendRedirect("/Instagrim"); //maybe send to profile?
         }
         else {
             request.setAttribute("error","passwordError");

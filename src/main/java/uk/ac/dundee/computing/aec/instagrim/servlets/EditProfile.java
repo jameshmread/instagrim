@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.aec.instagrim.stores.ProfileInfo;
 /**
  *
  * @author James
@@ -92,20 +92,20 @@ public class EditProfile extends HttpServlet {
         String username = (String)request.getParameter("username");
         String bio = (String)request.getParameter("bio");
         
-        LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
+        ProfileInfo profile = (ProfileInfo)session.getAttribute("Profile");
         
-        String oldUsername = loggedIn.getUsername();
-        String oldBio = loggedIn.getBio();
+        //String oldUsername = profile.getUsername();
+        String oldBio = profile.getBio();
         
-            System.out.println("Origional Username: " + oldUsername);
+            //System.out.println("Origional Username: " + oldUsername);
             System.out.println("Origional Bio: " + oldBio);
             
             //actual commands that change the store
-            loggedIn.setUsername(username);
-            loggedIn.setBio(bio);
-            
-            System.out.println("Modified username: " + loggedIn.getUsername());
-            System.out.println("Modified bio: " + loggedIn.getBio());
+            //loggedIn.setUsername(username); might leave change username out all together
+            profile.setBio(bio); 
+            //then cassandra ##############
+            ////System.out.println("Modified username: " + loggedIn.getUsername());
+            //System.out.println("Modified bio: " + loggedIn.getBio());
 
             
             
