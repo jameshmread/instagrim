@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  *
@@ -70,21 +70,34 @@ public class Login extends HttpServlet {
         
         String username=request.getParameter("username");
         String password=request.getParameter("password");
-        System.out.println("Login doPost");
+        System.out.println("Login Using post method on Login.java Servlet");
+        
         User us=new User();
         us.setCluster(cluster);
+        
         boolean isValid=us.IsValidUser(username, password);
         HttpSession session=request.getSession();
+        
         System.out.println("Session in servlet "+session);
+        
+        
         if (isValid){
+            us.getUserInfo(username);
             LoggedIn lg= new LoggedIn();
             lg.setLogedin();
             lg.setUsername(username);
-            request.setAttribute("LoggedIn", lg);
-            
+            request.setAttribute("LoggedIn", lg);  
             session.setAttribute("LoggedIn", lg);
             System.out.println("Session in servlet "+session);
             
+            ProfileInfo profileInfo = new ProfileInfo();
+            profileInfo.setFirst_name(us.getUserInfo(username)[0]);
+            profileInfo.setLast_name(us.getUserInfo(username)[1]);
+            profileInfo.setEmail(us.getUserInfo(username)[2]);
+            //THIS STUFF USES THE MODEL AND RETURNS USER INFO FROM DATABASE WHEN SEARCHING USING USERNAME
+            
+            //request.setAttribute("ProfileInfo", profileInfo);
+            session.setAttribute("ProfileInfo", profileInfo);
             //need to call model server.getifo then set the store to those return values
             
             RequestDispatcher rd=request.getRequestDispatcher("index.jsp"); //index.jsp

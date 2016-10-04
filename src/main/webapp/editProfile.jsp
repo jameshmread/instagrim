@@ -21,7 +21,14 @@
         <br>
         <h2>Edit Bio</h2>
         <input type="text" name="bio">
-        <br>
+        <br>   
+            <form method="POST" enctype="multipart/form-data" action="Image">
+                Select Picture <input type="file" name=""><br/>
+
+                <br/>
+                
+            </form>
+        
         <input type="submit" value="Apply Changes">
         </form>
     </body>

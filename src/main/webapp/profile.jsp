@@ -11,10 +11,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
               <%LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");%>
               <%ProfileInfo profile = (ProfileInfo) session.getAttribute("ProfileInfo");%>
               <%String username = "NULL"; %>
-              
+              <%String firstName, lastName, email = "NULL"; %>
               <title>Profile</title>       
         <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         
@@ -27,13 +28,19 @@
        
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                <li><a href="/Instagrim">Home</a></li>
                 <li> <a  href="Login" method="GET">  Log Out </a></li>
+                <li><a href="editProfile.jsp"> Edit Profile </a></li>
+                
                 <% if(profile != null) { %>
-                <li><%=profile.getFirst_name() %></li>
-                <li><%=profile.getLast_name() %></li>
-                <li><%=profile.getEmail() %></li>
+                <% firstName = profile.getFirst_name(); %>
+                <% lastName = profile.getLast_name(); %>
+                <% email = profile.getEmail(); %>
+                <p><%=firstName%></p>
+                <p><%=lastName%></p>
+                <p><%=email%></p>
                 <%}%> 
+                
                 <%--Login link removed as this action is not possible on this page--%>        
         </ul>
     <body>
@@ -47,21 +54,15 @@
         else {
     %><p>No Username found</p><%
                 } }%>
-        Welcome <%=username%>
+                Welcome <%=username%> <br>
         
-        
+        <p id="bioEdit"> <%=profile.getBio()%></p>
         <img id="profilePic" src="profile" method="GET" alt="Profile Picture" style="width:300px;height:300px;">
-        <p>            
-            <form method="POST" enctype="multipart/form-data" action="Image">
-                Select Picture <input type="file" name=""><br/>
-
-                <br/>
-                <input type="submit" value="Press"> Set Profile Picture
-            </form>
-        </p>
+        
+        
         <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>
-        <h2 id="bio"> <%--=profile.getBio()--%></h2>
-        <h2 id="bioEdit"><a href="editProfile.jsp"> Edit Profile</h2>
+        
+        
         
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
         <%

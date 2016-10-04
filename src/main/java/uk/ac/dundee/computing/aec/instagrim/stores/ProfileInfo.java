@@ -10,14 +10,13 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  * @author James
  */
 public class ProfileInfo {
-    
-    private String userProfilePicture = "NULL";
+     private String userProfilePicture = "NULL";
     private String first_name = "NULL";
     private String last_name = "NULL";
     private String email = "NULL";
     private String bio = "Say something about yourself";
     
-    public void ProfileInfo(){
+    public void ProfileInfo() {
         
     }
     

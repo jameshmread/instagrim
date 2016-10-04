@@ -65,6 +65,7 @@ a:link{
     color: white;
 }
 
+
 a:visited{
     color: white;
 }
@@ -85,9 +86,11 @@ footer{
     float: center;
 }
 
-#bioEdit{
+#bioEdit {
     color:gray;
+    text-align: right;
 }
+
 
 #userPic{
     background-color: black;

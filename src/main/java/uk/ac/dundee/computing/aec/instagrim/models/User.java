@@ -14,6 +14,8 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Vector;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
 import javax.servlet.http.HttpSession;
@@ -77,6 +79,7 @@ public class User {
             System.out.println("No Images returned");
             return false;
         } else {
+            
             for (Row row : rs) {
                
                 String StoredPass = row.getString("password");
@@ -99,6 +102,34 @@ public class User {
         profile.setEmail(email);
         
         
+    }
+    
+    //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL AND STUFF
+    public String[] getUserInfo(String username){
+        //this.username = username;
+                 
+          String[] userInformation = new String[3];
+          
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT first_name, last_name, email FROM userprofiles WHERE login =?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        
+        if (rs.isExhausted()) {
+            System.out.println("No user information retrieved from database");
+            
+        } else {
+            for(Row row: rs){
+             userInformation[0] = row.getString(0);
+             userInformation[1] = row.getString(1);
+             userInformation[2] = row.getString(2);
+             System.out.println(userInformation[0]+ userInformation[1] + userInformation[2]);
+                }
+        }
+        return userInformation;
     }
     
        public void setCluster(Cluster cluster) {

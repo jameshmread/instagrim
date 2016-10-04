@@ -29,7 +29,7 @@
                 {%>
                 <li><a href="profile" method="GET" >Profile</a> </li> <%--calls java servlet --%>
                 <li><a href="upload.jsp"> Upload</a></li>
-                <li> <a  href="profile" method="GET">  Log Out </a></li>   
+                <li> <a  href="Login" method="GET">  Log Out </a></li>   
                 <%}%>
                     <%
                         if (lg != null) {
