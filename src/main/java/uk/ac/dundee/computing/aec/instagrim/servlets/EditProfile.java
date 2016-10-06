@@ -29,32 +29,7 @@ public class EditProfile extends HttpServlet {
         Cluster cluster =null;
         
 
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditProfile</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditProfile at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+  
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -68,7 +43,7 @@ public class EditProfile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**
@@ -86,33 +61,32 @@ public class EditProfile extends HttpServlet {
         HttpSession session = request.getSession();
            
             User us = new User();
+            
             //cluster = CassandraHosts.getCluster();
             //cluster.connect("instagrim");
             
-        String username = (String)request.getParameter("username");
+        String firstName = (String)request.getParameter("firstName");
+        String lastName = (String)request.getParameter("lastName");
         String bio = (String)request.getParameter("bio");
+        String email = (String)request.getParameter("email");
         
-        ProfileInfo profile = (ProfileInfo)session.getAttribute("Profile");
+        ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
         
         //String oldUsername = profile.getUsername();
-        String oldBio = profile.getBio();
+        //String oldBio = profile.getBio();
         
-            //System.out.println("Origional Username: " + oldUsername);
-            System.out.println("Origional Bio: " + oldBio);
-            
-            //actual commands that change the store
+            //changing the store for the session 
+            us.setProfileStoreInfo(firstName, lastName, email, bio);
+            us.setProfileDatabaseInfo(firstName, lastName, email, bio);
             //loggedIn.setUsername(username); might leave change username out all together
-            profile.setBio(bio); 
-            //then cassandra ##############
-            ////System.out.println("Modified username: " + loggedIn.getUsername());
-            //System.out.println("Modified bio: " + loggedIn.getBio());
-
+            //profile.setProfilePicture(); ####
+            //Update database ###
             
+            session.setAttribute("ProfileInfo", profile);
             
             System.out.println("Session in servlet "+session);
             RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
 	    rd.forward(request,response);
-            //muck about with cassandra
         
     }
 
