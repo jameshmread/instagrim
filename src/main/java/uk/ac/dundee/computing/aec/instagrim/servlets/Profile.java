@@ -51,6 +51,8 @@ public class Profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
                 //System.out.println("Returned Profile pic");                       
         //User user = new User();
         //String usernameRequest = request.getParameter("username");
@@ -63,7 +65,7 @@ public class Profile extends HttpServlet {
         String username = loggedIn.getUsername();
         
                getProfilePic(request, response);
-               DisplayImageList(username, request, response);
+               //image.DisplayImageList(username, request, response);
                //getUserPictures(request, response);
                            
             
@@ -94,21 +96,7 @@ public class Profile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        //POSSIBLY MOVE TO DOGET METHOD
-        User user = new User();
-        String usernameRequest = request.getParameter("username");
-        String passwordRequest = request.getParameter("password");
-        
-        boolean userExists = user.IsValidUser(usernameRequest, passwordRequest);
-        
-        session = request.getSession();
-        if(userExists){
-        RequestDispatcher rd = request.getRequestDispatcher("/profile/"+usernameRequest);
-        }
-        else
-        response.sendRedirect("/Instagrim/Redirect");
-        */
+ 
     }
     
     public void getProfilePic(HttpServletRequest request, HttpServletResponse response)
@@ -117,16 +105,8 @@ public class Profile extends HttpServlet {
         
     }
         //taken from Image.java servlet
-    
-        private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PicModel tm = new PicModel();
-        tm.setCluster(cluster);
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // do i need this?
-        request.setAttribute("Pics", lsPics);
-        rd.forward(request, response);
-
-    }
+        //need call to image.java
+   
     
     public void getUserPictures(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
