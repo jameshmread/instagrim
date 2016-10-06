@@ -82,7 +82,6 @@ public class Login extends HttpServlet {
         
         
         if (isValid){
-            us.getUserInfo(username);
             LoggedIn lg= new LoggedIn();
             lg.setLogedin();
             lg.setUsername(username);
@@ -91,9 +90,7 @@ public class Login extends HttpServlet {
             System.out.println("Session in servlet "+session);
             
             ProfileInfo profileInfo = new ProfileInfo();
-            profileInfo.setFirst_name(us.getUserInfo(username)[0]);
-            profileInfo.setLast_name(us.getUserInfo(username)[1]);
-            profileInfo.setEmail(us.getUserInfo(username)[2]);
+            profileInfo = us.getUserInfo(username, profileInfo);
             //THIS STUFF USES THE MODEL AND RETURNS USER INFO FROM DATABASE WHEN SEARCHING USING USERNAME
             
             //request.setAttribute("ProfileInfo", profileInfo);
