@@ -105,11 +105,9 @@ public class User {
     }
     
     //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL AND STUFF
-    public String[] getUserInfo(String username){
-        //this.username = username;
-                 
-          String[] userInformation = new String[3];
-          
+    public ProfileInfo getUserInfo(String username, ProfileInfo profileInfo){
+        this.profile = profileInfo;
+        
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT first_name, last_name, email FROM userprofiles WHERE login =?");
         ResultSet rs = null;
@@ -123,13 +121,15 @@ public class User {
             
         } else {
             for(Row row: rs){
-             userInformation[0] = row.getString(0);
-             userInformation[1] = row.getString(1);
-             userInformation[2] = row.getString(2);
-             System.out.println(userInformation[0]+ userInformation[1] + userInformation[2]);
+                
+            profileInfo.setFirst_name(row.getString(0));
+            profileInfo.setLast_name(row.getString(1));
+            profileInfo.setEmail(row.getString(2));
+             System.out.println("Profile Info set in user method" + 
+                     profileInfo.getFirst_name() + profileInfo.getLast_name() + profileInfo.getEmail());
                 }
         }
-        return userInformation;
+        return profileInfo;
     }
     
        public void setCluster(Cluster cluster) {
