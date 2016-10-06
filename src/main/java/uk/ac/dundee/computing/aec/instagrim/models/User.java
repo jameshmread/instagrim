@@ -55,7 +55,7 @@ public class User {
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username,EncodedPassword,first_name,last_name,email));
         //We are assuming this always works.  Also a transaction would be good here !
-        setUserInfo(first_name, last_name, email);
+        this.setProfileDatabaseInfo(first_name, last_name, email, "Place holder bio");
         return true;
     }
     
@@ -93,15 +93,26 @@ public class User {
     }
     
     
-    public void setUserInfo(String first_name, String last_name, String email){
+    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio){
         System.out.println(first_name);
         System.out.println(last_name);
         System.out.println(email);
         profile.setFirst_name(first_name);
         profile.setLast_name(last_name);
-        profile.setEmail(email);
-        
-        
+        profile.setEmail(email); 
+        profile.setBio(bio);
+    }
+    
+    public void setProfileDatabaseInfo(String first_name, String last_name, String email, String bio){
+        //remember to look at keyspaces for editing of bio######
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("UPDATE userprofiles (first_name,last_name,email) Values(?,?,?)");
+       
+        BoundStatement boundStatement = new BoundStatement(ps);
+        session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        first_name,last_name,email));
+        //We are assuming this always works.  Also a transaction would be good here !
     }
     
     //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL AND STUFF
