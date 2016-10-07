@@ -71,6 +71,7 @@ public class EditProfile extends HttpServlet {
         String lastName = (String)request.getParameter("lastName");
         String bio = (String)request.getParameter("bio");
         String email = (String)request.getParameter("email");
+        //request.getParts(); should probably change the above to this as it would be more maintainable
         
         ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
         lg = (LoggedIn)session.getAttribute("LoggedIn");

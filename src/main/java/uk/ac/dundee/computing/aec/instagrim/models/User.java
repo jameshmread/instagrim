@@ -112,12 +112,12 @@ public class User {
         //remember to look at keyspaces for editing of bio######
         cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("UPDATE userprofiles SET first_name =?, last_name =?, email =? WHERE login=?");
+        PreparedStatement ps = session.prepare("UPDATE userprofiles SET first_name =?, last_name =?, email =?, bio =? WHERE login=?");
        
         BoundStatement boundStatement = new BoundStatement(ps);
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        first_name,last_name,email,username));
+                        first_name,last_name,email,bio,username));
         //We are assuming this always works.  Also a transaction would be good here !
         
 
@@ -128,7 +128,7 @@ public class User {
         this.profile = profileInfo;
         
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT first_name, last_name, email FROM userprofiles WHERE login =?");
+        PreparedStatement ps = session.prepare("SELECT first_name, last_name, email, bio FROM userprofiles WHERE login =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -140,10 +140,12 @@ public class User {
             
         } else {
             for(Row row: rs){
-                
+                //does this need to be in a loop? is there some other way to get the Row object? of course there is...
             profileInfo.setFirst_name(row.getString(0));
             profileInfo.setLast_name(row.getString(1));
             profileInfo.setEmail(row.getString(2));
+            profileInfo.setBio(row.getString(3));
+            //i know i know there should be a better way to do this
              System.out.println("Profile Info set in user method" + 
                      profileInfo.getFirst_name() + profileInfo.getLast_name() + profileInfo.getEmail());
                 }
