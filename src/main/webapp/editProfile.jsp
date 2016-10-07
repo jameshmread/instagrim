@@ -28,15 +28,17 @@
         <h2>Edit Email </h2>
         <input type="text" name="email">
         <br>
-          
+        <input type="submit" value="Apply Changes"> 
+        <%-- will need to validate input when fields are empty. 
+        basically a few if's check if empty field, then get from session store--%>
+        </form>
+        
             <form method="POST" enctype="multipart/form-data" action="Image">
-                Edit Profile Picture <input type="file" name=""><br/>
+                Edit Profile Picture <input type="file" name="profilePic"><br/>
 
                 <br/>
-                
-            
+                <input type="submit" value="Edit Profile Picture">
         
-        <input type="submit" value="Apply Changes">
         </form>
     </body>
 </html>
