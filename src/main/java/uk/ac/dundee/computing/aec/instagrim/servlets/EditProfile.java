@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.ProfileInfo;
+import uk.ac.dundee.computing.aec.instagrim.stores.*;
 /**
  *
  * @author James
@@ -61,6 +61,8 @@ public class EditProfile extends HttpServlet {
         HttpSession session = request.getSession();
            
             User us = new User();
+            LoggedIn lg = new LoggedIn();
+            
             
             //cluster = CassandraHosts.getCluster();
             //cluster.connect("instagrim");
@@ -71,14 +73,14 @@ public class EditProfile extends HttpServlet {
         String email = (String)request.getParameter("email");
         
         ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
+        lg = (LoggedIn)session.getAttribute("LoggedIn");
         
         //String oldUsername = profile.getUsername();
         //String oldBio = profile.getBio();
         
             //changing the store for the session 
-            us.setProfileStoreInfo(firstName, lastName, email, bio);
-            us.setProfileDatabaseInfo(firstName, lastName, email, bio);
-            //loggedIn.setUsername(username); might leave change username out all together
+            us.setProfileStoreInfo(firstName, lastName, email, bio, request);
+            us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);
             //profile.setProfilePicture(); ####
             //Update database ###
             

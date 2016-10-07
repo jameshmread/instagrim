@@ -16,9 +16,11 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Vector;
+import javax.servlet.http.HttpServletRequest;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
 import javax.servlet.http.HttpSession;
+import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 
 /**
@@ -55,7 +57,7 @@ public class User {
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username,EncodedPassword,first_name,last_name,email));
         //We are assuming this always works.  Also a transaction would be good here !
-        this.setProfileDatabaseInfo(first_name, last_name, email, "Place holder bio");
+        this.setProfileDatabaseInfo(username,first_name, last_name, email, "Place holder bio");
         return true;
     }
     
@@ -93,7 +95,10 @@ public class User {
     }
     
     
-    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio){
+    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio, HttpServletRequest request){
+        session = request.getSession();
+        profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
+        //need to pass the session into this or it cant update the store for the sesison
         System.out.println(first_name);
         System.out.println(last_name);
         System.out.println(email);
@@ -103,16 +108,19 @@ public class User {
         profile.setBio(bio);
     }
     
-    public void setProfileDatabaseInfo(String first_name, String last_name, String email, String bio){
+    public void setProfileDatabaseInfo(String username, String first_name, String last_name, String email, String bio){
         //remember to look at keyspaces for editing of bio######
+        cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("UPDATE userprofiles (first_name,last_name,email) Values(?,?,?)");
+        PreparedStatement ps = session.prepare("UPDATE userprofiles SET first_name =?, last_name =?, email =? WHERE login=?");
        
         BoundStatement boundStatement = new BoundStatement(ps);
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        first_name,last_name,email));
+                        first_name,last_name,email,username));
         //We are assuming this always works.  Also a transaction would be good here !
+        
+
     }
     
     //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL AND STUFF
