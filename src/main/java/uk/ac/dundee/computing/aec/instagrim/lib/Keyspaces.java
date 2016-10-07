@@ -47,6 +47,8 @@ public final class Keyspaces {
                     + "      first_name text,\n"
                     + "      last_name text,\n"
                     + "      email text,\n" //set <text>
+                    + "      bio text, \n"
+                    + "     profilePicID uuid, \n"
                     + "      addresses  map<text, frozen <address>>\n"
                     + "  );";
             Session session = c.connect();
