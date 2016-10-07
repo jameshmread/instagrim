@@ -89,21 +89,7 @@ public class profile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        //POSSIBLY MOVE TO DOGET METHOD
-        User user = new User();
-        String usernameRequest = request.getParameter("username");
-        String passwordRequest = request.getParameter("password");
-        
-        boolean userExists = user.IsValidUser(usernameRequest, passwordRequest);
-        
-        session = request.getSession();
-        if(userExists){
-        RequestDispatcher rd = request.getRequestDispatcher("/profile/"+usernameRequest);
-        }
-        else
-        response.sendRedirect("/Instagrim/Redirect");
-        */
+       
     }
     
     public void getProfilePic(HttpServletRequest request, HttpServletResponse response)
