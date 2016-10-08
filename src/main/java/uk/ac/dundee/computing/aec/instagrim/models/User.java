@@ -63,6 +63,7 @@ public class User {
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username,EncodedPassword,first_name,last_name,email));
+        session.close();
         //We are assuming this always works.  Also a transaction would be good here !
         this.setProfileDatabaseInfo(username,first_name, last_name, email, "Place holder bio");
         return true;
@@ -84,6 +85,7 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
+        session.close();
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return false;
@@ -137,7 +139,7 @@ public class User {
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         first_name,last_name,email,bio,username));
         //We are assuming this always works.  Also a transaction would be good here !
-        //should probably close sessions on all database functions
+        session.close();
     }
    
     public void setDatabaseProfilePicture(String username, java.util.UUID uuid){
@@ -150,6 +152,7 @@ public class User {
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         uuid,username));
+        session.close();
     }
     
    
@@ -184,6 +187,7 @@ public class User {
                      profileInfo.getFirst_name() + profileInfo.getLast_name() + profileInfo.getEmail());
                 }
         }
+        session.close();
         return profileInfo;
     }
     //MIGHT NOT NEED THIS METHOD ON ITS OWN
@@ -195,6 +199,7 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
+        session.close();
     }
        public void setCluster(Cluster cluster) {
         this.cluster = cluster;

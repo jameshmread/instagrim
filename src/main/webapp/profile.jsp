@@ -56,13 +56,12 @@
                 } }%>
                 Welcome <%=username%> <br>
         
-        <p id="bioEdit"> <%=profile.getBio()%></p>
-        <img <a href="/Instagrim/Image/<%=profile.getProfilePicture() %>" ><img src="/Instagrim/Thumb/<%=profile.getProfilePicture() %>" alt="Profile Picture" style="width:300px;height:300px;"></a>
-        
-        
-        <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>
-        
-        
+        <p id="bioEdit"> <%=profile.getBio()%></p>    
+        <%session.setAttribute("picID", profile.getProfilePicture());%>
+            <input type="image" action="/Instagrim/pictureServlet/<%profile.getProfilePicture();%>" method="GET" name="picID">
+            <a href="/Instagrim/pictureServlet"> 
+               <img id="profilePic" src="/Instagrim/Thumb/<%=profile.getProfilePicture()%> " alt="Profile Picture"></a></br>    
+       
         
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
         <%

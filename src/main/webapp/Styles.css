@@ -92,9 +92,10 @@ footer{
 }
 
 
-#userPic{
-    background-color: black;
-    
+#profilePic{
+    background-color: #00b3fd;
+    padding: 10px;
+    border-radius: 20px;
 }
 #register{
     text-align: right;

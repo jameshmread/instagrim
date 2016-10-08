@@ -16,13 +16,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 /**
  *
  * @author James
  */
-@WebServlet(name = "pictureServlet", urlPatterns = {"/pictureServlet/*" + "/pictureServlet"})
+@WebServlet(name = "pictureServlet", urlPatterns = {"/pictureServlet", "/pictureServlet/*"})
 public class pictureServlet extends HttpServlet {
         Cluster cluster;
         public void init(ServletConfig config) throws ServletException {
@@ -49,7 +50,9 @@ public class pictureServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("simple doget");
+        HttpSession session;
+        session = request.getSession();
+        System.out.println("PIC ID: " + session.getAttribute("picID"));
         RequestDispatcher rd = request.getRequestDispatcher("picture.jsp");        
         rd.forward(request, response);
     }
