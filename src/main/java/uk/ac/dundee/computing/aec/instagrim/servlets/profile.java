@@ -96,6 +96,9 @@ public class profile extends HttpServlet {
             throws ServletException, IOException{
         System.out.println("Returned profile pic");
         
+        //call model which gets it
+        
+        
     }
         //taken from Image.java servlet
         private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
