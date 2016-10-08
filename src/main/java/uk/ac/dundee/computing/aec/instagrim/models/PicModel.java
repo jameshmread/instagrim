@@ -81,7 +81,9 @@ public class PicModel {
             //Below calls the user model to enter a uuid related to the user so a profile pic can be returned
             if(this.getEnteringProfilePic()){
                 User us = new User();
-                us.setProfilePicture(user, picid);
+                us.setDatabaseProfilePicture(user, picid);
+                //setting the profile store happens in image servlet as that has a request
+                us.setProfilePicid(picid);
                 this.setEnteringProfilePic(false); //re-set etering profile pic
             }
             PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");

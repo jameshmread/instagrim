@@ -25,6 +25,7 @@ import org.apache.commons.fileupload.util.Streams;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
+import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -146,12 +147,18 @@ public class Image extends HttpServlet {
                 is.read(b);
                 System.out.println("Length : " + b.length);
                 PicModel tm = new PicModel();
+                
                 if(request.getPart("profilePic")!=null){
                      tm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
                     }
+                
                 tm.setCluster(cluster);
                 tm.insertPic(b, type, filename, username);
-
+                //
+                java.util.UUID uuid = null;
+                User us = new User();
+                us.setStoreProfilePicture(uuid, request);
+                //
                 is.close();
             }
             RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");

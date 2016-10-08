@@ -31,11 +31,18 @@ public class User {
     Cluster cluster;
     HttpSession session;
     ProfileInfo profile = new ProfileInfo();
-    
+    private java.util.UUID profilePicid = null;
     String username = null;
     
     public User(){
         
+    }
+    //setter and getter for profilepic id
+    public void setProfilePicid(java.util.UUID uuid){
+        this.profilePicid = uuid;
+    }
+    public java.util.UUID getProfilePicid(){
+        return this.profilePicid;
     }
     
     public boolean RegisterUser(String username, String Password, String first_name, String last_name, String email){
@@ -95,7 +102,8 @@ public class User {
     }
     
     
-    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio, HttpServletRequest request){
+    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,
+            HttpServletRequest request){
         session = request.getSession();
         profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
         //need to pass the session into this or it cant update the store for the sesison
@@ -106,8 +114,17 @@ public class User {
         profile.setLast_name(last_name);
         profile.setEmail(email); 
         profile.setBio(bio);
-        
     }
+    
+    //might not need this either
+    public void setStoreProfilePicture(java.util.UUID uuid, HttpServletRequest request){
+        uuid = this.profilePicid;
+        System.out.println("Profile picture changed, UUID: " + uuid);
+        session = request.getSession();
+        profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
+        profile.setProfilePicture(uuid);
+    }
+    
     
     public void setProfileDatabaseInfo(String username, String first_name, String last_name, String email, String bio){
         //remember to look at keyspaces for editing of bio######
@@ -122,9 +139,9 @@ public class User {
         //We are assuming this always works.  Also a transaction would be good here !
         //should probably close sessions on all database functions
     }
-    public void setProfilePicture(String username, java.util.UUID uuid){
+   
+    public void setDatabaseProfilePicture(String username, java.util.UUID uuid){
         cluster = CassandraHosts.getCluster();
-        profile = (ProfileInfo)session.getAttribute("ProfileInfo");
         Session session = cluster.connect("instagrim");
                 PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilePicID =? WHERE login=?");
         System.out.println("ProfilePicture Set as: " + uuid);
@@ -143,7 +160,8 @@ public class User {
         this.profile = profileInfo;
         
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT first_name, last_name, email, bio FROM userprofiles WHERE login =?");
+        PreparedStatement ps = 
+                session.prepare("SELECT first_name, last_name, email, bio, profilePicID FROM userprofiles WHERE login =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -160,6 +178,7 @@ public class User {
             profileInfo.setLast_name(row.getString(1));
             profileInfo.setEmail(row.getString(2));
             profileInfo.setBio(row.getString(3));
+            profileInfo.setProfilePicture(row.getUUID("profilePicID"));
             //i know i know there should be a better way to do this
              System.out.println("Profile Info set in user method" + 
                      profileInfo.getFirst_name() + profileInfo.getLast_name() + profileInfo.getEmail());
@@ -167,7 +186,16 @@ public class User {
         }
         return profileInfo;
     }
-    
+    //MIGHT NOT NEED THIS METHOD ON ITS OWN
+    public void getProfilePicture(){
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT profilePicID FROM userprofiles WHERE login =?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+    }
        public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }

@@ -20,6 +20,7 @@
        
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="profile" method="GET"</a></li>
                 <li><a href="register.jsp">Register</a></li>
                 <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
                 <li class="footer"><a href="/Instagrim">Home</a></li>

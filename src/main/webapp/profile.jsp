@@ -57,7 +57,7 @@
                 Welcome <%=username%> <br>
         
         <p id="bioEdit"> <%=profile.getBio()%></p>
-        <img id="profilePic" src="profile" method="GET" alt="Profile Picture" style="width:300px;height:300px;">
+        <img <a href="/Instagrim/Image/<%=profile.getProfilePicture() %>" ><img src="/Instagrim/Thumb/<%=profile.getProfilePicture() %>" alt="Profile Picture" style="width:300px;height:300px;"></a>
         
         
         <%-- could have attribute dropped with IE7 src needs to have explicit value assigned--%>

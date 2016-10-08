@@ -17,7 +17,6 @@ public class ProfileInfo {
     private String bio = "Say something about yourself";
     
     public void ProfileInfo() {
-        
     }
     
     public void setBio(String bio)
@@ -30,7 +29,7 @@ public class ProfileInfo {
     }
     
     public void setFirst_name(String first_name){
-        System.out.println("First name set");
+        //System.out.println("First name set");
         this.first_name = first_name;
     }
     public String getFirst_name(){
@@ -50,15 +49,10 @@ public class ProfileInfo {
     public String getEmail(){
         return this.email;
     }
-        public java.util.UUID getProfilePicture(){
-        //server get profile picture
-        //return profile picture
-        //should return a string as thats what is put in the <img tag>
-        //or use a file stream shich takes from database
-        return this.userProfilePicture;
+        public String getProfilePicture(){
+        return userProfilePicture.toString();
     }
     public void setProfilePicture(java.util.UUID uuid){
-        //upload picture stored and then set
-        //choose existing picture from server and set
+        this.userProfilePicture = uuid;
     }
 }

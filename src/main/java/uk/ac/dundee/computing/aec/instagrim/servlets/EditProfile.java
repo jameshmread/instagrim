@@ -80,10 +80,12 @@ public class EditProfile extends HttpServlet {
         //String oldBio = profile.getBio();
         
             //changing the store for the session 
+            //need to do if not all values are entered
             us.setProfileStoreInfo(firstName, lastName, email, bio, request);
             us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);
+
             //profile.setProfilePicture(); ####
-            //Update database ###
+            
             
             session.setAttribute("ProfileInfo", profile);
             
