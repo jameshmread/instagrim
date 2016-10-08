@@ -106,6 +106,7 @@ public class User {
         profile.setLast_name(last_name);
         profile.setEmail(email); 
         profile.setBio(bio);
+        
     }
     
     public void setProfileDatabaseInfo(String username, String first_name, String last_name, String email, String bio){
@@ -119,11 +120,25 @@ public class User {
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         first_name,last_name,email,bio,username));
         //We are assuming this always works.  Also a transaction would be good here !
-        
-
+        //should probably close sessions on all database functions
+    }
+    public void setProfilePicture(String username, java.util.UUID uuid){
+        cluster = CassandraHosts.getCluster();
+        profile = (ProfileInfo)session.getAttribute("ProfileInfo");
+        Session session = cluster.connect("instagrim");
+                PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilePicID =? WHERE login=?");
+        System.out.println("ProfilePicture Set as: " + uuid);
+        profile.setProfilePicture(uuid);
+        BoundStatement boundStatement = new BoundStatement(ps);
+        session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        uuid,username));
     }
     
-    //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL AND STUFF
+   
+    
+    //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL 
+    //could this method return profile uuid too? probably!
     public ProfileInfo getUserInfo(String username, ProfileInfo profileInfo){
         this.profile = profileInfo;
         

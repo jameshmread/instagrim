@@ -128,7 +128,8 @@ public class Image extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
-
+   
+                    
             String type = part.getContentType();
             String filename = part.getSubmittedFileName();
             
@@ -145,6 +146,9 @@ public class Image extends HttpServlet {
                 is.read(b);
                 System.out.println("Length : " + b.length);
                 PicModel tm = new PicModel();
+                if(request.getPart("profilePic")!=null){
+                     tm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
+                    }
                 tm.setCluster(cluster);
                 tm.insertPic(b, type, filename, username);
 

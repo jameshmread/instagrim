@@ -10,7 +10,7 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  * @author James
  */
 public class ProfileInfo {
-     private String userProfilePicture = "NULL";
+    private java.util.UUID userProfilePicture =null;
     private String first_name = "NULL";
     private String last_name = "NULL";
     private String email = "NULL";
@@ -50,14 +50,14 @@ public class ProfileInfo {
     public String getEmail(){
         return this.email;
     }
-        public String getProfilePicture(){
+        public java.util.UUID getProfilePicture(){
         //server get profile picture
         //return profile picture
         //should return a string as thats what is put in the <img tag>
         //or use a file stream shich takes from database
         return this.userProfilePicture;
     }
-    public void setProfilePicture(){
+    public void setProfilePicture(java.util.UUID uuid){
         //upload picture stored and then set
         //choose existing picture from server and set
     }

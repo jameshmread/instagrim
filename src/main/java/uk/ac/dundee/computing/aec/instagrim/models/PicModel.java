@@ -41,7 +41,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 public class PicModel {
 
     Cluster cluster;
-
+    boolean enteringProfilePic;
     public void PicModel() {
 
     }
@@ -50,6 +50,13 @@ public class PicModel {
         this.cluster = cluster;
     }
 
+    public void setEnteringProfilePic(boolean profilePic){
+        this.enteringProfilePic = profilePic;
+    }
+    public boolean getEnteringProfilePic(){
+        return this.enteringProfilePic;
+    }
+    
     public void insertPic(byte[] b, String type, String name, String user) {
         try {
             Convertors convertor = new Convertors();
@@ -71,7 +78,12 @@ public class PicModel {
             ByteBuffer processedbuf=ByteBuffer.wrap(processedb);
             int processedlength=processedb.length;
             Session session = cluster.connect("instagrim");
-
+            //Below calls the user model to enter a uuid related to the user so a profile pic can be returned
+            if(this.getEnteringProfilePic()){
+                User us = new User();
+                us.setProfilePicture(user, picid);
+                this.setEnteringProfilePic(false); //re-set etering profile pic
+            }
             PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
             BoundStatement bsInsertPic = new BoundStatement(psInsertPic);
