@@ -9,6 +9,7 @@ import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 
 /**
  *
@@ -52,8 +54,12 @@ public class pictureServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session;
         session = request.getSession();
-        System.out.println("PIC ID: " + session.getAttribute("picID"));
-        RequestDispatcher rd = request.getRequestDispatcher("picture.jsp");        
+        String picID = (String)session.getAttribute("picID");
+        System.out.println("PIC ID: " + picID);
+        PicModel pm = new PicModel();
+        RequestDispatcher rd = request.getRequestDispatcher("picture.jsp");
+        request.setAttribute(picID, picID); 
+        request.setAttribute("picTitle", pm.getPicTitle((String)session.getAttribute("picID"))); //gets the title for the picture
         rd.forward(request, response);
     }
 

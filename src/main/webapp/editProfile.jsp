@@ -4,6 +4,7 @@
     Author     : James
 --%>
 
+<%@page import="uk.ac.dundee.computing.aec.instagrim.models.PicModel"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,8 +35,9 @@
         </form>
         
             <form method="POST" enctype="multipart/form-data" action="Image">
-                Edit Profile Picture <input type="file" name="profilePic"><br/>
-
+                <% session.setAttribute("profilePic", true); %>
+                Edit Profile Picture <input type="file" name="profilePic"><br/>                
+                <%-- could have the 'set entering profile pic as a store element in profileInfo --%>
                 <br/>
                 <input type="submit" value="Edit Profile Picture">
         

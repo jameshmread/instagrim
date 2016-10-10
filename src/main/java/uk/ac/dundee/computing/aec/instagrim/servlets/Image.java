@@ -24,10 +24,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
-import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.aec.instagrim.models.*;
+import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  * Servlet implementation class Image
@@ -133,6 +131,7 @@ public class Image extends HttpServlet {
                     
             String type = part.getContentType();
             String filename = part.getSubmittedFileName();
+            String title = (String)request.getAttribute("title");
             
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
@@ -148,16 +147,23 @@ public class Image extends HttpServlet {
                 System.out.println("Length : " + b.length);
                 PicModel tm = new PicModel();
                 
-                if(request.getPart("profilePic")!=null){
-                     tm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
+                if((boolean)session.getAttribute("profilePic")==true){
+                    tm.setCluster(cluster);
+                    System.out.println("Setting profile picture");
+                    java.util.UUID uuid = null;
+                    User us = new User();
+                    us.setCluster(cluster);
+                    tm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
+                    tm.insertPic(b, type, type, username, "Profile Picture"); //this has to change using editprofile.jsp to add title
+                    //us.setStoreProfilePicture(uuid, request);
+                     
                     }
-                
+                else{
                 tm.setCluster(cluster);
-                tm.insertPic(b, type, filename, username);
+                tm.insertPic(b, type, filename, username, title); //added a title so user can name their pictures on upload
+                }
                 //
-                java.util.UUID uuid = null;
-                User us = new User();
-                us.setStoreProfilePicture(uuid, request);
+
                 //
                 is.close();
             }

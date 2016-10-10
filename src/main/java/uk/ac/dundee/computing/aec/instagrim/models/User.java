@@ -118,7 +118,7 @@ public class User {
         profile.setBio(bio);
     }
     
-    //might not need this either
+    /*
     public void setStoreProfilePicture(java.util.UUID uuid, HttpServletRequest request){
         uuid = this.profilePicid;
         System.out.println("Profile picture changed, UUID: " + uuid);
@@ -126,7 +126,7 @@ public class User {
         profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
         profile.setProfilePicture(uuid);
     }
-    
+    */
     
     public void setProfileDatabaseInfo(String username, String first_name, String last_name, String email, String bio){
         //remember to look at keyspaces for editing of bio######

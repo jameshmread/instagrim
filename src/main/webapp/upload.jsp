@@ -31,11 +31,14 @@
         </ul>
  
         <article>
-            <h3>File Upload</h3>
+            <h3>Post a Photo</h3>
             <form method="POST" enctype="multipart/form-data" action="Image">
+                <% session.setAttribute("profilePic", false); %>
                 File to upload: <input type="file" name="upfile"><br/>
 
                 <br/>
+                <input type="text" name="title"> Set Picture Title
+                <%-- prevent picture upload without title or it'll cause some bother --%>
                 <input type="submit" value="Press"> to upload the file!
             </form>
 

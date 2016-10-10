@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
 
@@ -57,7 +58,7 @@ public class PicModel {
         return this.enteringProfilePic;
     }
     
-    public void insertPic(byte[] b, String type, String name, String user) {
+    public void insertPic(byte[] b, String type, String name, String user, String title) {
         try {
             Convertors convertor = new Convertors();
 
@@ -79,20 +80,22 @@ public class PicModel {
             int processedlength=processedb.length;
             Session session = cluster.connect("instagrim");
             //Below calls the user model to enter a uuid related to the user so a profile pic can be returned
+            
             if(this.getEnteringProfilePic()){
                 User us = new User();
                 us.setDatabaseProfilePicture(user, picid);
                 //setting the profile store happens in image servlet as that has a request
+               
                 us.setProfilePicid(picid);
                 this.setEnteringProfilePic(false); //re-set etering profile pic
             }
-            PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name, title) values(?,?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
             BoundStatement bsInsertPic = new BoundStatement(psInsertPic);
             BoundStatement bsInsertPicToUser = new BoundStatement(psInsertPicToUser);
 
             Date DateAdded = new Date();
-            session.execute(bsInsertPic.bind(picid, buffer, thumbbuf,processedbuf, user, DateAdded, length,thumblength,processedlength, type, name));
+            session.execute(bsInsertPic.bind(picid, buffer, thumbbuf,processedbuf, user, DateAdded, length,thumblength,processedlength, type, name, title));
             session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
             session.close();
 
@@ -225,6 +228,19 @@ public class PicModel {
 
         return p;
 
+    }
+    //allowing a string in here is easier as only one conversion to uuid has to be done (inside this function)
+    public String getPicTitle(String picID){ 
+        java.util.UUID uuid = java.util.UUID.fromString(picID); 
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("select title from pics where picID =?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        uuid));
+        session.close();
+        return rs.one().getString("title");
     }
 
 }
