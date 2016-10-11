@@ -59,9 +59,12 @@ public class profile extends HttpServlet {
         LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
         String username = loggedIn.getUsername();
         
-               getProfilePic(request, response);
-               DisplayImageList(username, request, response);
-               //getUserPictures(request, response);
+        PicModel tm = new PicModel();
+        tm.setCluster(cluster);
+        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(username);
+        request.setAttribute("Pics", lsPics); 
+        //removed call to method displayImageList
+        //as it requestDispatched then profile had to request dispatch
         
         System.out.println(username);
         if(loggedIn.getlogedin()){
