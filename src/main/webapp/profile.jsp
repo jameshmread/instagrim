@@ -54,13 +54,12 @@
         else {
     %><p>No Username found</p><%
                 } }%>
-                Welcome <%=username%> <br>
+                <h1> Welcome <%=username%> </h1><br>
         
         <p id="bioEdit"> <%=profile.getBio()%></p>    
-        <%session.setAttribute("picID", profile.getProfilePicture());%>
-            <input type="image" action="/Instagrim/pictureServlet/<%profile.getProfilePicture();%>" method="GET" name="picID">
-            <a href="/Instagrim/pictureServlet"> 
-               <img id="profilePic" src="/Instagrim/Thumb/<%=profile.getProfilePicture()%> " alt="Profile Picture"></a></br>    
+        
+        <a href="/Instagrim/pictureServlet" onclick="<%session.setAttribute("picID", profile.getProfilePicture());%>">
+               <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a></br>    
        
         
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
@@ -77,7 +76,9 @@
                 Pic p = (Pic) iterator.next();
 
         %>
-        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
+        <a href="/Instagrim/pictureServlet" onclick="<%session.setAttribute("picID", p.getSUUID());%>">
+            <img id="userPicture" src="/Instagrim/Image/<%=p.getSUUID()%>" alt="User Picture"></a><br/>
+            <%
             
             }
             }

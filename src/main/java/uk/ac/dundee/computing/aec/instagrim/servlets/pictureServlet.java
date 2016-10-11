@@ -55,7 +55,7 @@ public class pictureServlet extends HttpServlet {
         HttpSession session;
         session = request.getSession();
         String picID = (String)session.getAttribute("picID");
-        System.out.println("PIC ID: " + picID);
+        System.out.println("Picture serverlet recieved the PIC ID as: " + picID);
         PicModel pm = new PicModel();
         RequestDispatcher rd = request.getRequestDispatcher("picture.jsp");
         request.setAttribute(picID, picID); 

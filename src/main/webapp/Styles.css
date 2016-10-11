@@ -96,6 +96,22 @@ footer{
     background-color: #00b3fd;
     padding: 10px;
     border-radius: 20px;
+    
+   max-height: 300px;
+    max-width: 300px;
+    width: auto;
+    height: auto;
+}
+#userPicture{
+    padding: 10px;
+    border-radius: 20px;
+    
+    max-height: 300px;
+    max-width: 300px;
+    width: auto;
+    height: auto;
+    
+    float: right;
 }
 #register{
     text-align: right;

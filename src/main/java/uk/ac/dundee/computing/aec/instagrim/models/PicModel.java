@@ -231,7 +231,8 @@ public class PicModel {
     }
     //allowing a string in here is easier as only one conversion to uuid has to be done (inside this function)
     public String getPicTitle(String picID){ 
-        java.util.UUID uuid = java.util.UUID.fromString(picID); 
+        java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+        cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("select title from pics where picID =?");
         ResultSet rs = null;
