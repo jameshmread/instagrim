@@ -240,7 +240,7 @@ public class PicModel {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         uuid));
-        session.close();
+        //session.close();
         return rs.one().getString("title");
     }
 

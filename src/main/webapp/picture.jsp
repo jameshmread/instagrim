@@ -12,9 +12,10 @@
         <title>put pic title here</title>
     </head>
     <body><%%>
-        <%String picID = (String)session.getAttribute("picID"); %>
-        <%String picTitle = (String)session.getAttribute("picTitle");%>
-        <a href="/Instagrim/Image/<%=picID%>" ><img src="/Instagrim/Thumb/<%=picID%>"></a>
+        <%String picID = (String)request.getAttribute("pictureID"); %>
+        <%String picTitle = (String)request.getAttribute("picTitle");%>
+        <a href="/Instagrim/Image/<%=picID%>" >
+            <img id="userPicture" src="/Instagrim/Thumb/<%=picID%>"></a>
         <h2><%=picTitle%></h2>
         
     </body>

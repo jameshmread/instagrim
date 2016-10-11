@@ -52,14 +52,17 @@ public class pictureServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session;
-        session = request.getSession();
-        String picID = (String)session.getAttribute("picID");
-        System.out.println("Picture serverlet recieved the PIC ID as: " + picID);
+
+        String pictureIDToGo = (String)request.getParameter("picID");
+        System.out.println("Picture serverlet recieved the PIC ID as(PARAM): " + pictureIDToGo);
+        
         PicModel pm = new PicModel();
-        RequestDispatcher rd = request.getRequestDispatcher("picture.jsp");
-        request.setAttribute(picID, picID); 
-        request.setAttribute("picTitle", pm.getPicTitle((String)session.getAttribute("picID"))); //gets the title for the picture
+        String picTitle = (String)pm.getPicTitle(pictureIDToGo);
+        request.setAttribute("pictureID", pictureIDToGo); 
+        request.setAttribute("picTitle", picTitle);
+        
+        System.out.println("Pic Title is: " + pictureIDToGo);
+        RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
         rd.forward(request, response);
     }
 

@@ -57,8 +57,9 @@
                 <h1> Welcome <%=username%> </h1><br>
         
         <p id="bioEdit"> <%=profile.getBio()%></p>    
-        
-        <a href="/Instagrim/pictureServlet" onclick="<%session.setAttribute("picID", profile.getProfilePicture());%>">
+        <%String profilePicID = profile.getProfilePicture();%>
+        <a href="/Instagrim/pictureServlet/?picID=<%=profilePicID%>"> 
+            <%-- i have finally realised how simple it is to pass params into servlets using urls --%>
                <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a></br>    
        
         
@@ -74,9 +75,9 @@
             iterator = lsPics.iterator();
             while (iterator.hasNext()) {
                 Pic p = (Pic) iterator.next();
-
+                String userPictureID = p.getSUUID();
         %>
-        <a href="/Instagrim/pictureServlet" onclick="<%session.setAttribute("picID", p.getSUUID());%>">
+        <a href="/Instagrim/pictureServlet/?picID=<%=userPictureID%>" >
             <img id="userPicture" src="/Instagrim/Image/<%=p.getSUUID()%>" alt="User Picture"></a><br/>
             <%
             
