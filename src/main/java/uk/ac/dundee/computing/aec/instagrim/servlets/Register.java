@@ -54,14 +54,15 @@ public class Register extends HttpServlet {
         String first_name=request.getParameter("first_name");
         String last_name=request.getParameter("last_name");
         String email=request.getParameter("email");
-        
+                
         if(password.equals(confirmPassword)) 
-        //SHOULD I HAVE THIS HERE OR IN MODEL SINCE SUCH SMALL AMOUNT OF CODE
         {
         us=new User();
         
         us.setCluster(cluster);
         us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
+        java.util.UUID uuid = java.util.UUID.randomUUID();
+        us.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
         //us.setUserInfo(first_name, last_name, email); //sets store with user information
         
 	response.sendRedirect("/Instagrim"); //maybe send to profile?
