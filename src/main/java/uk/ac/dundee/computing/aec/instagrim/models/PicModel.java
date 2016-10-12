@@ -89,7 +89,7 @@ public class PicModel {
                 us.setProfilePicid(picid);
                 this.setEnteringProfilePic(false); //re-set etering profile pic
             }
-            PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name, title) values(?,?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name,title) values(?,?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
             BoundStatement bsInsertPic = new BoundStatement(psInsertPic);
             BoundStatement bsInsertPicToUser = new BoundStatement(psInsertPicToUser);
@@ -231,17 +231,77 @@ public class PicModel {
     }
     //allowing a string in here is easier as only one conversion to uuid has to be done (inside this function)
     public String getPicTitle(String picID){ 
+        String title =null;
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
         cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select title from pics where picID =?");
-        ResultSet rs = null;
-        BoundStatement boundStatement = new BoundStatement(ps);
-        rs = session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        uuid));
-        //session.close();
-        return rs.one().getString("title");
+         Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("select title from pics where picID =?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid));
+            
+            
+            for (Row row : rs) {
+                title = (String)row.getString("title");
+                //cannot try and get a string straight from result set
+                //need to create a row using the RS
+
+            }
+            
+            System.out.println("Title taken at Picmodel: " + title);
+        session.close();
+        return title;
     }
 
+    public void deletePicture(String picID, String username){
+        java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+        
+        cluster = CassandraHosts.getCluster();
+         Session session = cluster.connect("instagrim");
+            //deletes from pics and userpiclist so it cant be referenced
+            System.out.println("Deleting picture");
+            Date picDate = getDateFromPic(picID); //this needs to be called beforefirst delete or it'll never be found
+           /* PreparedStatement ps = session.prepare("delete from pics where picID =?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid));
+            */
+            PreparedStatement psUserPicList = session.prepare("delete from userpiclist where user =? AND pic_added =?");
+            ResultSet rs1 = null;
+            BoundStatement boundStatementUPL = new BoundStatement(psUserPicList);
+            rs1 = session.execute( // this is where the query is executed
+                    boundStatementUPL.bind( // here you are binding the 'boundStatement'
+                            username, picDate));
+            //both statements combined should delete the picture from the database entirely
+            session.close();
+    }
+    
+    public Date getDateFromPic(String picID){
+        java.util.UUID uuid = java.util.UUID.fromString(picID);
+        Date picDate = new Date();
+        
+        cluster = CassandraHosts.getCluster();
+         Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("select interaction_time from pics where picID =?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid));
+            
+            
+            for (Row row : rs) {
+                picDate = (Date)row.getDate("interaction_time");
+                //cannot try and get a string straight from result set
+                //need to create a row using the RS
+
+            }
+            System.out.println("Pic Date: " + picDate);
+        
+        return picDate;
+    }
 }

@@ -38,6 +38,7 @@
 
                 <br/>
                 <input type="text" name="title"> Set Picture Title
+                <br/>
                 <%-- prevent picture upload without title or it'll cause some bother --%>
                 <input type="submit" value="Press"> to upload the file!
             </form>
