@@ -103,16 +103,7 @@ public class profile extends HttpServlet {
         
         
     }
-        //taken from Image.java servlet
-        private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PicModel tm = new PicModel();
-        tm.setCluster(cluster);
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // do i need this?
-        request.setAttribute("Pics", lsPics);
-        rd.forward(request, response);
-
-    }
+     
     
     public void getUserPictures(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
