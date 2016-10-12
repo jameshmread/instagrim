@@ -127,15 +127,17 @@ public class Image extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
-   
-                    
+            
+            HttpSession session=request.getSession();
             String type = part.getContentType();
             String filename = part.getSubmittedFileName();
-            String title = (String)request.getAttribute("title");
             
+            String title = (String)request.getParameter("title");
+            
+            System.out.println("Title recieved on upload " + title);
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
-            HttpSession session=request.getSession();
+            
             LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
             String username="majed";
             if (lg.getlogedin()){
