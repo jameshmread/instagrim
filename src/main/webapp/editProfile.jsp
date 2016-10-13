@@ -31,7 +31,7 @@
         <br>
         <input type="submit" value="Apply Changes"> 
         <%-- will need to validate input when fields are empty. 
-        basically a few if's check if empty field, then get from session store--%>
+        basically a few if's check if empty field, then get from session store [DO THIS IN SERVLET]--%>
         </form>
         
             <form method="POST" enctype="multipart/form-data" action="Image">
@@ -42,5 +42,10 @@
                 <input type="submit" value="Edit Profile Picture">
         
         </form>
+                <form method="GET" action="Register?deleteProfile=true">
+            
+        <input type="submit" Value="Delete">
+                </form> 
+                <h3>WARNING. This action CANNOT be undone</h3>
     </body>
 </html>

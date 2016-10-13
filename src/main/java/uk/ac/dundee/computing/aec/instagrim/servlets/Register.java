@@ -16,8 +16,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
+import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  *
@@ -34,7 +36,31 @@ public class Register extends HttpServlet {
     }
 
 
-
+/**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = null; //GETTING NULL POINTER LINE 51
+        if(session.getAttribute("deleteProfile").equals("true")){
+            
+            LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
+            User us = new User();
+            String username = lg.getUsername();
+            if(username !=null){
+            us.deleteProfile(lg.getUsername());
+            response.sendRedirect("/Instagrim");
+            }else{
+                System.out.println("Unable to delete user.");
+            }
+        }
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

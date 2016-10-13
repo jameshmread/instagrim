@@ -188,7 +188,7 @@ public class User {
         session.close();
         return profileInfo;
     }
-    //MIGHT NOT NEED THIS METHOD ON ITS OWN
+
     public void getProfilePicture(){
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT profilePicID FROM userprofiles WHERE login =?");
@@ -199,6 +199,22 @@ public class User {
                         username));
         session.close();
     }
+    
+     public void deleteProfile(String username){
+      
+        cluster = CassandraHosts.getCluster();
+         Session session = cluster.connect("instagrim");
+            System.out.println("Deleting Profile");
+            
+            PreparedStatement ps = session.prepare("DELETE FROM userprofiles WHERE login =?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            username));
+            session.close();
+    }
+    
        public void setCluster(Cluster cluster) {
         this.cluster = cluster;
     }
