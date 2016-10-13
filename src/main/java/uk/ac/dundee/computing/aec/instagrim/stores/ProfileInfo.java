@@ -17,6 +17,7 @@ public class ProfileInfo {
     private String bio = "Say something about yourself";
     
     public void ProfileInfo() {
+      
     }
     
     public void setBio(String bio)
@@ -29,7 +30,6 @@ public class ProfileInfo {
     }
     
     public void setFirst_name(String first_name){
-        //System.out.println("First name set");
         this.first_name = first_name;
     }
     public String getFirst_name(){

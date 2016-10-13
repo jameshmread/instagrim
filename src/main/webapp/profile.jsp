@@ -56,13 +56,15 @@
                 } }%>
                 <h1> Welcome <%=username%> </h1><br>
         
-        <p id="bioEdit"> <%=profile.getBio()%></p>    
+        <p id="bioEdit"> <%=profile.getBio()%></p>   
+        <% if(profile.getProfilePicture()!=null){%>
         <%String profilePicID = profile.getProfilePicture();%>
-        <a href="/Instagrim/pictureServlet/?picID=<%=profilePicID%>"> 
+        <a href="/Instagrim/Image/<%=profile.getProfilePicture()%> "> 
             <%-- i have finally realised how simple it is to pass params into servlets using urls --%>
                <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a></br>    
-       
-        
+       <%}else{%>
+       <p> No Profile Picture! </p>
+        <%}%>
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
         <%
             java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");

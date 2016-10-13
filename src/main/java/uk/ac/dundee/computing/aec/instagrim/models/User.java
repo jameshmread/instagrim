@@ -156,9 +156,6 @@ public class User {
     }
     
    
-    
-    //FLESH OUT THIS METHOD WHERE SEARCHES USERNAME AND RETURNS THE FIRST/LAST NAME EMAIL 
-    //could this method return profile uuid too? probably!
     public ProfileInfo getUserInfo(String username, ProfileInfo profileInfo){
         this.profile = profileInfo;
         
@@ -184,7 +181,8 @@ public class User {
             profileInfo.setProfilePicture(row.getUUID("profilePicID"));
             //i know i know there should be a better way to do this
              System.out.println("Profile Info set in user method" + 
-                     profileInfo.getFirst_name() + profileInfo.getLast_name() + profileInfo.getEmail());
+                     profileInfo.getFirst_name() + profileInfo.getLast_name() 
+                     + profileInfo.getEmail());
                 }
         }
         session.close();

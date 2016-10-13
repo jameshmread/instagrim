@@ -61,8 +61,10 @@ public class Register extends HttpServlet {
         
         us.setCluster(cluster);
         us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
+        
         java.util.UUID uuid = java.util.UUID.randomUUID();
         us.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
+        
         //us.setUserInfo(first_name, last_name, email); //sets store with user information
         
 	response.sendRedirect("/Instagrim"); //maybe send to profile?

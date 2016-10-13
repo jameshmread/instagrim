@@ -93,9 +93,8 @@ public class Login extends HttpServlet {
             profileInfo = us.getUserInfo(username, profileInfo);
             //THIS STUFF USES THE MODEL AND RETURNS USER INFO FROM DATABASE WHEN SEARCHING USING USERNAME
             
-            //request.setAttribute("ProfileInfo", profileInfo);
+           // request.setAttribute("ProfileInfo", profileInfo);
             session.setAttribute("ProfileInfo", profileInfo);
-            //need to call model server.getifo then set the store to those return values
             
             RequestDispatcher rd=request.getRequestDispatcher("index.jsp"); //index.jsp
 	    rd.forward(request,response);
