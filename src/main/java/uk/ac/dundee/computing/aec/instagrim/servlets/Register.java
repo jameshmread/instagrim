@@ -48,7 +48,8 @@ public class Register extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = null; //GETTING NULL POINTER LINE 51
-        if(session.getAttribute("deleteProfile").equals("true")){
+        
+        if(request.getParameter("deleteProfile").equals("true")){
             
             LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
             User us = new User();
@@ -59,7 +60,9 @@ public class Register extends HttpServlet {
             }else{
                 System.out.println("Unable to delete user.");
             }
-        }
+        }else{
+                System.out.println("Unable to delete user.");
+            }
     }
 
     /**

@@ -58,7 +58,24 @@ public class EditProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-           
+        
+        if(request.getParameter("deleteProfile").equals("true")){
+            HttpSession session = request.getSession();
+            LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
+            User us = new User();
+            String username = lg.getUsername();
+            if(username !=null){
+            us.deleteProfile(lg.getUsername());
+            lg.setLogedout();
+            
+            RequestDispatcher rd=request.getRequestDispatcher("Instagrim"); //index.jsp
+	    rd.forward(request,response);
+            }else{
+                System.out.println("Unable to delete user.");
+            }
+        }else{
+               
+        
         HttpSession session = request.getSession();
            
             User us = new User();
@@ -93,7 +110,7 @@ public class EditProfile extends HttpServlet {
             System.out.println("Session in servlet "+session);
             RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
 	    rd.forward(request,response);
-        
+        }
     }
 
     /**

@@ -42,7 +42,7 @@
                 <input type="submit" value="Edit Profile Picture">
         
         </form>
-                <form method="GET" action="Register?deleteProfile=true">
+                <form action="EditProfile?deleteProfile=true" method="POST">
             
         <input type="submit" Value="Delete">
                 </form> 

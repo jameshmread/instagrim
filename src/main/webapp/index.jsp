@@ -42,7 +42,7 @@
                             }else{
                                 %>
                  <li><a href="register.jsp">Register</a></li>
-                <li><a href="login.jsp">Login</a></li>
+                <li><a href="login.jsp">Login</a></li> <%--need to change .jsp to servlets to handle this doGET request--%>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
                 <%}%>
             </ul>
@@ -51,7 +51,7 @@
         <footer>
             <ul>
                 
-                <li>&COPY; Andy C</li>
+                <li>&COPY; Andy C, James Read</li>
             </ul>
         </footer>
     </body>
