@@ -14,6 +14,7 @@ package uk.ac.dundee.computing.aec.instagrim.models;
  */
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
+import static com.datastax.driver.core.DataType.text;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -34,6 +35,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
+
 
 import uk.ac.dundee.computing.aec.instagrim.lib.*;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
@@ -168,7 +170,6 @@ public class PicModel {
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);
                 Pics.add(pic);
-
             }
         }
         return Pics;
@@ -303,5 +304,62 @@ public class PicModel {
             System.out.println("Pic Date: " + picDate);
         
         return picDate;
+    }
+    
+    public void insertComment(String comment, String user, String picID){
+        java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+        java.util.UUID commentID = java.util.UUID.randomUUID(); //creates a unique comment id as the primary key
+        
+        cluster = CassandraHosts.getCluster();
+         Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("INSERT into comments (commentText, userCommenting, picID, commentID) values(?,?,?)");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            comment,user,uuid,commentID));
+           
+        session.close(); 
+        System.out.println("SUCCESS! Comment Inserted: " + comment + " From User: " + user);
+    }
+    
+    public java.util.LinkedList<String> getCommentList(String picID){
+        java.util.UUID uuid = java.util.UUID.fromString(picID);
+        java.util.LinkedList<String> comments = new java.util.LinkedList<>();
+        cluster = CassandraHosts.getCluster();
+         Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("SELECT commentText FROM instagrim.comments WHERE picID =?");
+            //need to know which user made which comment 
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid));
+            
+            for (Row row : rs) {
+                comments.add(row.getString("comments")); //seems too easy....
+            }
+        
+        return  comments;
+    }
+     
+    public java.util.LinkedList<String> getCommentsUser(String picID){
+        java.util.UUID uuid = java.util.UUID.fromString(picID);
+        java.util.LinkedList<String> user = new java.util.LinkedList<>();
+        cluster = CassandraHosts.getCluster();
+         Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("SELECT userCommenting FROM comments WHERE picID =?");
+            //need to know which user made which comment 
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid));
+            
+            for (Row row : rs) {
+                user.add(row.getString("userCommenting")); //seems too easy....
+            }
+        
+        return  user;
     }
 }

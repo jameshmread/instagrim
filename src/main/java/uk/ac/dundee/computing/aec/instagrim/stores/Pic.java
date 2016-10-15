@@ -18,7 +18,9 @@ public class Pic {
     private int length;
     private String type;
     private java.util.UUID UUID=null;
-    
+
+    public Pic() {
+    }
     public void Pic() {
 
     }
@@ -51,5 +53,5 @@ public class Pic {
         byte image[] = Bytes.getArray(bImage);
         return image;
     }
-
+    
 }

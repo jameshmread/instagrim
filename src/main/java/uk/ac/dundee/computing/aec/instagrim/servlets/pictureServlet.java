@@ -9,6 +9,7 @@ import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -61,6 +62,11 @@ public class pictureServlet extends HttpServlet {
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
         String picTitle = (String)pm.getPicTitle(pictureIDToGo);
+        LinkedList<String> comments = pm.getCommentList(pictureIDToGo);
+        LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
+        //i could cut out the middle man here but to get it working, just keep it in two separate expressions
+        request.setAttribute("comments", comments);
+        request.setAttribute("users", users);
         request.setAttribute("pictureID", pictureIDToGo); 
         request.setAttribute("picTitle", picTitle);
         
@@ -83,22 +89,31 @@ public class pictureServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("pictureServlet.doPost() called"); 
         HttpSession session = request.getSession();
-            LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
+        LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
+        String picID = (String)request.getParameter("picID");
+        PicModel pm = new PicModel();
+        pm.setCluster(cluster);
+            
         if( "true".equals(request.getParameter("delete"))){
             System.out.println("Delete Parameter: " + request.getParameter("delete"));
-            System.out.println("PictureID to delete: " + request.getParameter("picID")); 
+            System.out.println("PictureID to delete: " + request.getParameter("picID"));
             
-            String pictureIDRecieved = (String)request.getParameter("picID");
-            //get delete working then worry about the code duplication of request picID
-            PicModel pm = new PicModel();
-            pm.setCluster(cluster);
-            
-            pm.deletePicture(pictureIDRecieved, lg.getUsername());
+            pm.deletePicture(picID, lg.getUsername());
             System.out.println("Picture deleted");
             //RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
             //rd.forward(request, response);
             response.sendRedirect("/Instagrim/profile");
-        } 
+        }else 
+        if("true".equals(request.getParameter("postComment"))){ 
+            String commentText = request.getParameter("commentText");
+            String username = lg.getUsername();
+            //insert comment into database
+            pm.insertComment(commentText, username, picID);
+            response.sendRedirect(".Instagrim/profile"); //see if this works then do request dispatcher
+            //RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
+            //rd.forward(request, response);
+        }
+         
     }
 
     /**

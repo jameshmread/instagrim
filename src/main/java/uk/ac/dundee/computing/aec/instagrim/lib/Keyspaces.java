@@ -25,11 +25,18 @@ public final class Keyspaces {
                     + " processed blob,"
                     + " imagelength int,"
                     + " thumblength int,"
-                    + "  processedlength int,"
+                    + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
                     + " PRIMARY KEY (picid)"
                     + ")";
+            String CreateComments = "CREATE TABLE if not exists instagrim.comments (\n"
+                    + " commentText text,\n"
+                    + " userCommenting text, \n"
+                    + " picID uuid, \n"
+                    + " commentID uuid, \n"
+                    + " PRIMARY KEY (commentID) \n"
+                    + ") WITH CLUSTERING ORDER BY (commentID desc);";
             String Createuserpiclist = "CREATE TABLE if not exists instagrim.userpiclist (\n"
                     + "picid uuid,\n"
                     + "user varchar,\n"
@@ -74,6 +81,14 @@ public final class Keyspaces {
                 System.out.println("Can't create tweet table " + et);
             }
             System.out.println("" + Createuserpiclist);
+            
+            try{
+                SimpleStatement cqlQuery = new SimpleStatement(CreateComments);
+                session.execute(cqlQuery);
+                System.out.println("" + CreateComments);
+            } catch(Exception et){
+                System.out.println("Couldnt create comments table " + CreateComments);
+            }
 
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(Createuserpiclist);
