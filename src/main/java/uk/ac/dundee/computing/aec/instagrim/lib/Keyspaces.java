@@ -34,9 +34,9 @@ public final class Keyspaces {
                     + " commentText text,\n"
                     + " userCommenting text, \n"
                     + " picID uuid, \n"
-                    + " commentID uuid, \n"
+                    + " commentID timestamp, \n"
                     + " PRIMARY KEY (picID, commentID) \n"
-                    + ");";
+                    + ")WITH CLUSTERING ORDER BY (commentID ASC);";
             String Createuserpiclist = "CREATE TABLE if not exists instagrim.userpiclist (\n"
                     + "picid uuid,\n"
                     + "user varchar,\n"

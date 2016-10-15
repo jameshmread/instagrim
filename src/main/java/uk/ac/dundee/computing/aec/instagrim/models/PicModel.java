@@ -29,7 +29,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.security.Timestamp;
 import java.util.Date;
+import java.sql.*;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
@@ -308,8 +310,7 @@ public class PicModel {
     
     public void insertComment(String comment, String user, String picID){
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
-        java.util.UUID commentID = java.util.UUID.randomUUID(); //creates a unique comment id as the primary key
-        
+        Date commentID = new Date(); //creates a unique comment id as the primary key
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("INSERT into comments (commentText, userCommenting, picID, commentID) values(?,?,?,?)");
