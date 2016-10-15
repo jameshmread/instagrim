@@ -27,23 +27,24 @@
         <%--request.setAttribute("deletePicID", picID); --%>
         <h2>Add a Comment</h2>
         
-        <form method="POST" action="pictureServlet?picID=<%=picID%>&postComment=true">
+        <form method="POST" action="?picID=<%=picID%>&postComment=true">
             <input type="text" name="commentText">
         <input type="submit" value="Post Comment">
         </form>
         <br>
         
-        <h3>Comments</h3><br>
-        <%if(comments.iterator()!=null){%>
-            <%while(comments.iterator().hasNext()) %>
-            <%{%> <%--comments.iterator().next(); probably wont need this then comments.element.tostring--%>
-                  <%String comment = comments.iterator().next().toString();%>
+        <h3>Comments</h3>
+        <%if(comments !=null){%>
+        <%String comment;%>
+        <%=comments.size()%>
+            <%for(int i=0; i < comments.size(); i++){
+            comment = (String)comments.get(i);%>
             <ul>
                 <li>Comment:<%=comment%></li>
             </ul>
             <%}%>
-        <%}%>
-        <%else{%><p>No comments yet!</p><%}%>
+        <%%>
+        <%}else{%><p>No comments yet!</p><%}%>
         
         <%--This delete button should only be visible to user who posted this--%>
         <form method="POST" action="pictureServlet?picID=<%=picID%>&delete=true">

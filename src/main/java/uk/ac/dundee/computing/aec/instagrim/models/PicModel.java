@@ -312,7 +312,7 @@ public class PicModel {
         
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("INSERT into comments (commentText, userCommenting, picID, commentID) values(?,?,?)");
+            PreparedStatement ps = session.prepare("INSERT into comments (commentText, userCommenting, picID, commentID) values(?,?,?,?)");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
@@ -328,7 +328,7 @@ public class PicModel {
         java.util.LinkedList<String> comments = new java.util.LinkedList<>();
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT commentText FROM instagrim.comments WHERE picID =?");
+            PreparedStatement ps = session.prepare("SELECT commentText FROM comments WHERE picID =? ALLOW FILTERING");
             //need to know which user made which comment 
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
@@ -337,9 +337,23 @@ public class PicModel {
                             uuid));
             
             for (Row row : rs) {
-                comments.add(row.getString("comments")); //seems too easy....
+                comments.push(row.getString("commentText")); //seems too easy....
+                System.out.println("Adding comment");
             }
-        
+            /*/SYSTEM OUT PRINT
+            PreparedStatement commentps = session.prepare("SELECT * FROM comments");
+            //need to know which user made which comment 
+            ResultSet commentrs = null;
+            BoundStatement commentboundStatement = new BoundStatement(commentps);
+            commentrs = session.execute( // this is where the query is executed
+                    commentboundStatement.bind( // here you are binding the 'boundStatement'
+                            ));
+            System.out.println("#########################################################");
+            for (Row row : rs) {
+                System.out.println("Comment: " + row.getString("commentText") + " User: " + row.getString("userCommenting")
+                                    + " Comment Text: " + row.getString("commentText"));
+            }
+            //////SYSTEM OUT PRINT */
         return  comments;
     }
      

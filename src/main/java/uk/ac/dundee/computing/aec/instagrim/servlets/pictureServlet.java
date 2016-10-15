@@ -109,9 +109,10 @@ public class pictureServlet extends HttpServlet {
             String username = lg.getUsername();
             //insert comment into database
             pm.insertComment(commentText, username, picID);
-            response.sendRedirect(".Instagrim/profile"); //see if this works then do request dispatcher
-            //RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
-            //rd.forward(request, response);
+            request.setAttribute("picID", picID);
+            //response.sendRedirect("Instagrim/profile"); //see if this works then do request dispatcher
+            RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
+            rd.forward(request, response);
         }
          
     }

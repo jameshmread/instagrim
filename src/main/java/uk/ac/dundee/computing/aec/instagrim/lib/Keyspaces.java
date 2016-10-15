@@ -35,8 +35,9 @@ public final class Keyspaces {
                     + " userCommenting text, \n"
                     + " picID uuid, \n"
                     + " commentID uuid, \n"
-                    + " PRIMARY KEY (commentID) \n"
-                    + ") WITH CLUSTERING ORDER BY (commentID desc);";
+                    + " PRIMARY KEY (picID) \n" //witht the pk being picID it should work, may need compound key
+                    //since pk is now picid i may be able to order using commentid (may need to change to date/time)
+                    + ");";
             String Createuserpiclist = "CREATE TABLE if not exists instagrim.userpiclist (\n"
                     + "picid uuid,\n"
                     + "user varchar,\n"
@@ -88,6 +89,7 @@ public final class Keyspaces {
                 System.out.println("" + CreateComments);
             } catch(Exception et){
                 System.out.println("Couldnt create comments table " + CreateComments);
+                System.out.println("Exception: " + et);
             }
 
             try {
