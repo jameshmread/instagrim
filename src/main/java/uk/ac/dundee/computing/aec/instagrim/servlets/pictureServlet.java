@@ -94,7 +94,7 @@ public class pictureServlet extends HttpServlet {
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
             
-        if( "true".equals(request.getParameter("delete"))){
+        if("true".equals(request.getParameter("delete"))){
             System.out.println("Delete Parameter: " + request.getParameter("delete"));
             System.out.println("PictureID to delete: " + request.getParameter("picID"));
             

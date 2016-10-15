@@ -28,6 +28,7 @@ public final class Keyspaces {
                     + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
+                    + " likes text<set>"
                     + " PRIMARY KEY (picid)"
                     + ")";
             String CreateComments = "CREATE TABLE if not exists instagrim.comments (\n"
