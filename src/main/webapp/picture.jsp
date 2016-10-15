@@ -17,6 +17,7 @@
         <%String picID = (String)request.getAttribute("pictureID"); %>
         <%String picTitle = (String)request.getAttribute("picTitle");%>
         <%LinkedList comments = (LinkedList)request.getAttribute("comments");%>
+        <%LinkedList usernames = (LinkedList)request.getAttribute("users");%>
         <%---LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn"); --%>
         <%--String user = lg.getUsername(); --%>
         
@@ -35,12 +36,13 @@
         
         <h3>Comments</h3>
         <%if(comments !=null){%>
-        <%String comment;%>
+        <%String comment, username;%>
         <%=comments.size()%>
             <%for(int i=0; i < comments.size(); i++){
-            comment = (String)comments.get(i);%>
+            comment = (String)comments.get(i);
+            username = (String)usernames.get(i); %>
             <ul>
-                <li>Comment:<%=comment%></li>
+                <li><%=username%>:  <%=comment%></li>
             </ul>
             <%}%>
         <%%>

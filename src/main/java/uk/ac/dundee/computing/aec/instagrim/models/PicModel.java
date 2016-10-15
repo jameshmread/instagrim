@@ -328,7 +328,7 @@ public class PicModel {
         java.util.LinkedList<String> comments = new java.util.LinkedList<>();
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT commentText FROM comments WHERE picID =? ALLOW FILTERING");
+            PreparedStatement ps = session.prepare("SELECT commentText FROM comments WHERE picID =?");
             //need to know which user made which comment 
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
@@ -340,20 +340,7 @@ public class PicModel {
                 comments.push(row.getString("commentText")); //seems too easy....
                 System.out.println("Adding comment");
             }
-            /*/SYSTEM OUT PRINT
-            PreparedStatement commentps = session.prepare("SELECT * FROM comments");
-            //need to know which user made which comment 
-            ResultSet commentrs = null;
-            BoundStatement commentboundStatement = new BoundStatement(commentps);
-            commentrs = session.execute( // this is where the query is executed
-                    commentboundStatement.bind( // here you are binding the 'boundStatement'
-                            ));
-            System.out.println("#########################################################");
-            for (Row row : rs) {
-                System.out.println("Comment: " + row.getString("commentText") + " User: " + row.getString("userCommenting")
-                                    + " Comment Text: " + row.getString("commentText"));
-            }
-            //////SYSTEM OUT PRINT */
+            
         return  comments;
     }
      
@@ -364,6 +351,7 @@ public class PicModel {
          Session session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("SELECT userCommenting FROM comments WHERE picID =?");
             //need to know which user made which comment 
+            //this will probably break when i add multiple users, keep an eye... it did
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
