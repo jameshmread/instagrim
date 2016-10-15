@@ -100,8 +100,6 @@ public class pictureServlet extends HttpServlet {
             
             pm.deletePicture(picID, lg.getUsername());
             System.out.println("Picture deleted");
-            //RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
-            //rd.forward(request, response);
             response.sendRedirect("/Instagrim/profile");
         }else 
         if("true".equals(request.getParameter("postComment"))){ 
@@ -110,9 +108,9 @@ public class pictureServlet extends HttpServlet {
             //insert comment into database
             pm.insertComment(commentText, username, picID);
             request.setAttribute("picID", picID);
-            //response.sendRedirect("Instagrim/profile"); //see if this works then do request dispatcher
-            RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
-            rd.forward(request, response);
+            response.sendRedirect("/Instagrim/pictureServlet/?picID=" + picID);
+            //use redirects for post, request dispatchers for get 
+            // http://www.javapractices.com/topic/TopicAction.do?Id=181
         }
          
     }
