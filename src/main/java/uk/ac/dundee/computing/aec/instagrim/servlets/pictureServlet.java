@@ -118,7 +118,7 @@ public class pictureServlet extends HttpServlet {
                 //get the specific user if they have liked this, dont itterate through all the users
                 //who have ever liked this, you idiot
                 //if user has not liked this, set like, else if liked set unlike
-                if(!pm.userLikedPicture(picID, picID)) pm.setLike(username, picID);
+                if(!pm.userLikedPicture(username, picID)) pm.setLike(username, picID);
                 else pm.setUnlike(username, picID);
                 request.setAttribute("picID", picID);
                 response.sendRedirect("/Instagrim/pictureServlet/?picID=" + picID);

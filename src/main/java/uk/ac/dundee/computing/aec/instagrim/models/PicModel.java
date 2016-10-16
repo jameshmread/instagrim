@@ -59,6 +59,7 @@ public class PicModel {
     public void setEnteringProfilePic(boolean profilePic){
         this.enteringProfilePic = profilePic;
     }
+    
     public boolean getEnteringProfilePic(){
         return this.enteringProfilePic;
     }
@@ -390,7 +391,7 @@ public class PicModel {
          java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
             cluster = CassandraHosts.getCluster();
             Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("DELETE FROM likes WHERE picID =? AND username =?");
+            PreparedStatement ps = session.prepare("DELETE FROM likes WHERE username =? AND picID =?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
@@ -426,19 +427,17 @@ public class PicModel {
         String returnedUsername = null;
         cluster = CassandraHosts.getCluster();
             Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT FROM likes WHERE picID=? AND username =?");
+            PreparedStatement ps = session.prepare("SELECT * FROM likes WHERE picID=?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
                     boundStatement.bind( // here you are binding the 'boundStatement'
-                            uuid, username));
+                            uuid));
          for (Row row : rs) {
-                returnedUsername = row.getString("username");
+                if(username.equals(row.getString("username"))){ System.out.println("USER LIKED THIS, DISLIKING"); return true;}
             }
          session.close();
-         if(returnedUsername != null && username.equals(returnedUsername))
-         {
-         return true;
-         }else return false;
+         System.out.println("USER HAS NOT LIKED THIS, LIKING");
+         return false;
     }
 }
