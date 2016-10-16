@@ -33,6 +33,7 @@ import java.security.Timestamp;
 import java.util.Date;
 import java.sql.*;
 import java.util.LinkedList;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import static org.imgscalr.Scalr.*;
@@ -364,5 +365,80 @@ public class PicModel {
             }
         
         return  user;
+    }
+    
+    public void setLike(String username, String picID){
+        java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+        //Date likeTime = new Date();
+
+            cluster = CassandraHosts.getCluster();
+            Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("INSERT into likes (username, picID) values(?,?)");
+            // order of likes is not essential
+            //you cannot like a photo twice so the pk of username and picID is unique
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            username,uuid));
+            
+        session.close(); 
+        System.out.println("SUCCESS! LIKED by: " + username);
+    }
+    
+    public void setUnlike(String username, String picID){
+         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+            cluster = CassandraHosts.getCluster();
+            Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("DELETE FROM likes WHERE picID =? AND username =?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            username,uuid));
+           
+        session.close(); 
+        System.out.println("SUCCESS! UNLIKED by: " + username);
+    }
+    
+    public LinkedList<String> getLikes(String picID){
+        UUID uuid = UUID.fromString(picID);
+        LinkedList<String> likes = new LinkedList<>();
+        cluster = CassandraHosts.getCluster();
+            Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("SELECT username FROM likes WHERE picID=?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid));
+         for (Row row : rs) {
+                likes.push(row.getString("username")); 
+                System.out.println("Adding Like to list");
+            }
+        session.close(); 
+        System.out.println("SUCCESS! Returned likes from database");
+        return likes;
+    }
+    
+     public boolean userLikedPicture(String username, String picID){
+        UUID uuid = UUID.fromString(picID);
+        String returnedUsername = null;
+        cluster = CassandraHosts.getCluster();
+            Session session = cluster.connect("instagrim");
+            PreparedStatement ps = session.prepare("SELECT FROM likes WHERE picID=? AND username =?");
+            ResultSet rs = null;
+            BoundStatement boundStatement = new BoundStatement(ps);
+            rs = session.execute( // this is where the query is executed
+                    boundStatement.bind( // here you are binding the 'boundStatement'
+                            uuid, username));
+         for (Row row : rs) {
+                returnedUsername = row.getString("username");
+            }
+         session.close();
+         if(returnedUsername != null && username.equals(returnedUsername))
+         {
+         return true;
+         }else return false;
     }
 }

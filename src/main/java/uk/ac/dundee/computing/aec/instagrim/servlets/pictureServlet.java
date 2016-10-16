@@ -64,12 +64,13 @@ public class pictureServlet extends HttpServlet {
         String picTitle = (String)pm.getPicTitle(pictureIDToGo);
         LinkedList<String> comments = pm.getCommentList(pictureIDToGo);
         LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
+        LinkedList<String> likes = pm.getLikes(pictureIDToGo);
         //i could cut out the middle man here but to get it working, just keep it in two separate expressions
         request.setAttribute("comments", comments);
         request.setAttribute("users", users);
         request.setAttribute("pictureID", pictureIDToGo); 
         request.setAttribute("picTitle", picTitle);
-        
+        request.setAttribute("likes", likes);
         System.out.println("Pic Title is: " + picTitle);
         RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
         rd.forward(request, response);
@@ -111,7 +112,17 @@ public class pictureServlet extends HttpServlet {
             response.sendRedirect("/Instagrim/pictureServlet/?picID=" + picID);
             //use redirects for post, request dispatchers for get 
             // http://www.javapractices.com/topic/TopicAction.do?Id=181
-        }
+        }else
+            if("true".equals(request.getParameter("like"))){
+                String username = lg.getUsername();
+                //get the specific user if they have liked this, dont itterate through all the users
+                //who have ever liked this, you idiot
+                //if user has not liked this, set like, else if liked set unlike
+                if(!pm.userLikedPicture(picID, picID)) pm.setLike(username, picID);
+                else pm.setUnlike(username, picID);
+                request.setAttribute("picID", picID);
+                response.sendRedirect("/Instagrim/pictureServlet/?picID=" + picID);
+            }
          
     }
 

@@ -28,9 +28,14 @@ public final class Keyspaces {
                     + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
-                    + " likes text<set>"
                     + " PRIMARY KEY (picid)"
                     + ")";
+            String CreateLikes = "CREATE TABLE if not exists instagrim.likes (\n"
+                    + " username text, \n"
+                    + " picID uuid, \n"
+                   // + " likeID timestamp, \n" dont think i need this
+                    + " PRIMARY KEY (picID, username) \n"
+                    + ");";
             String CreateComments = "CREATE TABLE if not exists instagrim.comments (\n"
                     + " commentText text,\n"
                     + " userCommenting text, \n"
@@ -92,6 +97,15 @@ public final class Keyspaces {
                 System.out.println("Exception: " + et);
             }
 
+            try{
+                SimpleStatement cqlQuery = new SimpleStatement(CreateLikes);
+                session.execute(cqlQuery);
+                System.out.println("" + CreateLikes);
+            } catch(Exception et){
+                System.out.println("Couldnt create LIKES table " + CreateLikes);
+                System.out.println("Exception: " + et);
+            }
+            
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(Createuserpiclist);
                 session.execute(cqlQuery);

@@ -18,7 +18,8 @@
         <%String picTitle = (String)request.getAttribute("picTitle");%>
         <%LinkedList comments = (LinkedList)request.getAttribute("comments");%>
         <%LinkedList usernames = (LinkedList)request.getAttribute("users");%>
-        <%---LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn"); --%>
+        <%LinkedList likes = (LinkedList)request.getAttribute("likes"); %>
+        <%--LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn"); --%>
         <%--String user = lg.getUsername(); --%>
         
         <a href="/Instagrim/Image/<%=picID%>">
@@ -32,6 +33,20 @@
             <input type="text" name="commentText">
         <input type="submit" value="Post Comment">
         </form>
+            <form method="POST" action="?picID=<%=picID%>&like=true"> <%--GET WHETHER USER HAS LIKED THIS PHOTO AND CHANGE POST ACCORDINGLY--%>
+            <input type="submit" value="Like"> 
+            </form>
+        <%if(likes !=null){%>
+        <%String like;%>
+        <h3>Likes:<%=likes.size()%></h3> <%--add if statement to return the likes as a number over 3ish--%>
+            <%for(int i=0; i < likes.size(); i++){
+            like = (String)likes.get(i); %>
+            <ul>
+                <li><%=like%></li> 
+            </ul>
+            <%}%>
+        <%%>
+        <%}else{%><p>No-one likes this</p><%}%>
         <br>
         
         <h3>Comments</h3>
