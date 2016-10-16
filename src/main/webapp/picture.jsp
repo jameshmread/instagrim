@@ -33,8 +33,8 @@
             <input type="text" name="commentText">
         <input type="submit" value="Post Comment">
         </form>
-            <form method="POST" action="?picID=<%=picID%>&like=true"> <%--GET WHETHER USER HAS LIKED THIS PHOTO AND CHANGE POST ACCORDINGLY--%>
-            <input type="submit" value="Like"> 
+            <form method="POST" action="?picID=<%=picID%>&like=true"> 
+                <input type="submit" value="Like"> 
             </form>
         <%if(likes !=null){%>
         <%String like;%>

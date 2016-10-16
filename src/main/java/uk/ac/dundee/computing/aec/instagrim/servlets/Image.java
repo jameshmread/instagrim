@@ -35,7 +35,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
     "/Image/*",
     "/Thumb/*",
     "/Images",
-    "/Images/*"
+    "/Images/*",
+    "/Delete/",
+    "/Delete/*"
 })
 @MultipartConfig
 
@@ -56,6 +58,7 @@ public class Image extends HttpServlet {
         CommandsMap.put("Image", 1);
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
+        CommandsMap.put("Delete", 4);
 
     }
 
@@ -88,6 +91,7 @@ public class Image extends HttpServlet {
             case 3:
                 DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
                 break;
+            
             default:
                 error("Bad Operator", response);
         }
