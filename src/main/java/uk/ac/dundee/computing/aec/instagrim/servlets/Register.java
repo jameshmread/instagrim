@@ -65,7 +65,8 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        
+        us=new User();
+        us.setCluster(cluster);
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         String confirmPassword=request.getParameter("confirmPassword");
@@ -74,10 +75,11 @@ public class Register extends HttpServlet {
         String last_name=request.getParameter("last_name");
         String email=request.getParameter("email");
                 
-        if(password.equals(confirmPassword) && !password.isEmpty() && username != null && !username.isEmpty()) 
+        if(password.equals(confirmPassword) && !password.isEmpty() 
+                && username != null && !username.isEmpty() && !us.usernameAlreadyExists(username)) 
         {
-        us=new User();
-        us.setCluster(cluster);
+
+         
         us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
         pm = new PicModel();
         pm.setCluster(cluster);
@@ -92,7 +94,7 @@ public class Register extends HttpServlet {
             if(!password.equals(confirmPassword)) request.setAttribute("passwordError","true");
             if(password.isEmpty()) request.setAttribute("emptyPassword", "true");
             if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "true");
-            
+            if(!us.usernameAlreadyExists(username)) request.setAttribute("usernameError", "true");
             RequestDispatcher rd=request.getRequestDispatcher("register.jsp");            
             rd.include(request, response);
         }

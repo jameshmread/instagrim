@@ -103,7 +103,30 @@ public class User {
     return false;  
     }
     
+    public boolean usernameAlreadyExists(String username){
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = 
+                session.prepare("SELECT login FROM userprofiles WHERE login =?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        username));
+        
+        if (rs.isExhausted()) {
+            System.out.println("User doesnt exist");
+            return false;
+        } else {
+            for(Row row: rs){
+                if(username.equals(row.getString("login"))) return true;
+                }
+        }
+        session.close();
+        System.out.println("USER DOESNT EXIST YET");
+        return false;
+    }
     
+    //leave this here for now, probably should be in editprofile servlet
     public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,
             HttpServletRequest request){
         session = request.getSession();

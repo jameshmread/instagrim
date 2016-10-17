@@ -63,28 +63,29 @@ public class EditProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Edirprofile servlet dopost called");
+        System.out.println("Editprofile servlet dopost called");
         if(request.getParameter("deleteProfile").equals("true")){
            
         }else{
                
         
         HttpSession session = request.getSession();
-           
+            ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
             User us = new User();
             LoggedIn lg = new LoggedIn();
+            String firstName,lastName,bio,email = null;
             
-            
-            //cluster = CassandraHosts.getCluster();
-            //cluster.connect("instagrim");
-            
-        String firstName = (String)request.getParameter("firstName");
-        String lastName = (String)request.getParameter("lastName");
-        String bio = (String)request.getParameter("bio");
-        String email = (String)request.getParameter("email");
+        firstName = (String)request.getParameter("firstName");
+        lastName = (String)request.getParameter("lastName");
+        bio = (String)request.getParameter("bio");
+        email = (String)request.getParameter("email");
+        if(firstName == null) firstName = profile.getFirst_name();
+        if(lastName == null) lastName = profile.getLast_name();
+        if(bio == null) bio = profile.getBio();
+        if(email == null) email = profile.getEmail();
         //request.getParts(); should probably change the above to this as it would be more maintainable
         
-        ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
+        
         lg = (LoggedIn)session.getAttribute("LoggedIn");
         
         //String oldUsername = profile.getUsername();
@@ -93,10 +94,7 @@ public class EditProfile extends HttpServlet {
             //changing the store for the session 
             //need to do if not all values are entered
             us.setProfileStoreInfo(firstName, lastName, email, bio, request);
-            us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);
-
-            //profile.setProfilePicture(); ####
-            
+            us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);            
             
             session.setAttribute("ProfileInfo", profile);
             

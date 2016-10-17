@@ -4,6 +4,7 @@
     Author     : James
 --%>
 
+<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.ProfileInfo"%>
 <%@page import="uk.ac.dundee.computing.aec.instagrim.models.PicModel"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,11 +15,12 @@
         <title>Profile Settings</title>
     </head>
     <body>
+        <% ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo"); %>
         <h1>Settings</h1>
        
         <form method="POST" action="EditProfile?deleteProfile=false">
         <h2>Edit First Name</h2>
-        <input type="text" name="firstName">
+        <input type="text" name="firstName" value="<%profileInfo.getFirst_name();%>">
         <br>
         <h2>Edit Last Name </h2>
         <input type="text" name="lastName">
