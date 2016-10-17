@@ -88,11 +88,9 @@ public class PicModel {
             //Below calls the user model to enter a uuid related to the user so a profile pic can be returned
             
             if(this.getEnteringProfilePic()){
-                User us = new User();
-                us.setDatabaseProfilePicture(user, picid);
+                setDatabaseProfilePicture(user, picid);
                 //setting the profile store happens in image servlet as that has a request
-               
-                us.setProfilePicid(picid);
+                
                 this.setEnteringProfilePic(false); //re-set etering profile pic
             }
             PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name,title) values(?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -108,6 +106,17 @@ public class PicModel {
         } catch (IOException ex) {
             System.out.println("Error --> " + ex);
         }
+    }
+    public void setDatabaseProfilePicture(String username, java.util.UUID uuid){
+        cluster = CassandraHosts.getCluster();
+        Session session = cluster.connect("instagrim");
+                PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilePicID =? WHERE login=?");
+        System.out.println("ProfilePicture Set as: " + uuid);
+        BoundStatement boundStatement = new BoundStatement(ps);
+        session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        uuid,username));
+        session.close();
     }
 
     public byte[] picresize(String picid,String type) {

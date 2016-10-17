@@ -14,7 +14,7 @@
     </head>
     <body>
         <header>
-            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </h1>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </a></h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
        
@@ -32,10 +32,11 @@
             <form method="POST"  action="Register">
                 <ul id="register">
                     <li id="register">User Name <input type="text" name="username"></li>
+                    <li id="error"> <% if((String)request.getAttribute("usernameError") == "true") {%> Invalid username <%} else {} %></li>
                     <li id="register">Password <input type="password" name="password"></li>
-                    <li id="register">Confirm Password <input type="password" name="confirmPassword"></li></br>
+                    <li id="register">Confirm Password <input type="password" name="confirmPassword"></li>
                     
-                    <div id="error" name="error"> <% if((String)request.getAttribute("error") != null) {%> Passwords do not match <%} else {} %></div>
+                    <li id="error"> <% if((String)request.getAttribute("passwordError") == "true") {%> Passwords do not match <%} else {} %></li>
                     <%-- IF time store the users info apart from mismatched passwords (convenience) --%>
                     <li id="register">First Name <input type="text" name="first_name"></li>
                     <li id="register">Last Name <input type="text" name="last_name"></li>

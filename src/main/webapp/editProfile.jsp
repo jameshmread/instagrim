@@ -40,7 +40,6 @@
                 <%-- could have the 'set entering profile pic as a store element in profileInfo --%>
                 <br/>
                 <input type="submit" value="Edit Profile Picture">
-        
             </form>
                 <form action="/Instagrim/DeleteProfile/">
                     <input type="submit" Value="Delete">

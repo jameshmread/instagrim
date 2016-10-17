@@ -150,22 +150,23 @@ public class Image extends HttpServlet {
                 byte[] b = new byte[i + 1];
                 is.read(b);
                 System.out.println("Length : " + b.length);
-                PicModel tm = new PicModel();
+                PicModel pm = new PicModel();
                 
                 if((boolean)session.getAttribute("profilePic")==true){
-                    tm.setCluster(cluster);
+                    pm.setCluster(cluster);
                     System.out.println("Setting profile picture");
-                    java.util.UUID uuid = null; //does this even get used?
-                    User us = new User();
+                
+                    pm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
+                    pm.insertPic(b, type, type, username, "Profile Picture"); //this has to change using editprofile.jsp to add title
+                    User us = new User(); 
                     us.setCluster(cluster);
-                    tm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
-                    tm.insertPic(b, type, type, username, "Profile Picture"); //this has to change using editprofile.jsp to add title
-                    //us.setStoreProfilePicture(uuid, request);
-                     
+                    ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo");
+                    java.util.UUID uuid = us.getProfilePicture(username);
+                    profileInfo.setProfilePicture(uuid);
                     }
                 else{
-                tm.setCluster(cluster);
-                tm.insertPic(b, type, filename, username, title); //added a title so user can name their pictures on upload
+                pm.setCluster(cluster);
+                pm.insertPic(b, type, filename, username, title); //added a title so user can name their pictures on upload
                 }
                 //
 

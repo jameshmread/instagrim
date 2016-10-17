@@ -123,3 +123,7 @@ footer{
    padding: 0px 2%;
    padding-bottom: 10px;
 }
+
+#error{
+    color: red;
+}

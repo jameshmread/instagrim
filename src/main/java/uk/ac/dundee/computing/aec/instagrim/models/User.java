@@ -141,20 +141,7 @@ public class User {
         //We are assuming this always works.  Also a transaction would be good here !
         session.close();
     }
-   
-    public void setDatabaseProfilePicture(String username, java.util.UUID uuid){
-        cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
-                PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilePicID =? WHERE login=?");
-        System.out.println("ProfilePicture Set as: " + uuid);
-        profile.setProfilePicture(uuid);
-        BoundStatement boundStatement = new BoundStatement(ps);
-        session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        uuid,username));
-        session.close();
-    }
-    
+       
    
     public ProfileInfo getUserInfo(String username, ProfileInfo profileInfo){
         this.profile = profileInfo;
@@ -189,7 +176,9 @@ public class User {
         return profileInfo;
     }
 
-    public void getProfilePicture(){
+    public java.util.UUID getProfilePicture(String username){
+        java.util.UUID uuid = null;
+        //cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT profilePicID FROM userprofiles WHERE login =?");
         ResultSet rs = null;
@@ -198,6 +187,16 @@ public class User {
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
         session.close();
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                uuid = row.getUUID("profilePicID");
+                
+            }
+        }
+        return uuid;
     }
     
      public void deleteProfile(String username){

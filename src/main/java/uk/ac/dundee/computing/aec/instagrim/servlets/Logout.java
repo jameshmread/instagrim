@@ -43,8 +43,8 @@ public class Logout extends HttpServlet {
         logOut = request.getParameter("profile");
         session=request.getSession();
         
-        LoggedIn lg= new LoggedIn();
-        lg.setLogedout();
+        //LoggedIn lg= new LoggedIn();
+        //lg.setLogedout();
         session.invalidate();
         
         RequestDispatcher rd=request.getRequestDispatcher("index.jsp");

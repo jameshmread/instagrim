@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
@@ -29,6 +30,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 public class Register extends HttpServlet {
     Cluster cluster=null;
     User us;
+    PicModel pm;
     
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
@@ -47,22 +49,8 @@ public class Register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = null; //GETTING NULL POINTER LINE 51
-        
-        if(request.getParameter("deleteProfile").equals("true")){
-            
-            LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
-            User us = new User();
-            String username = lg.getUsername();
-            if(username !=null){
-            us.deleteProfile(lg.getUsername());
-            response.sendRedirect("/Instagrim");
-            }else{
-                System.out.println("Unable to delete user.");
-            }
-        }else{
-                System.out.println("Unable to delete user.");
-            }
+        RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+        rd.forward(request, response);
     }
 
     /**
@@ -76,6 +64,8 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         String confirmPassword=request.getParameter("confirmPassword");
@@ -84,22 +74,25 @@ public class Register extends HttpServlet {
         String last_name=request.getParameter("last_name");
         String email=request.getParameter("email");
                 
-        if(password.equals(confirmPassword)) 
+        if(password.equals(confirmPassword) && !password.isEmpty() && username != null && !username.isEmpty()) 
         {
         us=new User();
-        
         us.setCluster(cluster);
         us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
-        
+        pm = new PicModel();
+        pm.setCluster(cluster);
         java.util.UUID uuid = java.util.UUID.randomUUID();
-        us.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
+        pm.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
         
         //us.setUserInfo(first_name, last_name, email); //sets store with user information
         
-	response.sendRedirect("/Instagrim"); //maybe send to profile?
+	response.sendRedirect("/Instagrim");
         }
         else {
-            request.setAttribute("error","passwordError");
+            if(!password.equals(confirmPassword)) request.setAttribute("passwordError","true");
+            if(password.isEmpty()) request.setAttribute("emptyPassword", "true");
+            if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "true");
+            
             RequestDispatcher rd=request.getRequestDispatcher("register.jsp");            
             rd.include(request, response);
         }
