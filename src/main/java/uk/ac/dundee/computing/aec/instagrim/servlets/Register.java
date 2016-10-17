@@ -75,11 +75,18 @@ public class Register extends HttpServlet {
         String last_name=request.getParameter("last_name");
         String email=request.getParameter("email");
                 
-        if(password.equals(confirmPassword) && !password.isEmpty() 
-                && username != null && !username.isEmpty() && !us.usernameAlreadyExists(username)) 
+        if(!password.equals(confirmPassword) || password.isEmpty() 
+                || username == null || username.isEmpty() || us.usernameAlreadyExists(username)) 
         {
+            if(!password.equals(confirmPassword)) request.setAttribute("passwordError","true");
+            if(password.isEmpty()) request.setAttribute("emptyPassword", "true");
+            if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "true");
+            //if(!us.usernameAlreadyExists(username)) request.setAttribute("usernameError", "true");
+            RequestDispatcher rd=request.getRequestDispatcher("register.jsp");            
+            rd.include(request, response);
+        }
+        else {
 
-         
         us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
         pm = new PicModel();
         pm.setCluster(cluster);
@@ -89,14 +96,6 @@ public class Register extends HttpServlet {
         //us.setUserInfo(first_name, last_name, email); //sets store with user information
         
 	response.sendRedirect("/Instagrim");
-        }
-        else {
-            if(!password.equals(confirmPassword)) request.setAttribute("passwordError","true");
-            if(password.isEmpty()) request.setAttribute("emptyPassword", "true");
-            if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "true");
-            if(!us.usernameAlreadyExists(username)) request.setAttribute("usernameError", "true");
-            RequestDispatcher rd=request.getRequestDispatcher("register.jsp");            
-            rd.include(request, response);
         }
         
         
