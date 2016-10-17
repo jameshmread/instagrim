@@ -36,8 +36,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
     "/Thumb/*",
     "/Images",
     "/Images/*",
-    "/Delete/",
-    "/Delete/*"
+  
 })
 @MultipartConfig
 
@@ -156,7 +155,7 @@ public class Image extends HttpServlet {
                 if((boolean)session.getAttribute("profilePic")==true){
                     tm.setCluster(cluster);
                     System.out.println("Setting profile picture");
-                    java.util.UUID uuid = null;
+                    java.util.UUID uuid = null; //does this even get used?
                     User us = new User();
                     us.setCluster(cluster);
                     tm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic

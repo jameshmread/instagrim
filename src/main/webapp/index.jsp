@@ -18,7 +18,7 @@
     </head>
     <body>
         <header>
-            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </h1>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
         
@@ -27,9 +27,9 @@
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <% if(lg != null)
                 {%>
-                <li><a href="profile" method="GET" >Profile</a> </li> <%--calls java servlet --%>
+                <li><a href="/Instagrim/profile">Profile</a> </li> <%--calls java servlet --%>
                 <li><a href="upload.jsp"> Upload</a></li>
-                <li> <a  href="Login" method="GET">  Log Out </a></li>   
+                <li> <a  href="/Instagrim/Logout">  Log Out </a></li>   
                 <%}%>
                     <%
                         if (lg != null) {
@@ -42,7 +42,7 @@
                             }else{
                                 %>
                  <li><a href="register.jsp">Register</a></li>
-                <li><a href="login.jsp">Login</a></li> <%--need to change .jsp to servlets to handle this doGET request--%>
+                <li><a href="/Instagrim/Login">Login</a></li> <%--need to change .jsp to servlets to handle this doGET request--%>
                 <li class="footer"><a href="/Instagrim">Home</a></li>
                 <%}%>
             </ul>

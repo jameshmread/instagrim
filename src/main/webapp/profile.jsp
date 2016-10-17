@@ -22,15 +22,15 @@
     </head>
     
         <header>
-            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim ! </h1>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
        
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
-                <li> <a  href="Login" method="GET">  Log Out </a></li>
-                <li><a href="editProfile.jsp"> Edit Profile </a></li>
+                <li> <a  href="/Instagrim/Logout">  Log Out </a></li>
+                <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
                 
                 <% if(profile != null) { %>
                 <% firstName = profile.getFirst_name(); %>

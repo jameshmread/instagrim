@@ -23,7 +23,11 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
  *
  * @author James
  */
-@WebServlet(name = "EditProfile", urlPatterns = {"/EditProfile"})
+@WebServlet(name = "EditProfile", urlPatterns = 
+        {"/EditProfile",
+            "/DeleteProfile",
+            "/DeleteProfile/*"
+        })
 public class EditProfile extends HttpServlet {
 
         Cluster cluster =null;
@@ -43,7 +47,8 @@ public class EditProfile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        RequestDispatcher rd = request.getRequestDispatcher("editProfile.jsp");
+        rd.forward(request, response);
         
     }
 
@@ -58,21 +63,9 @@ public class EditProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        System.out.println("Edirprofile servlet dopost called");
         if(request.getParameter("deleteProfile").equals("true")){
-            HttpSession session = request.getSession();
-            LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
-            User us = new User();
-            String username = lg.getUsername();
-            if(username !=null){
-            us.deleteProfile(lg.getUsername());
-            lg.setLogedout();
-            
-            RequestDispatcher rd=request.getRequestDispatcher("Instagrim"); //index.jsp
-	    rd.forward(request,response);
-            }else{
-                System.out.println("Unable to delete user.");
-            }
+           
         }else{
                
         
@@ -108,8 +101,9 @@ public class EditProfile extends HttpServlet {
             session.setAttribute("ProfileInfo", profile);
             
             System.out.println("Session in servlet "+session);
-            RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
-	    rd.forward(request,response);
+            //RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
+	    //rd.forward(request,response);
+            response.sendRedirect("/Instagrim/profile");
         }
     }
 

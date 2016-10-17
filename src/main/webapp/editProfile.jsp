@@ -16,7 +16,7 @@
     <body>
         <h1>Settings</h1>
        
-        <form method="POST" action="EditProfile">
+        <form method="POST" action="EditProfile?deleteProfile=false">
         <h2>Edit First Name</h2>
         <input type="text" name="firstName">
         <br>
@@ -41,10 +41,9 @@
                 <br/>
                 <input type="submit" value="Edit Profile Picture">
         
-        </form>
-                <form action="EditProfile?deleteProfile=true" method="POST">
-            
-        <input type="submit" Value="Delete">
+            </form>
+                <form action="/Instagrim/DeleteProfile/">
+                    <input type="submit" Value="Delete">
                 </form> 
                 <h3>WARNING. This action CANNOT be undone</h3>
     </body>
