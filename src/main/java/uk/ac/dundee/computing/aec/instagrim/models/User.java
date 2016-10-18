@@ -227,14 +227,36 @@ public class User {
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
             System.out.println("Deleting Profile");
-            
-            PreparedStatement ps = session.prepare("DELETE FROM userprofiles WHERE login =?");
+            PreparedStatement ps;
             ResultSet rs = null;
-            BoundStatement boundStatement = new BoundStatement(ps);
-            rs = session.execute( // this is where the query is executed
-                    boundStatement.bind( // here you are binding the 'boundStatement'
-                            username));
+            BoundStatement boundStatement;
+            try{            
+            ps = session.prepare("DELETE FROM pics WHERE user =?");
+            boundStatement = new BoundStatement(ps);
+            rs = session.execute(boundStatement.bind(username));
+            System.out.println("deleting pics");
+            ps = session.prepare("DELETE FROM likes WHERE username =?");
+            boundStatement = new BoundStatement(ps);
+            rs = session.execute(boundStatement.bind(username));
+            System.out.println("deleting likes");
+            ps = session.prepare("DELETE FROM comments WHERE username =?");
+            boundStatement = new BoundStatement(ps);
+            rs = session.execute(boundStatement.bind(username));
+            System.out.println("deleting comments");
+            ps = session.prepare("DELETE FROM userpiclist WHERE user =?");
+            boundStatement = new BoundStatement(ps);
+            rs = session.execute(boundStatement.bind(username));
+            System.out.println("deleting userpiclist");
+            ps = session.prepare("DELETE FROM userprofiles WHERE login =?");
+            boundStatement = new BoundStatement(ps);
+            rs = session.execute(boundStatement.bind(username));
+            System.out.println("deleting profile");
+            System.out.println("~~~User: " + username + " deleted.~~~");
+            } catch(Exception ex){System.out.println("Unable to delete profile. Exception:  " + ex);}
+            
             session.close();
+            
+            
     }
     
        public void setCluster(Cluster cluster) {

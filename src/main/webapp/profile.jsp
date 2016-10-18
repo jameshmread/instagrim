@@ -13,9 +13,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
               <%LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");%>
-              <%ProfileInfo profile = (ProfileInfo) session.getAttribute("ProfileInfo");%>
+              <%ProfileInfo profile = (ProfileInfo) request.getAttribute("ProfileInfo");%>
+              <%String firstName = profile.getFirst_name(); %>
               <%String username = "NULL"; %>
-              <%String firstName, lastName, email = "NULL"; %>
+              <%boolean userVisiting = (boolean)request.getAttribute("userVisiting");%>
+              <%String otherUsersName = (String)request.getAttribute("otherUsersName");%>
+              
               <title>Profile</title>       
         <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         
@@ -29,32 +32,17 @@
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
-                <li> <a  href="/Instagrim/Logout">  Log Out </a></li>
+                <li><a href="/Instagrim/Logout">  Log Out </a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
-                
-                <% if(profile != null) { %>
-                <% firstName = profile.getFirst_name(); %>
-                <% lastName = profile.getLast_name(); %>
-                <% email = profile.getEmail(); %>
-                <p><%=firstName%></p>
-                <p><%=lastName%></p>
-                <p><%=email%></p>
-                <%}%> 
-                
+         
                 <%--Login link removed as this action is not possible on this page--%>        
         </ul>
-    <body>
-        
-        
-        
-        <% if(lg != null) {
-         if (lg.getlogedin()) {%>
-        <%username = lg.getUsername(); 
-        } 
-        else {
-    %><p>No Username found</p><%
-                } }%>
-                <h1> Welcome <%=username%> </h1><br>
+    
+        <%if(userVisiting){%> <%%>
+        <h1>Visiting: <%=firstName%>'s Profile </h1>
+        <%}else{%>
+        <h1> Welcome <%=firstName%> </h1><br>
+        <%}%>
         
         <p id="bioEdit"> <%=profile.getBio()%></p>   
         <% if(profile.getProfilePicture()!=null){%>

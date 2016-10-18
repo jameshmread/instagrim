@@ -11,25 +11,43 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         <title>Profile Settings</title>
     </head>
+    
+    <header>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
+            <h2 id="instagrimSubheader"> Your world in Black and White</h2>
+        </header>
+       
+        <ul id="navBar">
+                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="/Instagrim">Home</a></li>
+                <li><a href="/Instagrim/profile"> Profile </a></li>
+                <li> <a  href="/Instagrim/Logout">  Log Out </a></li>
+                
+            
+                <%--Login link removed as this action is not possible on this page--%>        
+        </ul>
     <body>
         <% ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo"); %>
         <h1>Settings</h1>
-       
+        <%String firstName = (String)profileInfo.getFirst_name();%>
+        <%String lastName = (String)profileInfo.getLast_name();%>
+        <%String bio = (String)profileInfo.getBio();%>
+        <%String email = (String)profileInfo.getEmail();%>
         <form method="POST" action="EditProfile?deleteProfile=false">
         <h2>Edit First Name</h2>
-        <input type="text" name="firstName" value="<%profileInfo.getFirst_name();%>">
+        <input type="text" name="firstName" value="<%=firstName%>">
         <br>
         <h2>Edit Last Name </h2>
-        <input type="text" name="lastName">
+        <input type="text" name="lastName" value="<%=lastName%>">
         <br>
         <h2>Edit Bio</h2>
-        <input type="text" name="bio">
+        <input type="text" name="bio" value="<%=bio%>">
         <br>
         <h2>Edit Email </h2>
-        <input type="text" name="email">
+        <input type="text" name="email" value="<%=email%>">
         <br>
         <input type="submit" value="Apply Changes"> 
         <%-- will need to validate input when fields are empty. 

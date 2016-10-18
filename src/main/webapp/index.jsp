@@ -12,6 +12,7 @@
 <html>
     <head>
         <% LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn"); %>
+        
         <title>Instagrim</title>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -26,8 +27,9 @@
             <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <% if(lg != null)
-                {%>
-                <li><a href="/Instagrim/profile">Profile</a> </li> <%--calls java servlet --%>
+                {
+                String username = (String)lg.getUsername();%>
+                <li><a href="/Instagrim/profile/<%=username%>">Profile</a> </li> <%--calls java servlet --%>
                 <li><a href="upload.jsp"> Upload</a></li>
                 <li> <a  href="/Instagrim/Logout">  Log Out </a></li>   
                 <%}%>
