@@ -33,7 +33,6 @@ public final class Keyspaces {
             String CreateLikes = "CREATE TABLE if not exists instagrim.likes (\n"
                     + " username text, \n"
                     + " picID uuid, \n"
-                   // + " likeID timestamp, \n" dont think i need this
                     + " PRIMARY KEY (picID, username) \n"
                     + ");";
             String CreateComments = "CREATE TABLE if not exists instagrim.comments (\n"

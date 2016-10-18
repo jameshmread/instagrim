@@ -30,7 +30,7 @@
         </header>
        
         <ul id="navBar">
-                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>

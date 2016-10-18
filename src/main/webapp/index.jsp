@@ -25,7 +25,7 @@
         
         
             <ul id="navBar">
-                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <% if(lg != null)
                 {
                 String username = (String)lg.getUsername();%>

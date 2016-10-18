@@ -107,6 +107,7 @@ public class PicModel {
             System.out.println("Error --> " + ex);
         }
     }
+    
     public void setDatabaseProfilePicture(String username, java.util.UUID uuid){
         cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
@@ -152,9 +153,9 @@ public class PicModel {
         return null;
     }
 
-    public static BufferedImage createThumbnail(BufferedImage img) {
+    public static BufferedImage createThumbnail(BufferedImage img) { 
         img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_GRAYSCALE);
-        // Let's add a little border before we return result.
+        // Let's add a little border before we return result.       
         return pad(img, 2);
     }
     
@@ -186,6 +187,29 @@ public class PicModel {
             }
         }
         return Pics;
+    }
+    
+    public LinkedList<Pic> getAllPics(){
+         java.util.LinkedList<Pic> allPictures = new java.util.LinkedList<>();
+         cluster = CassandraHosts.getCluster();
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT picid from pics LIMIT 500");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute(boundStatement.bind());
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                Pic pic = new Pic();
+                java.util.UUID UUID = row.getUUID("picid");
+                System.out.println("UUID" + UUID.toString());
+                pic.setUUID(UUID);
+                allPictures.add(pic);
+            }
+        }
+        return allPictures;
     }
 
     public Pic getPic(int image_type, java.util.UUID picid) {

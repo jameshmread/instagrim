@@ -22,7 +22,7 @@
         </header>
        
         <ul id="navBar">
-                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/profile/<%=lg.getUsername()%>"> Profile </a></li>
                 <li> <a  href="/Instagrim/Logout">  Log Out </a></li>
@@ -43,7 +43,9 @@
         <input type="text" name="lastName" value="<%=lastName%>">
         <br>
         <h2>Edit Bio</h2>
-        <input type="text" name="bio" value="<%=bio%>">
+        <textarea name="bio" cols="40" rows="5" > 
+            <%=bio%> 
+        </textarea>
         <br>
         <h2>Edit Email </h2>
         <input type="text" name="email" value="<%=email%>">

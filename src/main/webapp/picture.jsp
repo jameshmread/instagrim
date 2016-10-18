@@ -11,16 +11,18 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>put pic title here</title>
+        <link rel="stylesheet" type="text/css" href="Styles.css" />
+        <title>Picture</title>
     </head>
     
             <header>
+                
             <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
             </header>
        
         <ul id="navBar">
-                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>

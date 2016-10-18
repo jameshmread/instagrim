@@ -101,7 +101,7 @@ public class EditProfile extends HttpServlet {
             System.out.println("Session in servlet "+session);
             //RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
 	    //rd.forward(request,response);
-            response.sendRedirect("/Instagrim/profile");
+            response.sendRedirect("/Instagrim/profile/" + lg.getUsername());
         }
     }
 
