@@ -75,9 +75,10 @@ public class profile extends HttpServlet {
             return;
         }
         switch (command) {
-            case 1:
-                getProfile(request, response);
-                break;
+            case 1:{
+                getProfile(request, response, args[2]);
+            }
+            break;
             case 2:
                 System.out.println("Delete profile called");
                 deleteProfile(request, response);
@@ -109,26 +110,38 @@ public class profile extends HttpServlet {
        
     }
     
-    public void getProfile(HttpServletRequest request, HttpServletResponse response)
+    public void getProfile(HttpServletRequest request, HttpServletResponse response, String user)
             throws ServletException, IOException{
 
         session = request.getSession();
         LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
+        User us = new User();
+        us.setCluster(cluster);        
         //ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo");
         String username = loggedIn.getUsername();
+        //checks to see if user= userprofile being requested
+        if(!user.equals(username)) {
+            //for visiting anothers user profile
+            request.setAttribute("userVisiting", true);
+            request.setAttribute("ProfileInfo",us.getUserInfo(user, profileInfo));
+            System.out.println("Visiting other users profile");
+            username = user;
+           }else {
+            //for currently logged in user
+            request.setAttribute("userVisiting", false);
+            request.setAttribute("ProfileInfo", us.getUserInfo(username, profileInfo));
+        }
         
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(username);
         request.setAttribute("Pics", lsPics); 
-        //removed call to method displayImageList
-        //as it requestDispatched then profile had to request dispatch
         
         System.out.println(username);
         if(loggedIn.getlogedin()){
             System.out.println("user should be logged in");
             
-        RequestDispatcher rd = request.getRequestDispatcher("profile.jsp");        
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");        
         rd.forward(request, response);
         
         }
