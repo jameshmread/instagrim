@@ -4,7 +4,7 @@
     Author     : James
 --%>
 
-<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.ProfileInfo"%>
+<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*"%>
 <%@page import="uk.ac.dundee.computing.aec.instagrim.models.PicModel"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,6 +16,7 @@
     </head>
     
     <header>
+        <%LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");%>
             <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
@@ -23,13 +24,11 @@
         <ul id="navBar">
                 <li><a href="gallery.jsp"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
-                <li><a href="/Instagrim/profile"> Profile </a></li>
+                <li><a href="/Instagrim/profile/<%=lg.getUsername()%>"> Profile </a></li>
                 <li> <a  href="/Instagrim/Logout">  Log Out </a></li>
-                
-            
                 <%--Login link removed as this action is not possible on this page--%>        
         </ul>
-    <body>
+        <body>
         <% ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo"); %>
         <h1>Settings</h1>
         <%String firstName = (String)profileInfo.getFirst_name();%>
@@ -65,5 +64,5 @@
                     <input type="submit" Value="Delete">
                 </form> 
                 <h3>WARNING. This action CANNOT be undone</h3>
-    </body>
+        </body>
 </html>

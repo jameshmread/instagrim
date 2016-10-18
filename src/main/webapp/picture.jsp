@@ -13,6 +13,21 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>put pic title here</title>
     </head>
+    
+            <header>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
+            <h2 id="instagrimSubheader"> Your world in Black and White</h2>
+            </header>
+       
+        <ul id="navBar">
+                <li><a href="gallery.jsp"> Browse</a> </li>
+                <li><a href="/Instagrim">Home</a></li>
+                <li><a href="/Instagrim/Logout">  Log Out </a></li>
+                <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
+         
+                <%--Login link removed as this action is not possible on this page--%>        
+        </ul>
+    
     <body><%%>
         <%String picID = (String)request.getAttribute("pictureID"); %>
         <%String picTitle = (String)request.getAttribute("picTitle");%>
