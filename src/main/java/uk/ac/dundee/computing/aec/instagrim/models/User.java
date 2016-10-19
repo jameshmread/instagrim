@@ -29,7 +29,7 @@ import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
  */
 public class User {
     Cluster cluster;
-    HttpSession session;
+    Session session;
     ProfileInfo profile = new ProfileInfo();
     private java.util.UUID profilePicid = null;
     String username = null;
@@ -104,7 +104,8 @@ public class User {
     }
     
     public boolean usernameAlreadyExists(String username){
-        Session session = cluster.connect("instagrim");
+        try{
+        session = cluster.connect("instagrim");
         PreparedStatement ps = 
                 session.prepare("SELECT login FROM userprofiles WHERE login =?");
         ResultSet rs = null;
@@ -112,34 +113,29 @@ public class User {
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         username));
-        
         if (rs.isExhausted()) {
             System.out.println("User doesnt exist");
             return false;
-        } else {
+        } 
+        else {
             for(Row row: rs){
                 if(username.equals(row.getString("login"))) return true;
                 }
         }
-        session.close();
+       }catch(Exception e)
+       {
+           System.out.println("Could not check for existing username " + e);
+           
+           return false;
+       }
+       finally{
+            if(session!=null) session.close();
+        }
         System.out.println("USER DOESNT EXIST YET");
         return false;
     }
     
-    //leave this here for now, probably should be in editprofile servlet
-    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,
-            HttpServletRequest request){
-        session = request.getSession();
-        profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
-        //need to pass the session into this or it cant update the store for the sesison
-        System.out.println(first_name);
-        System.out.println(last_name);
-        System.out.println(email);
-        profile.setFirst_name(first_name);
-        profile.setLast_name(last_name);
-        profile.setEmail(email); 
-        profile.setBio(bio);
-    }
+    
     
     /*
     public void setStoreProfilePicture(java.util.UUID uuid, HttpServletRequest request){
@@ -152,7 +148,7 @@ public class User {
     */
     
     public void setProfileDatabaseInfo(String username, String first_name, String last_name, String email, String bio){
-        //remember to look at keyspaces for editing of bio######
+       try{
         cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("UPDATE userprofiles SET first_name =?, last_name =?, email =?, bio =? WHERE login=?");
@@ -162,13 +158,19 @@ public class User {
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         first_name,last_name,email,bio,username));
         //We are assuming this always works.  Also a transaction would be good here !
-        session.close();
+       }catch(Exception e)
+       {
+           System.out.println("Could not update user info " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
     }
        
    
     public ProfileInfo getUserInfo(String username, ProfileInfo profileInfo){
         this.profile = profileInfo;
-        
+        try{
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = 
                 session.prepare("SELECT first_name, last_name, email, bio, profilePicID FROM userprofiles WHERE login =?");
@@ -194,14 +196,23 @@ public class User {
                      profileInfo.getFirst_name() + profileInfo.getLast_name() 
                      + profileInfo.getEmail());
                 }
+        }return profileInfo;
+        //dont need session.close here as finally block is always executed
+        }catch(Exception e)
+       {
+           System.out.println("Could return user info " + e);
+       }
+       finally{
+            if(session!=null) session.close();   
         }
-        session.close();
         return profileInfo;
+        
     }
 
     public java.util.UUID getProfilePicture(String username){
         java.util.UUID uuid = null;
-        //cluster = CassandraHosts.getCluster();
+        //sometimes i had to use cassandrahosts.getcluster and sometimes not
+        try{
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT profilePicID FROM userprofiles WHERE login =?");
         ResultSet rs = null;
@@ -220,6 +231,14 @@ public class User {
             }
         }
         return uuid;
+        }catch(Exception e)
+       {
+           System.out.println("Could not update user info " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
+        return uuid;
     }
     
      public void deleteProfile(String username){
@@ -230,7 +249,7 @@ public class User {
             PreparedStatement ps;
             ResultSet rs = null;
             BoundStatement boundStatement;
-            try{            
+            try{          
             ps = session.prepare("DELETE FROM pics WHERE user =?");
             boundStatement = new BoundStatement(ps);
             rs = session.execute(boundStatement.bind(username));
