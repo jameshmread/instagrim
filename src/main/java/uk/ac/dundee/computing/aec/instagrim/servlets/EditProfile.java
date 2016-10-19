@@ -31,7 +31,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 public class EditProfile extends HttpServlet {
 
         Cluster cluster =null;
-        
+        ProfileInfo profile;
 
   
 
@@ -65,11 +65,11 @@ public class EditProfile extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("Editprofile servlet dopost called");
         if(request.getParameter("deleteProfile").equals("true")){
-           
+           //remove this and test
         }else{
                
         
-        HttpSession session = request.getSession();
+            HttpSession session = request.getSession();
             ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
             User us = new User();
             LoggedIn lg = new LoggedIn();
@@ -84,8 +84,7 @@ public class EditProfile extends HttpServlet {
         if(bio == null) bio = profile.getBio();
         if(email == null) email = profile.getEmail();
         //request.getParts(); should probably change the above to this as it would be more maintainable
-        
-        
+   
         lg = (LoggedIn)session.getAttribute("LoggedIn");
         
         //String oldUsername = profile.getUsername();
@@ -93,16 +92,30 @@ public class EditProfile extends HttpServlet {
         
             //changing the store for the session 
             //need to do if not all values are entered
-            us.setProfileStoreInfo(firstName, lastName, email, bio, request);
+            setProfileStoreInfo(firstName, lastName, email, bio, request);
             us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);            
             
             session.setAttribute("ProfileInfo", profile);
             
             System.out.println("Session in servlet "+session);
-            //RequestDispatcher rd=request.getRequestDispatcher("profile.jsp"); //index.jsp
-	    //rd.forward(request,response);
+
             response.sendRedirect("/Instagrim/profile/" + lg.getUsername());
         }
+    }
+    
+    
+    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,
+            HttpServletRequest request){
+        HttpSession session = request.getSession();
+        profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
+        //need to pass the session into this or it cant update the store for the sesison
+        System.out.println(first_name);
+        System.out.println(last_name);
+        System.out.println(email);
+        profile.setFirst_name(first_name);
+        profile.setLast_name(last_name);
+        profile.setEmail(email); 
+        profile.setBio(bio);
     }
 
     /**
