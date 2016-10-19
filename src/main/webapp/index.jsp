@@ -29,8 +29,8 @@
                 <% if(lg != null)
                 {
                 String username = (String)lg.getUsername();%>
-                <li><a href="/Instagrim/profile/<%=username%>">Profile</a> </li> <%--calls java servlet --%>
-                <li><a href="upload.jsp"> Upload</a></li>
+                <li><a href="/Instagrim/profile/<%=username%>">Profile</a> </li> 
+                <li><a href="/Instagrim/upload"> Upload</a></li>
                 <li> <a  href="/Instagrim/Logout">  Log Out </a></li>   
                 <%}%>
                     <%
@@ -44,7 +44,7 @@
                             }else{
                                 %>
                  <li><a href="/Instagrim/Register">Register</a></li>
-                <li><a href="/Instagrim/Login">Login</a></li> <%--need to change .jsp to servlets to handle this doGET request--%>
+                <li><a href="/Instagrim/Login">Login</a></li> 
                 <li class="footer"><a href="/Instagrim">Home</a></li>
                 <%}%>
             </ul>

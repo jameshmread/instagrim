@@ -36,6 +36,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
     "/Thumb/*",
     "/Images",
     "/Images/*",
+    "/upload"
   
 })
 @MultipartConfig
@@ -57,7 +58,7 @@ public class Image extends HttpServlet {
         CommandsMap.put("Image", 1);
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
-        CommandsMap.put("Delete", 4);
+        CommandsMap.put("upload", 4);
 
     }
 
@@ -90,7 +91,10 @@ public class Image extends HttpServlet {
             case 3:
                 DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
                 break;
-            
+            case 4:
+                RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
+                rd.forward(request, response);
+                break;
             default:
                 error("Bad Operator", response);
         }
@@ -157,7 +161,7 @@ public class Image extends HttpServlet {
                     System.out.println("Setting profile picture");
                 
                     pm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
-                    pm.insertPic(b, type, type, username, "Profile Picture"); //this has to change using editprofile.jsp to add title
+                    pm.insertPic(b, type, type, username, "Profile Picture", (String)request.getAttribute("filter")); 
                     User us = new User(); 
                     us.setCluster(cluster);
                     ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo");
@@ -166,7 +170,7 @@ public class Image extends HttpServlet {
                     }
                 else{
                 pm.setCluster(cluster);
-                pm.insertPic(b, type, filename, username, title); //added a title so user can name their pictures on upload
+                pm.insertPic(b, type, filename, username, title, (String)request.getParameter("filter")); //added a title so user can name their pictures on upload
                 }
                 //
 

@@ -32,8 +32,10 @@
         <ul id="navBar">
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
-                <li><a href="/Instagrim/Logout">  Log Out </a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
+                <li><a href="/Instagrim/Upload"> Edit Profile </a></li>
+                <li><a href="/Instagrim/Logout">  Log Out </a></li>
+                
          
                 <%--Login link removed as this action is not possible on this page--%>        
         </ul>

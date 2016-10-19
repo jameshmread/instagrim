@@ -64,7 +64,7 @@ public class PicModel {
         return this.enteringProfilePic;
     }
     
-    public void insertPic(byte[] b, String type, String name, String user, String title) {
+    public void insertPic(byte[] b, String type, String name, String user, String title, String filter) {
         try {
             Convertors convertor = new Convertors();
 
@@ -78,10 +78,10 @@ public class PicModel {
             FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/" + picid));
 
             output.write(b);
-            byte []  thumbb = picresize(picid.toString(),types[1]);
+            byte []  thumbb = picresize(picid.toString(),types[1], filter);
             int thumblength= thumbb.length;
             ByteBuffer thumbbuf=ByteBuffer.wrap(thumbb);
-            byte[] processedb = picdecolour(picid.toString(),types[1]);
+            byte[] processedb = picdecolour(picid.toString(),types[1], filter);
             ByteBuffer processedbuf=ByteBuffer.wrap(processedb);
             int processedlength=processedb.length;
             Session session = cluster.connect("instagrim");
@@ -120,10 +120,10 @@ public class PicModel {
         session.close();
     }
 
-    public byte[] picresize(String picid,String type) {
+    public byte[] picresize(String picid,String type, String filter) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
-            BufferedImage thumbnail = createThumbnail(BI);
+            BufferedImage thumbnail = createThumbnail(BI, filter);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(thumbnail, type, baos);
             baos.flush();
@@ -137,10 +137,11 @@ public class PicModel {
         return null;
     }
     
-    public byte[] picdecolour(String picid,String type) {
+    public byte[] picdecolour(String picid,String type, String filter) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
-            BufferedImage processed = createProcessed(BI);
+            BufferedImage processed = createProcessed(BI, filter);
+            
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(processed, type, baos);
             baos.flush();
@@ -152,16 +153,33 @@ public class PicModel {
         }
         return null;
     }
-
-    public static BufferedImage createThumbnail(BufferedImage img) { 
-        img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_GRAYSCALE);
-        // Let's add a little border before we return result.       
+    
+    public static BufferedImage createThumbnail(BufferedImage img, String filter) {
+        switch(filter){
+                case "Light":
+                        img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_BRIGHTER);
+                        break;
+                case "Dark":
+                        img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_DARKER);
+                        break;
+                default: System.out.println("Thumbnail Filter Error"); return null;
+            }       
         return pad(img, 2);
     }
     
-   public static BufferedImage createProcessed(BufferedImage img) {
-        int Width=img.getWidth()-1; 
-        img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE); 
+    public static BufferedImage createProcessed(BufferedImage img, String filter) {
+        int Width=img.getWidth()-1;
+         switch(filter){
+                case "Light":
+                        img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_BRIGHTER);
+                        System.out.println("#### LIGHT ####");
+                        break;
+                case "Dark":
+                       img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_DARKER);
+                       System.out.println("#### DARK ####");
+                       break;
+                default: System.out.println("Picture Filter Error"); return null;
+            }
         return pad(img, 4);
     }
    
