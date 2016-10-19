@@ -63,11 +63,11 @@ public class pictureServlet extends HttpServlet {
         pm.setCluster(cluster);
         String picTitle = (String)pm.getPicTitle(pictureIDToGo);
         LinkedList<String> comments = pm.getCommentList(pictureIDToGo);
-        LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
+        //LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
         LinkedList<String> likes = pm.getLikes(pictureIDToGo);
         //i could cut out the middle man here but to get it working, just keep it in two separate expressions
         request.setAttribute("comments", comments);
-        request.setAttribute("users", users);
+        //request.setAttribute("users", users);
         request.setAttribute("pictureID", pictureIDToGo); 
         request.setAttribute("picTitle", picTitle);
         request.setAttribute("likes", likes);
@@ -101,7 +101,7 @@ public class pictureServlet extends HttpServlet {
             
             pm.deletePicture(picID, lg.getUsername());
             System.out.println("Picture deleted");
-            response.sendRedirect("/Instagrim/profile");
+            response.sendRedirect("/Instagrim/profile/"+lg.getUsername());
         }else 
         if("true".equals(request.getParameter("postComment"))){ 
             String commentText = request.getParameter("commentText");

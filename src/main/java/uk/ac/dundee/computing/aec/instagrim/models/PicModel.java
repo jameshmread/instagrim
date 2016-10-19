@@ -160,7 +160,7 @@ public class PicModel {
                         img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_BRIGHTER);
                         break;
                 case "Dark":
-                        img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_DARKER);
+                        img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_GRAYSCALE);
                         break;
                 default: System.out.println("Thumbnail Filter Error"); return null;
             }       
@@ -175,7 +175,7 @@ public class PicModel {
                         System.out.println("#### LIGHT ####");
                         break;
                 case "Dark":
-                       img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_DARKER);
+                       img = resize(img, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE);
                        System.out.println("#### DARK ####");
                        break;
                 default: System.out.println("Picture Filter Error"); return null;
@@ -301,9 +301,6 @@ public class PicModel {
             
             for (Row row : rs) {
                 title = (String)row.getString("title");
-                //cannot try and get a string straight from result set
-                //need to create a row using the RS
-
             }
             
             System.out.println("Title taken at Picmodel: " + title);
@@ -379,10 +376,11 @@ public class PicModel {
     
     public java.util.LinkedList<String> getCommentList(String picID){
         java.util.UUID uuid = java.util.UUID.fromString(picID);
-        java.util.LinkedList<String> comments = new java.util.LinkedList<>();
+        java.util.LinkedList<String> userAndComments = new java.util.LinkedList<>();
+        java.util.LinkedList<String> user = new java.util.LinkedList<>();
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT commentText FROM comments WHERE picID =?");
+            PreparedStatement ps = session.prepare("SELECT userCommenting, commentText FROM comments WHERE picID =?");
             //need to know which user made which comment 
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
@@ -391,13 +389,15 @@ public class PicModel {
                             uuid));
             
             for (Row row : rs) {
-                comments.push(row.getString("commentText")); //seems too easy....
-                System.out.println("Adding comment");
+                userAndComments.push(row.getString("userCommenting"));
+                System.out.println("Adding username " + row.getString("userCommenting"));
+                userAndComments.push(row.getString("commentText")); 
+                System.out.println("Adding comment " + row.getString("commentText"));
             }
             
-        return  comments;
+        return  userAndComments;
     }
-     
+     /* dont really need this now as returning username and comments together
     public java.util.LinkedList<String> getCommentsUser(String picID){
         java.util.UUID uuid = java.util.UUID.fromString(picID);
         java.util.LinkedList<String> user = new java.util.LinkedList<>();
@@ -418,7 +418,7 @@ public class PicModel {
         
         return  user;
     }
-    
+    */
     public void setLike(String username, String picID){
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
         //Date likeTime = new Date();

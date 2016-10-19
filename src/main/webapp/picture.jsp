@@ -68,13 +68,16 @@
         
         <h3>Comments</h3>
         <%if(comments !=null){%>
-        <%String comment, username;%>
-        <%=comments.size()%>
-            <%for(int i=0; i < comments.size(); i++){
-            comment = (String)comments.get(i);
-            username = (String)usernames.get(i); %>
-            <ul>
-                <li><%=username%>:  <%=comment%></li>
+        <%String username, comment = "NULL";%>
+        <%=comments.size()/2%>
+            <%for(int i=0; i < comments.size(); i++){ 
+    //there will always be even number as a comment adds a user field too. so /2 is fine
+//            username = (String)comments.get(i);
+//            if(i != comments.size())
+//            comment = (String)comments.get(i+1); %>
+           
+            <ul><%--if(i != comments.size())--%>
+                <li><%=(String)comments.get(i)%>: <%i++;%> <%=(String)comments.get(i)%></li>
             </ul>
             <%}%>
         <%%>
