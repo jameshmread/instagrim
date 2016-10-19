@@ -70,13 +70,8 @@
         <%if(comments !=null){%>
         <%String username, comment = "NULL";%>
         <%=comments.size()/2%>
-            <%for(int i=0; i < comments.size(); i++){ 
-    //there will always be even number as a comment adds a user field too. so /2 is fine
-//            username = (String)comments.get(i);
-//            if(i != comments.size())
-//            comment = (String)comments.get(i+1); %>
-           
-            <ul><%--if(i != comments.size())--%>
+            <%for(int i=0; i < comments.size(); i++){ %>         
+            <ul>
                 <li><%=(String)comments.get(i)%>: <%i++;%> <%=(String)comments.get(i)%></li>
             </ul>
             <%}%>
@@ -84,7 +79,7 @@
         <%}else{%><p>No comments yet!</p><%}%>
         
         <%--This delete button should only be visible to user who posted this--%>
-        <form method="POST" action="pictureServlet?picID=<%=picID%>&delete=true">
+        <form action="/Instagrim/delete/<%=picID%>">
             
         <input type="submit" Value="Delete">
         </form>

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.*;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
@@ -27,9 +28,18 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
  *
  * @author James
  */
-@WebServlet(name = "pictureServlet", urlPatterns = {"/pictureServlet", "/pictureServlet/*"})
+@WebServlet(name = "pictureServlet", urlPatterns = 
+        {"/pictureServlet", 
+         "/pictureServlet/*", 
+         "/picture/*",
+         "/delete/*"
+        })
 public class pictureServlet extends HttpServlet {
         Cluster cluster;
+        private HashMap commandsMap = new HashMap();
+        
+        LoggedIn lg;
+        HttpSession session;
         public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
@@ -37,9 +47,10 @@ public class pictureServlet extends HttpServlet {
     }
   // private HashMap CommandsMap = new HashMap();
     public pictureServlet(){
-       ///// CommandsMap.put("Image", 1);
-       // CommandsMap.put("Images", 2);
-       // CommandsMap.put("Thumb", 3);
+        super();
+        commandsMap.put("pictureServlet", 1);
+        commandsMap.put("picture", 2);
+        commandsMap.put("delete", 3);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,9 +65,20 @@ public class pictureServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        
-        String pictureIDToGo = (String)request.getParameter("picID");
+            HttpSession session = request.getSession();
+            lg = (LoggedIn)session.getAttribute("LoggedIn");
+            String username = lg.getUsername();
+                String args[] = Convertors.SplitRequestPath(request);
+        int command;
+        try {
+            command = (Integer) commandsMap.get(args[1]);
+        } catch (Exception et) {
+            response.sendError(500);
+            return;
+        }
+        switch (command) {
+            case 1:{
+                String pictureIDToGo = (String)request.getParameter("picID");
         System.out.println("Picture serverlet recieved the PIC ID as(PARAM): " + pictureIDToGo);
         
         PicModel pm = new PicModel();
@@ -75,6 +97,20 @@ public class pictureServlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
         rd.forward(request, response);
         
+            }
+            break;
+            case 2:
+                //System.out.println("Delete profile called");
+                
+                break;
+            case 3:
+                deletePicture(request, response, args[2], username);
+                break;
+            default:
+                response.sendError(500);
+        }
+        
+       
     }
 
     /**
@@ -90,19 +126,12 @@ public class pictureServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("pictureServlet.doPost() called"); 
         HttpSession session = request.getSession();
-        LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
+        lg = (LoggedIn)session.getAttribute("LoggedIn");
         String picID = (String)request.getParameter("picID");
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
             
-        if("true".equals(request.getParameter("delete"))){
-            System.out.println("Delete Parameter: " + request.getParameter("delete"));
-            System.out.println("PictureID to delete: " + request.getParameter("picID"));
-            
-            pm.deletePicture(picID, lg.getUsername());
-            System.out.println("Picture deleted");
-            response.sendRedirect("/Instagrim/profile/"+lg.getUsername());
-        }else 
+       
         if("true".equals(request.getParameter("postComment"))){ 
             String commentText = request.getParameter("commentText");
             String username = lg.getUsername();
@@ -135,5 +164,17 @@ public class pictureServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void deletePicture(HttpServletRequest request, HttpServletResponse response, String picID, String username)
+    throws ServletException, IOException{
+           PicModel pm = new PicModel();
+        pm.setCluster(cluster);
+            System.out.println("PictureID to delete: " + picID);
+            
+            pm.deletePicture(picID, username);
+            System.out.println("Picture deleted");
+            response.sendRedirect("/Instagrim/profile/"+lg.getUsername());
+        
+      }
 
 }

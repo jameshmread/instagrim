@@ -25,7 +25,7 @@
                 <li><a href="/Instagrim/profile/<%=username%>">Profile</a> </li>
                 <li><a href="/Instagrim/Register">Register</a></li>
                 <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/Logout"> Log Out </a></li>
                 <%-- no profile nor upload --%>
                 <%-- Removed 'your images' as no user will be logged in to view 'their' images on this page--%>
