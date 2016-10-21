@@ -145,10 +145,10 @@ public class profile extends HttpServlet {
         rd.forward(request, response);
         
         }
-        else
+        else{
         response.sendRedirect("/Instagrim");
             System.out.println("user clearly not logged in");
-        
+        }
                         
     }
      
