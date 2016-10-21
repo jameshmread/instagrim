@@ -31,8 +31,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 @WebServlet(name = "pictureServlet", urlPatterns = 
         {"/pictureServlet", 
          "/pictureServlet/*", 
-         "/picture/*",
-         "/delete/*"
+         
+         "/delete/*",
+         "/comment/*"
         })
 public class pictureServlet extends HttpServlet {
         Cluster cluster;
@@ -40,18 +41,21 @@ public class pictureServlet extends HttpServlet {
         
         LoggedIn lg;
         HttpSession session;
+        
+          // private HashMap CommandsMap = new HashMap();
+    public pictureServlet(){
+        super();
+        commandsMap.put("pictureServlet", 1);
+       
+        commandsMap.put("delete", 3);
+        commandsMap.put("comment", 4);
+    }
         public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
         
     }
-  // private HashMap CommandsMap = new HashMap();
-    public pictureServlet(){
-        super();
-        commandsMap.put("pictureServlet", 1);
-        commandsMap.put("picture", 2);
-        commandsMap.put("delete", 3);
-    }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -65,6 +69,7 @@ public class pictureServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("PICTURE SERVLET CALLED");
             HttpSession session = request.getSession();
             lg = (LoggedIn)session.getAttribute("LoggedIn");
             String username = lg.getUsername();
@@ -77,30 +82,14 @@ public class pictureServlet extends HttpServlet {
             return;
         }
         switch (command) {
-            case 1:{
-                String pictureIDToGo = (String)request.getParameter("picID");
-        System.out.println("Picture serverlet recieved the PIC ID as(PARAM): " + pictureIDToGo);
-        
-        PicModel pm = new PicModel();
-        pm.setCluster(cluster);
-        String picTitle = (String)pm.getPicTitle(pictureIDToGo);
-        LinkedList<String> comments = pm.getCommentList(pictureIDToGo);
-        //LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
-        LinkedList<String> likes = pm.getLikes(pictureIDToGo);
-        //i could cut out the middle man here but to get it working, just keep it in two separate expressions
-        request.setAttribute("comments", comments);
-        //request.setAttribute("users", users);
-        request.setAttribute("pictureID", pictureIDToGo); 
-        request.setAttribute("picTitle", picTitle);
-        request.setAttribute("likes", likes);
-        System.out.println("Pic Title is: " + picTitle);
-        RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
-        rd.forward(request, response);
-        
+            case 1:
+            {
+                System.out.println("GET CONTENT: " + args[2]);
+                getContent(request, response, args[2]);
             }
             break;
             case 2:
-                //System.out.println("Delete profile called");
+                //getContent(request, response);
                 
                 break;
             case 3:
@@ -127,7 +116,7 @@ public class pictureServlet extends HttpServlet {
         System.out.println("pictureServlet.doPost() called"); 
         HttpSession session = request.getSession();
         lg = (LoggedIn)session.getAttribute("LoggedIn");
-        String picID = (String)request.getParameter("picID");
+        String picID = (String)request.getParameter("picID"); //hmmmmmm attirbute or param?
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
             
@@ -138,7 +127,7 @@ public class pictureServlet extends HttpServlet {
             //insert comment into database
             pm.insertComment(commentText, username, picID);
             request.setAttribute("picID", picID);
-            response.sendRedirect("/Instagrim/pictureServlet/?picID=" + picID);
+            response.sendRedirect("/Instagrim/pictureServlet/" + picID);
             //use redirects for post, request dispatchers for get 
             // http://www.javapractices.com/topic/TopicAction.do?Id=181
         }else
@@ -150,7 +139,7 @@ public class pictureServlet extends HttpServlet {
                 if(!pm.userLikedPicture(username, picID)) pm.setLike(username, picID);
                 else pm.setUnlike(username, picID);
                 request.setAttribute("picID", picID);
-                response.sendRedirect("/Instagrim/pictureServlet/?picID=" + picID);
+                response.sendRedirect("/Instagrim/pictureServlet/" + picID);
             }
          
     }
@@ -176,5 +165,33 @@ public class pictureServlet extends HttpServlet {
             response.sendRedirect("/Instagrim/profile/"+lg.getUsername());
         
       }
+
+    private void getContent(HttpServletRequest request, HttpServletResponse response, String picID) 
+    throws IOException, ServletException{
+        //String picturefromattribute = (String)request.getAttribute("picID");
+        String pictureIDToGo = (String)picID;
+        //String picturefromPARAM = (String)request.getParameter("picID");
+        System.out.println("Picture serverlet recieved the PIC ID as(ARG): " + pictureIDToGo);
+        //System.out.println("Picture serverlet recieved the PIC ID as(ATTRIBUTE): " + picturefromattribute);
+        //System.out.println("Picture serverlet recieved the PIC ID as(PARAM): " + picturefromPARAM);
+        PicModel pm = new PicModel();
+        pm.setCluster(cluster);
+        String picTitle = (String)pm.getPicTitle(pictureIDToGo);
+        LinkedList<comment> comments = pm.getCommentList(pictureIDToGo);
+        //LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
+        LinkedList<String> likes = pm.getLikes(pictureIDToGo);
+        //i could cut out the middle man here but to get it working, just keep it in two separate expressions
+        
+//        //request.setAttribute("users", users);
+
+        request.setAttribute("pictureID", pictureIDToGo); 
+        
+        request.setAttribute("picTitle", picTitle);
+        request.setAttribute("likes", likes);
+        System.out.println("Pic Title is: " + picTitle);
+        request.setAttribute("comments", comments);
+        RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
+        rd.forward(request, response);
+    }
 
 }

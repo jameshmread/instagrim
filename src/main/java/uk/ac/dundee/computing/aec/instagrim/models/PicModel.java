@@ -42,6 +42,7 @@ import org.imgscalr.Scalr.Method;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.*;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.aec.instagrim.stores.comment;
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
 
 public class PicModel {
@@ -182,11 +183,11 @@ public class PicModel {
             }
         return pad(img, 4);
     }
-   
+   // change this method and the following method to return the owner of the pictures
     public java.util.LinkedList<Pic> getPicsForUser(String User) {
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select picid from userpiclist where user =?");
+        PreparedStatement ps = session.prepare("select picid, user from userpiclist where user =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
@@ -199,8 +200,10 @@ public class PicModel {
             for (Row row : rs) {
                 Pic pic = new Pic();
                 java.util.UUID UUID = row.getUUID("picid");
+                String owner = row.getString("user");
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);
+                //pic.setOwner(owner); //this is a list of objets so i can add the fields all day
                 Pics.add(pic);
             }
         }
@@ -211,7 +214,7 @@ public class PicModel {
          java.util.LinkedList<Pic> allPictures = new java.util.LinkedList<>();
          cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT picid from pics LIMIT 500");
+        PreparedStatement ps = session.prepare("SELECT picid, user from pics LIMIT 500");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute(boundStatement.bind());
@@ -222,8 +225,10 @@ public class PicModel {
             for (Row row : rs) {
                 Pic pic = new Pic();
                 java.util.UUID UUID = row.getUUID("picid");
+                String username = row.getString("user");
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);
+                pic.setOwner(username);
                 allPictures.add(pic);
             }
         }
@@ -374,10 +379,16 @@ public class PicModel {
         System.out.println("SUCCESS! Comment Inserted: " + comment + " From User: " + user);
     }
     
-    public java.util.LinkedList<String> getCommentList(String picID){
+    //refactoring for third time, using a comment object and returning a list of those
+    //how i didnt think of this until now, i have no idea
+    public java.util.LinkedList<comment> getCommentList(String picID){
         java.util.UUID uuid = java.util.UUID.fromString(picID);
-        java.util.LinkedList<String> userAndComments = new java.util.LinkedList<>();
-        java.util.LinkedList<String> user = new java.util.LinkedList<>();
+        //java.util.LinkedList<String> userAndComments = new java.util.LinkedList<>();
+        //java.util.LinkedList<String> user = new java.util.LinkedList<>();
+        
+        comment comment = new comment();
+        LinkedList<comment> commentList = new LinkedList<>();
+        
         cluster = CassandraHosts.getCluster();
          Session session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("SELECT userCommenting, commentText FROM comments WHERE picID =?");
@@ -389,13 +400,13 @@ public class PicModel {
                             uuid));
             
             for (Row row : rs) {
-                userAndComments.push(row.getString("userCommenting"));
-                System.out.println("Adding username " + row.getString("userCommenting"));
-                userAndComments.push(row.getString("commentText")); 
-                System.out.println("Adding comment " + row.getString("commentText"));
+               comment.setCommentText(row.getString("commentText"));
+               System.out.println("Comment text: " + row.getString("commentText"));
+               comment.setUserCommenting(row.getString("userCommenting"));
+               commentList.add(comment);
             }
             
-        return  userAndComments;
+        return  commentList;
     }
      /* dont really need this now as returning username and comments together
     public java.util.LinkedList<String> getCommentsUser(String picID){

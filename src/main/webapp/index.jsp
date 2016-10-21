@@ -39,7 +39,7 @@
                             if (lg.getlogedin()) {
                     %>
 
-                <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
+                <%--<li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>--%>
                     <%}
                             }else{
                                 %>

@@ -19,9 +19,9 @@
         </header>
        
         <ul id="navBar">
-                <li><a href="gallery.jsp"> Browse</a> </li>
-                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                
+                <li><a href="/Instagrim/Login">Login</a></li> 
+                <li><a href="/Instagrim">Home</a></li>
                 <%-- no profile nor upload --%>
                 <%-- Removed 'your images' as no user will be logged in to view 'their' images on this page--%>
                 <%--Login/logout link removed as this action is not possible on this page--%>        

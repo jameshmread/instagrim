@@ -4,23 +4,24 @@
     Author     : James
 --%>
 
+<%@page import="java.util.Iterator"%>
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*"%>
 <%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="Styles.css" />
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         <title>Picture</title>
     </head>
-    
+    <body>
             <header>
-                
             <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
             </header>
-       
+    
         <ul id="navBar">
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
@@ -30,7 +31,7 @@
                 <%--Login link removed as this action is not possible on this page--%>        
         </ul>
     
-    <body><%%>
+    <%%>
         <%String picID = (String)request.getAttribute("pictureID"); %>
         <%String picTitle = (String)request.getAttribute("picTitle");%>
         <%LinkedList comments = (LinkedList)request.getAttribute("comments");%>
@@ -65,18 +66,20 @@
         <%%>
         <%}else{%><p>No-one likes this</p><%}%>
         <br>
-        
-        <h3>Comments</h3>
-        <%if(comments !=null){%>
-        <%String username, comment = "NULL";%>
-        <%=comments.size()/2%>
-            <%for(int i=0; i < comments.size(); i++){ %>         
-            <ul>
-                <li><%=(String)comments.get(i)%>: <%i++;%> <%=(String)comments.get(i)%></li>
-            </ul>
-            <%}%>
-        <%%>
-        <%}else{%><p>No comments yet!</p><%}%>
+        <h1>NEW COMMENTS</h1>
+        <%Iterator<comment> iterator;
+            iterator = comments.iterator();
+            comment c;
+            String commentText;
+            String userCommenting;
+            while (iterator.hasNext()) {
+                c = (comment)iterator.next();
+               
+                %>
+                <ul>
+                    <li>Comment: <%=c.getCommentText()%> By User: <%=c.getUserCommenting()%></li>
+                </ul>
+                <%}%>
         
         <%--This delete button should only be visible to user who posted this--%>
         <form action="/Instagrim/delete/<%=picID%>">

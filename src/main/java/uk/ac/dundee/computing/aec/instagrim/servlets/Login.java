@@ -60,7 +60,7 @@ public class Login extends HttpServlet {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         System.out.println("Login Using post method on Login.java Servlet");
-        
+        if(username.isEmpty()) {response.sendRedirect("/Instagrim"); return;}
         User us=new User();
         us.setCluster(cluster);
         

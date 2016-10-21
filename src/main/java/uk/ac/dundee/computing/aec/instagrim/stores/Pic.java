@@ -18,7 +18,7 @@ public class Pic {
     private int length;
     private String type;
     private java.util.UUID UUID=null;
-
+    private String owner;
     public Pic() {
     }
     public void Pic() {
@@ -54,4 +54,10 @@ public class Pic {
         return image;
     }
     
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
+    public String getOwner(){
+        return this.owner;
+    }
 }

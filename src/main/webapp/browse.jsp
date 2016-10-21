@@ -15,6 +15,22 @@
         <title>Browse</title>
     </head>
     <body>
+    <header>
+            <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
+            <h2 id="instagrimSubheader"> Your world in Black and White</h2>
+        </header>
+       
+        <ul id="navBar">
+                <li><a href="/Instagrim/browse"> Browse</a> </li>
+                <li><a href="/Instagrim">Home</a></li>
+                <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
+                <li><a href="/Instagrim/Upload"> Upload </a></li>
+                <li><a href="/Instagrim/Logout">  Log Out </a></li>
+                
+         
+                <%--Login link removed as this action is not possible on this page--%>        
+        </ul>
+    
         <h1>Explore all the pictures</h1>
         <%
             java.util.LinkedList<Pic> picList = (java.util.LinkedList<Pic>) request.getAttribute("picList");

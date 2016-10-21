@@ -10,6 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
               <%LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");%>
@@ -20,7 +21,7 @@
               <%String otherUsersName = (String)request.getAttribute("otherUsersName");%>
               
               <title>Profile</title>       
-        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
+        
         
     </head>
     
@@ -33,7 +34,7 @@
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
-                <li><a href="/Instagrim/Upload"> Edit Profile </a></li>
+                <li><a href="/Instagrim/Upload"> Upload </a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
                 
          
@@ -51,7 +52,7 @@
         <%String profilePicID = profile.getProfilePicture();%>
         <a href="/Instagrim/Image/<%=profile.getProfilePicture()%> "> 
             <%-- i have finally realised how simple it is to pass params into servlets using urls --%>
-               <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a></br>    
+               <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a><br>    
        <%}else{%>
        <p> No Profile Picture! </p>
         <%}%>
@@ -69,17 +70,18 @@
                 Pic p = (Pic) iterator.next();
                 String userPictureID = p.getSUUID();
         %>
-        <a href="/Instagrim/pictureServlet/?picID=<%=userPictureID%>" >
+        <a href="/Instagrim/pictureServlet/<%=userPictureID%>">
             <img id="userPicture" src="/Instagrim/Image/<%=p.getSUUID()%>" alt="User Picture"></a><br/>
+            Owner: <%=p.getOwner()%>
             <%
             
             }
             }
        %>
-        <%-- if there is a way to forward the SUIDD to page, then i may be able to take the java out --%>
+        
                 <footer>
             <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                <li id="footer"><a href="/Instagrim">Home</a></li>
             </ul>
         </footer>
     
