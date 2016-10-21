@@ -203,7 +203,7 @@ public class PicModel {
                 String owner = row.getString("user");
                 System.out.println("UUID" + UUID.toString());
                 pic.setUUID(UUID);
-                //pic.setOwner(owner); //this is a list of objets so i can add the fields all day
+                pic.setOwner(owner); //this is a list of objets so i can add the fields all day
                 Pics.add(pic);
             }
         }
@@ -386,7 +386,7 @@ public class PicModel {
         //java.util.LinkedList<String> userAndComments = new java.util.LinkedList<>();
         //java.util.LinkedList<String> user = new java.util.LinkedList<>();
         
-        comment comment = new comment();
+        
         LinkedList<comment> commentList = new LinkedList<>();
         
         cluster = CassandraHosts.getCluster();
@@ -400,6 +400,7 @@ public class PicModel {
                             uuid));
             
             for (Row row : rs) {
+               comment comment = new comment();
                comment.setCommentText(row.getString("commentText"));
                System.out.println("Comment text: " + row.getString("commentText"));
                comment.setUserCommenting(row.getString("userCommenting"));

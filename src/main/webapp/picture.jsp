@@ -67,13 +67,12 @@
         <%}else{%><p>No-one likes this</p><%}%>
         <br>
         <h1>NEW COMMENTS</h1>
-        <%Iterator<comment> iterator;
-            iterator = comments.iterator();
+        <%
             comment c;
             String commentText;
             String userCommenting;
-            while (iterator.hasNext()) {
-                c = (comment)iterator.next();
+            for (int i = 0; i < comments.size(); i++) {
+                c = (comment)comments.get(i);
                
                 %>
                 <ul>

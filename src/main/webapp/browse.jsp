@@ -45,7 +45,7 @@
                 Pic p = (Pic) iterator.next();
                 String userPictureID = p.getSUUID();
         %>
-        <a href="/Instagrim/pictureServlet/?picID=<%=userPictureID%>" >
+        <a href="/Instagrim/pictureServlet/<%=userPictureID%>" >
             <img id="userPicture" src="/Instagrim/Image/<%=p.getSUUID()%>" alt="User Picture"></a><br/>
             <%
             
