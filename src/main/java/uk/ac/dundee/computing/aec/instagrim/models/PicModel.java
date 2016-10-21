@@ -312,7 +312,7 @@ public class PicModel {
         session.close();
         return title;
     }
-
+    
     public void deletePicture(String picID, String username){
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
         
@@ -328,7 +328,9 @@ public class PicModel {
                     boundStatement.bind( // here you are binding the 'boundStatement'
                             uuid));
             */
-            PreparedStatement psUserPicList = session.prepare("delete from userpiclist where user =? AND pic_added =?");
+           //there is no user notification that they dont have permission to delete the picture
+           //however, using the two PK's means that a user cannot delete anothers photo
+            PreparedStatement psUserPicList = session.prepare("DELETE FROM userpiclist WHERE user =? AND pic_added =?");
             ResultSet rs1 = null;
             BoundStatement boundStatementUPL = new BoundStatement(psUserPicList);
             rs1 = session.execute( // this is where the query is executed

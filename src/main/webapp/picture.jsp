@@ -71,12 +71,12 @@
             comment c;
             String commentText;
             String userCommenting;
-            for (int i = 0; i < comments.size(); i++) {
+            for (int i = comments.size()-1; i > 0; i--) {
                 c = (comment)comments.get(i);
                
                 %>
                 <ul>
-                    <li>Comment: <%=c.getCommentText()%> By User: <%=c.getUserCommenting()%></li>
+                    <li id="comment">Comment: <%=c.getCommentText()%> By User: <%=c.getUserCommenting()%></li>
                 </ul>
                 <%}%>
         

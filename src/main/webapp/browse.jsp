@@ -15,7 +15,7 @@
         <title>Browse</title>
     </head>
     <body>
-    <header>
+        <header>
             <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
@@ -26,10 +26,15 @@
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
                 <li><a href="/Instagrim/Upload"> Upload </a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
-                
+        </ul>
+                <form method="POST" action="/Instagrim/browse">
+                    <ul id="navBar">
+                        <li> <input type="search" name="pictureTitle" value="Search for Pictures"></li>
+                    </ul>
+                </form>
          
                 <%--Login link removed as this action is not possible on this page--%>        
-        </ul>
+        
     
         <h1>Explore all the pictures</h1>
         <%

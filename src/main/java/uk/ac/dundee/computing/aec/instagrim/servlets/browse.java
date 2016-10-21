@@ -5,6 +5,7 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
+import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -21,7 +22,7 @@ import uk.ac.dundee.computing.aec.instagrim.models.*;
  */
 @WebServlet(name = "browse", urlPatterns = {"/browse"})
 public class browse extends HttpServlet {
-
+        Cluster cluster;
    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -57,6 +58,15 @@ public class browse extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("Browse dopost called");
+        
+        String pictureTitle = (String)request.getParameter("pictureTitle");
+        System.out.println("Picture title to search for: " + pictureTitle);
+        //PicModel pm = new PicModel();
+        //pm.setCluster(cluster);
+        //search pm for get pic via title return, forward picture object onto the
+        //jsp page
+        response.sendRedirect("/Instagrim/browse.jsp");
     }
 
     /**

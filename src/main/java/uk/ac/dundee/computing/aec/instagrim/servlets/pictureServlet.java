@@ -116,7 +116,7 @@ public class pictureServlet extends HttpServlet {
         System.out.println("pictureServlet.doPost() called"); 
         HttpSession session = request.getSession();
         lg = (LoggedIn)session.getAttribute("LoggedIn");
-        String picID = (String)request.getParameter("picID"); //hmmmmmm attirbute or param?
+        String picID = (String)request.getParameter("picID");
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
             
@@ -172,15 +172,12 @@ public class pictureServlet extends HttpServlet {
         String pictureIDToGo = (String)picID;
         //String picturefromPARAM = (String)request.getParameter("picID");
         System.out.println("Picture serverlet recieved the PIC ID as(ARG): " + pictureIDToGo);
-        //System.out.println("Picture serverlet recieved the PIC ID as(ATTRIBUTE): " + picturefromattribute);
-        //System.out.println("Picture serverlet recieved the PIC ID as(PARAM): " + picturefromPARAM);
+        
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
         String picTitle = (String)pm.getPicTitle(pictureIDToGo);
         LinkedList<comment> comments = pm.getCommentList(pictureIDToGo);
-        //LinkedList<String> users = pm.getCommentsUser(pictureIDToGo);
         LinkedList<String> likes = pm.getLikes(pictureIDToGo);
-        //i could cut out the middle man here but to get it working, just keep it in two separate expressions
         
 //        //request.setAttribute("users", users);
 
