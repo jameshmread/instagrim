@@ -8,6 +8,7 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.aec.instagrim.models.*;
+import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+
 
 /**
  *
@@ -58,15 +61,21 @@ public class browse extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        //THIS SHOULD BE IN DO GET
         System.out.println("Browse dopost called");
         
         String pictureTitle = (String)request.getParameter("pictureTitle");
         System.out.println("Picture title to search for: " + pictureTitle);
-        //PicModel pm = new PicModel();
-        //pm.setCluster(cluster);
+        PicModel pm = new PicModel();
+        pm.setCluster(cluster);
+        LinkedList<Pic> pics = pm.getPicsWithTitle(pictureTitle);
         //search pm for get pic via title return, forward picture object onto the
         //jsp page
-        response.sendRedirect("/Instagrim/browse.jsp");
+        request.setAttribute("searchedTitle", pictureTitle);
+        request.setAttribute("picList", pics);
+        RequestDispatcher rd = request.getRequestDispatcher("browse.jsp");
+        rd.forward(request, response);
     }
 
     /**

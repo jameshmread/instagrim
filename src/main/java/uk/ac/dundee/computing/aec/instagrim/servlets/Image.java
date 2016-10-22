@@ -162,7 +162,7 @@ public class Image extends HttpServlet {
                     System.out.println("Setting profile picture");
                 
                     pm.setEnteringProfilePic(true); //tell the PicModel that this is a profile pic
-                    pm.insertPic(b, type, type, username, "Profile Picture", (String)request.getAttribute("filter")); 
+                    pm.insertPic(b, type, type, username, "Profile Picture", "Light"); 
                     User us = new User(); 
                     us.setCluster(cluster);
                     ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo");

@@ -43,8 +43,9 @@
         %>
         <p>No Pictures found</p>
         <%
-        } else {
-            Iterator<Pic> iterator;
+        } else {String title = (String)request.getAttribute("searchedTitle");%>
+            <%if(title!=null){%>Showing Pictures with title: <%=request.getAttribute("searchedTitle")%><%}%>
+            <%Iterator<Pic> iterator;
             iterator = picList.iterator();
             while (iterator.hasNext()) {
                 Pic p = (Pic) iterator.next();

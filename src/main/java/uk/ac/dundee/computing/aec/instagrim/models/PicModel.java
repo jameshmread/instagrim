@@ -505,4 +505,27 @@ public class PicModel {
          System.out.println("USER HAS NOT LIKED THIS, LIKING");
          return false;
     }
+     
+     public LinkedList<Pic> getPicsWithTitle(String title){
+         java.util.LinkedList<Pic> pictures = new java.util.LinkedList<>();
+         cluster = CassandraHosts.getCluster();
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT picid FROM pics WHERE title =? ALLOW FILTERING");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute(boundStatement.bind(title));
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                Pic pic = new Pic();
+                java.util.UUID UUID = row.getUUID("picid");
+                System.out.println("UUID" + UUID.toString());
+                pic.setUUID(UUID);
+                pictures.add(pic);
+            }
+        }
+        return pictures;
+    }
 }

@@ -34,28 +34,30 @@
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
-                <li><a href="/Instagrim/Upload"> Upload </a></li>
+                <li><a href="/Instagrim/upload"> Upload </a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
-                
-         
-                <%--Login link removed as this action is not possible on this page--%>        
         </ul>
+                <form method="GET" action="/Instagrim/profileSearch/">
+                    <ul id="navBar">
+                        <li> <input type="search" name="profileName" value="Search for a User"></li>
+                    </ul>
+                </form>
     
         <%if(userVisiting){%> <%%>
-        <h1>Visiting: <%=firstName%>'s Profile </h1>
+            <h1>Visiting: <%=firstName%>'s Profile </h1>
         <%}else{%>
-        <h1> Welcome <%=firstName%> </h1><br>
+            <h1> Welcome <%=firstName%> </h1><br>
         <%}%>
         
         <p id="bioEdit"> <%=profile.getBio()%></p>   
         <% if(profile.getProfilePicture()!=null){%>
-        <%String profilePicID = profile.getProfilePicture();%>
-        <a href="/Instagrim/Image/<%=profile.getProfilePicture()%> "> 
-            <%-- i have finally realised how simple it is to pass params into servlets using urls --%>
-               <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a><br>    
-       <%}else{%>
-       <p> No Profile Picture! </p>
-        <%}%>
+                <%String profilePicID = profile.getProfilePicture();%>
+                    <a href="/Instagrim/Image/<%=profile.getProfilePicture()%> "> 
+                        <%-- i have finally realised how simple it is to pass params into servlets using urls --%>
+                        <img id="profilePic" src="/Instagrim/Image/<%=profile.getProfilePicture()%> " alt="Profile Picture" ></a><br>    
+            <%}else{%>
+                <p> No Profile Picture! </p>
+            <%}%>
         <%-- MAIN BODY SHOWING USERS PICTURES HERE --%>
         <%
             java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
