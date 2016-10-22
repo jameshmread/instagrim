@@ -27,7 +27,7 @@
                 <li><a href="/Instagrim/Upload"> Upload </a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
         </ul>
-                <form method="POST" action="/Instagrim/browse">
+                <form method="GET" action="/Instagrim/browse">
                     <ul id="navBar">
                         <li> <input type="search" name="pictureTitle" value="Search for Pictures"></li>
                     </ul>
