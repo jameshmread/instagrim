@@ -19,6 +19,30 @@
             <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
             <h2 id="instagrimSubheader"> Your world in Black and White</h2>
         </header>
+            <script>
+                function findPicNames(title){
+                    var xhttp = new XMLHttpRequest();
+                    var url = "/Instagrim/preBrowse/?pictureTitle=" + title;
+                   
+                    xhttp.onreadystatechange = function(){
+                        if (title.length === 0) {
+                            document.getElementById("autoFill").innerHTML = "No Suggestions";
+                            System.out.println("text=null");
+                            return;
+                        }else
+                        {
+                        //http://www.w3schools.com/xml/ajax_xmlhttprequest_response.asp
+                            if (this.readyState === 4 && this.status === 200) { //java script expects === instead of ==  ?? 
+                                document.getElementById("autoFill").innerHTML = this.responseText;
+                                System.out.println("response");
+                            }
+                        }
+                };
+                 xhttp.open("GET", url, true);
+                 xhttp.send();
+            };
+            
+            </script>
        
         <ul id="navBar">
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
@@ -28,9 +52,14 @@
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
         </ul>
                 <form method="GET" action="/Instagrim/browse">
-                    <ul id="navBar">
-                        <li> <input type="search" name="pictureTitle" value="Search for Pictures"></li>
-                    </ul>
+                    
+                        <ul id="navBar">
+                            <li> <input id="picSearch" type="search" name="pictureTitle" onKeyup="findPicNames(this.value)" value="Search for Pictures"></li>
+                        </ul>
+                    <div id="autoFill">
+                    </div>
+                    
+                    
                 </form>
          
                 <%--Login link removed as this action is not possible on this page--%>        

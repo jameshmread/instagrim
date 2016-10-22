@@ -65,7 +65,29 @@ public class PicModel {
         return this.enteringProfilePic;
     }
     
+    /*the method im using is primitive as itll only work for the starting char, however i just want to show how ajax could work in this
+    scenario, the problem is that cassandra doesnt have a 'like' command... or im being silly. since this is a late addition, itll have to do
+    
+    could store each title with given letter in a different cluster or something, read it online somewhere, and then search via cluster
+    but that would mean some clusters are accessed far more often than others
+    */
+    public String setStartingChar(String title){
+        String[] alphabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+        String startingChar = "";
+        for(int i = 0; i < alphabet.length; i++)
+        {
+            //if(title. == alphabet[i])
+            {
+                startingChar = (String)alphabet[i];
+                i = alphabet.length -1;
+            }
+        }System.out.println("Starting char of title: " + startingChar);
+        return startingChar;
+    }
+    
     public void insertPic(byte[] b, String type, String name, String user, String title, String filter) {
+        String firstLetter = setStartingChar(title);
+        
         try {
             Convertors convertor = new Convertors();
 
@@ -506,7 +528,7 @@ public class PicModel {
          return false;
     }
      
-     public LinkedList<Pic> getPicsWithTitle(String title){
+    public LinkedList<Pic> getPicsWithTitle(String title){
          java.util.LinkedList<Pic> pictures = new java.util.LinkedList<>();
          cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
@@ -527,5 +549,32 @@ public class PicModel {
             }
         }
         return pictures;
+    }
+    
+    public String getPictureTitles(String title){
+        
+         String titles = "No Titles returned";
+         String titleRetrieved = "No Titles returned";
+         cluster = CassandraHosts.getCluster();
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT title FROM pics"); //yes, this searches through every title, but it (hopefully) works
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        //System.out.println("Returning everything between: " + title.charAt(0) + " and: " + limit);
+        rs = session.execute(boundStatement.bind()); 
+        if (rs.isExhausted()) {
+            System.out.println("No Images returned");
+            return null;
+        } else {
+            for (Row row : rs) {
+                if(row.getString("title").contains(title))
+                {
+                titleRetrieved = row.getString("title");
+                System.out.println("Title Retrieved: " + titleRetrieved + " Using chars: " + title);
+                titles += " " + titleRetrieved;
+                }
+            }
+        }
+        return titles;
     }
 }
