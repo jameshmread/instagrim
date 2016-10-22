@@ -30,7 +30,8 @@ import uk.ac.dundee.computing.aec.instagrim.models.*;
         urlPatterns = {
          "/profile" ,
          "/profile/*",
-         "/DeleteProfile/"
+         "/DeleteProfile/",
+         "/profileSearch/*"
         })
 
 public class profile extends HttpServlet {
@@ -44,6 +45,7 @@ public class profile extends HttpServlet {
         super();
         commandsMap.put("profile", 1);
         commandsMap.put("DeleteProfile", 2);
+        commandsMap.put("profileSearch", 3);
 }
     
     public void init(ServletConfig config) throws ServletException {
@@ -83,7 +85,15 @@ public class profile extends HttpServlet {
                 System.out.println("Delete profile called");
                 deleteProfile(request, response);
                 break;
-                      
+            case 3:
+                System.out.println("### Profile Argument: " + request.getParameter("profileName"));
+                User us = new User();
+                us.setCluster(cluster);
+                if(us.usernameAlreadyExists(request.getParameter("profileName"))) //got to re-use this code! awesome
+                    response.sendRedirect("/Instagrim/profile/" + request.getParameter("profileName"));
+                else
+                    response.sendRedirect("/Instagrim");
+                break;
             default:
                 response.sendError(500);
         }
