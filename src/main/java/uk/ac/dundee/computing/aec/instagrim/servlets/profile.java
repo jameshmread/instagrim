@@ -3,9 +3,7 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -119,7 +117,7 @@ public class profile extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    public void getProfile(HttpServletRequest request, HttpServletResponse response, String user)
+    private void getProfile(HttpServletRequest request, HttpServletResponse response, String user)
             throws ServletException, IOException{
 
         session = request.getSession();
