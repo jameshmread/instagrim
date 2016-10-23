@@ -131,12 +131,14 @@ public class Image extends HttpServlet {
      */
     private void DisplayImage(int type,String Image, HttpServletResponse response) 
             throws ServletException, IOException {
+        
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-        
-        Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
-        
-        OutputStream out = response.getOutputStream();
+        OutputStream out = null;
+        try{
+        Pic p;
+        p = tm.getPic(type,java.util.UUID.fromString(Image));
+        out = response.getOutputStream();
 
         response.setContentType(p.getType());
         response.setContentLength(p.getLength());
@@ -147,7 +149,14 @@ public class Image extends HttpServlet {
         for (int length = 0; (length = input.read(buffer)) > 0;) {
             out.write(buffer, 0, length);
         }
-        out.close();
+        }catch(java.lang.NullPointerException e)
+        {
+            System.out.println("Picture returned null: " + e);
+            response.sendRedirect("/Instagrim");
+        }
+        finally{
+            if(out!= null) out.close();
+        }
     }
     
      /**

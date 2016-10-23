@@ -71,7 +71,7 @@
             comment c;
             String commentText;
             String userCommenting;
-            for (int i = comments.size()-1; i > 0; i--) {
+            for (int i=0; i < comments.size(); i++) {
                 c = (comment)comments.get(i);
                
                 %>
