@@ -61,6 +61,8 @@
                 <form action="/Instagrim/DeleteProfile/">
                     <input type="submit" Value="Delete">
                 </form> 
-                <h3>WARNING. This action CANNOT be undone</h3>
+                <h3>WARNING. This will delete your profile information<br>
+                    However, your comments and photos will still be visible to everyone else. <br>
+                        This action CANNOT be undone.</h3>
         </body>
 </html>

@@ -244,19 +244,7 @@ public class User {
             PreparedStatement ps;
             ResultSet rs = null;
             BoundStatement boundStatement;
-            try{          
-            ps = session.prepare("DELETE FROM pics WHERE user =?");
-            boundStatement = new BoundStatement(ps);
-            rs = session.execute(boundStatement.bind(username));
-            System.out.println("deleting pics");
-            ps = session.prepare("DELETE FROM likes WHERE username =?");
-            boundStatement = new BoundStatement(ps);
-            rs = session.execute(boundStatement.bind(username));
-            System.out.println("deleting likes");
-            ps = session.prepare("DELETE FROM comments WHERE username =?");
-            boundStatement = new BoundStatement(ps);
-            rs = session.execute(boundStatement.bind(username));
-            System.out.println("deleting comments");
+            try{
             ps = session.prepare("DELETE FROM userpiclist WHERE user =?");
             boundStatement = new BoundStatement(ps);
             rs = session.execute(boundStatement.bind(username));
@@ -264,7 +252,7 @@ public class User {
             ps = session.prepare("DELETE FROM userprofiles WHERE login =?");
             boundStatement = new BoundStatement(ps);
             rs = session.execute(boundStatement.bind(username));
-            System.out.println("deleting profile");
+            
             System.out.println("~~~User: " + username + " deleted.~~~");
             } catch(Exception ex){System.out.println("Unable to delete profile. Exception:  " + ex);}
             

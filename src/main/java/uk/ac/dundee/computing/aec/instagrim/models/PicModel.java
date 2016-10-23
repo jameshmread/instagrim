@@ -327,19 +327,19 @@ public class PicModel {
         return title;
     }
     
-    public void deletePicture(String picID, String username){
+    public void deletePicture(String picID, String username, String title){
         try{
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
         cluster = CassandraHosts.getCluster();
-        session = cluster.connect("instagrim");
+        Session session = cluster.connect("instagrim");
             //deletes from pics and userpiclist so it cant be referenced
             System.out.println("Deleting picture");
             Date picDate = getDateFromPic(picID);
             
-            PreparedStatement ps = session.prepare("DELETE FROM pics WHERE picID =?");
+            PreparedStatement ps = session.prepare("DELETE FROM pics WHERE picID =? AND title =?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
-            rs = session.execute(boundStatement.bind(uuid));
+            rs = session.execute(boundStatement.bind(uuid, title));
             
            //there is no user notification that they dont have permission to delete the picture
            //however, using the two PK's means that a user cannot delete anothers photo
@@ -350,6 +350,7 @@ public class PicModel {
                     boundStatementUPL.bind( // here you are binding the 'boundStatement'
                             username, picDate));
             //both statements combined should delete the picture from the database entirely
+            System.out.println("Picture deleted");
         }catch(Exception e)
        {
            System.out.println("Could not delete picture: " + e);

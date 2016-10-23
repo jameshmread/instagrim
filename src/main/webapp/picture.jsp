@@ -81,7 +81,7 @@
                 <%}%>
         
         <%--This delete button should only be visible to user who posted this--%>
-        <form action="/Instagrim/delete/<%=picID%>">
+        <form action="/Instagrim/delete/<%=picID%>/<%=picTitle%>">
             
         <input type="submit" Value="Delete">
         </form>

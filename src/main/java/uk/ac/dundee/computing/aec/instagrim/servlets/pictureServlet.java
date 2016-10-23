@@ -83,7 +83,7 @@ public class pictureServlet extends HttpServlet {
                 
                 break;
             case 3:
-                deletePicture(request, response, args[2], username);
+                deletePicture(request, response, args[2], username, args[3]);
                 break;
             default:
                 response.sendError(500);
@@ -140,14 +140,14 @@ public class pictureServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void deletePicture(HttpServletRequest request, HttpServletResponse response, String picID, String username)
+    private void deletePicture(HttpServletRequest request, HttpServletResponse response, String picID, String username, String title)
     throws ServletException, IOException{
            PicModel pm = new PicModel();
-        pm.setCluster(cluster);
+            pm.setCluster(cluster);
             System.out.println("PictureID to delete: " + picID);
             
-            pm.deletePicture(picID, username);
-            System.out.println("Picture deleted");
+            pm.deletePicture(picID, username, title);
+            
             response.sendRedirect("/Instagrim/profile/"+lg.getUsername());
         
       }
