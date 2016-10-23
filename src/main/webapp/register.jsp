@@ -32,11 +32,19 @@
             <form method="POST"  action="Register">
                 <ul id="register">
                     <li id="register">User Name <input type="text" name="username"></li>
-                    <li id="error"> <% if((String)request.getAttribute("usernameError") == "true") {%> Invalid username <%} else {} %></li>
+                    <li id="error"> <% if((String)request.getAttribute("usernameError") == "empty") 
+                                        {%> Username cannot be empty <%} else 
+                                        if((String)request.getAttribute("usernameError") == "exists")
+                                        {%>Username already exists, choose another<%} else{%><%}%>
+                    </li>
                     <li id="register">Password <input type="password" name="password"></li>
                     <li id="register">Confirm Password <input type="password" name="confirmPassword"></li>
                     
-                    <li id="error"> <% if((String)request.getAttribute("passwordError") == "true") {%> Passwords do not match <%} else {} %></li>
+                    <li id="error"> <% if((String)request.getAttribute("passwordError") == "noMatch") 
+                                        {%> Passwords do not match <%}else 
+                                        if((String)request.getAttribute("passwordError") == "empty")
+                                        {%>Password cannot be empty<%} else{%><%}%>
+                    </li>
                     <%-- IF time store the users info apart from mismatched passwords (convenience) --%>
                     <li id="register">First Name <input type="text" name="first_name"></li>
                     <li id="register">Last Name <input type="text" name="last_name"></li>

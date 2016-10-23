@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import java.io.IOException;
@@ -18,7 +14,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
 /**
  *
- * @author James
+ * @author James Read
  */
 @WebServlet(name = "Logout", urlPatterns = {"/Logout"})
 public class Logout extends HttpServlet {
@@ -37,14 +33,8 @@ public class Logout extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-                HttpSession session;
-        
-        String logOut = null;
-        logOut = request.getParameter("profile");
+        HttpSession session;
         session=request.getSession();
-        
-        //LoggedIn lg= new LoggedIn();
-        //lg.setLogedout();
         session.invalidate();
         
         RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
@@ -72,7 +62,7 @@ public class Logout extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles logging user out by invalidating their session";
     }// </editor-fold>
 
 }

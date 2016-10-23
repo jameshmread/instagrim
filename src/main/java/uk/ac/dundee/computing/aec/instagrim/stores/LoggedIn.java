@@ -11,7 +11,7 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  * @author Administrator
  */
 public class LoggedIn {
-    private boolean logedin=false;
+    private boolean loggedin=false;
     private String Username = null;
     
     
@@ -28,16 +28,16 @@ public class LoggedIn {
 
     
     public void setLogedin(){
-        logedin=true;
+        loggedin=true;
     }
     public void setLogedout(){
-        logedin=false;
+        loggedin=false;
     }
     
     public void setLoginState(boolean logedin){
-        this.logedin=logedin;
+        this.loggedin=logedin;
     }
     public boolean getlogedin(){
-        return logedin;
+        return loggedin;
     }
 }

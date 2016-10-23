@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -23,7 +19,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
 /**
  *
- * @author James
+ * @author James Read
  */
 @WebServlet(name = "browse", urlPatterns = 
         
@@ -31,6 +27,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
          "/browse/*",
          "/preBrowse/*"
         })
+
 public class browse extends HttpServlet {
         private Cluster cluster;
         private HashMap commandsMap = new HashMap();
@@ -82,10 +79,7 @@ public class browse extends HttpServlet {
                 break;
             default:
                 response.sendError(404);
-        }
-        
-        
-        
+        } 
     }
 
     /**
@@ -102,22 +96,20 @@ public class browse extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * HReturns the browse content for all pictures with a specific title
+     * looking back, i would have liked to add hashtags and use this to search them
+     * but the principle is identical
      *
-     * @return a String containing servlet description
+     * @param request servlet request
+     * @param response servlet response
+     * @param pictureTitle the picture title being searched for
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
-    /*
-    returns the browse content for all pictures with a specific title
-    */
     private void getBrowseContent(HttpServletRequest request, HttpServletResponse response, String pictureTitle) 
     throws ServletException, IOException{
         
-        PicModel pm = new PicModel();
+        pm = new PicModel();
         System.out.println("Picture title to search for: " + pictureTitle);
         
         pm.setCluster(cluster);
@@ -129,9 +121,15 @@ public class browse extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("browse.jsp");
         rd.forward(request, response);
     }
-    /*
-    returns the browse content for all pictures
-    */
+    
+    /**
+     * browses all pictures uploaded to the database 
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private void getBrowseContent(HttpServletRequest request, HttpServletResponse response) 
     throws ServletException, IOException{
             
@@ -142,8 +140,18 @@ public class browse extends HttpServlet {
         rd.forward(request, response);
     }
 
+    /**
+     * Is called using AJAX and returns a list of possible titles to the html
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @param searchString the current search  string the user has typed in, updated every keyup
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private void getSearchSuggestions(HttpServletRequest request, HttpServletResponse response, String searchString) 
     throws ServletException, IOException{
+        
         pm.setCluster(cluster);
         LinkedList<String> returned = pm.getPictureTitles(searchString);
         System.out.println("Returned suggestions: " + returned);
@@ -153,7 +161,15 @@ public class browse extends HttpServlet {
         pw.print(returned);
         pw.flush();
         pw.close();
-        
      }
 
+        /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "handles browsing through all pics, searching for titles and contains ajax called function";
+    }// </editor-fold>
 }

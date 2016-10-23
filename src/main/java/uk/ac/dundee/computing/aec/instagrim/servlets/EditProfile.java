@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -25,14 +21,12 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
  */
 @WebServlet(name = "EditProfile", urlPatterns = 
         {"/EditProfile",
-            "/DeleteProfile",
-            "/DeleteProfile/*"
         })
 public class EditProfile extends HttpServlet {
 
         Cluster cluster =null;
         ProfileInfo profile;
-
+        LoggedIn lg;
   
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,6 +48,7 @@ public class EditProfile extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
+     * Handles the editing of user profile from editprofile.jsp
      *
      * @param request servlet request
      * @param response servlet response
@@ -64,51 +59,54 @@ public class EditProfile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("Editprofile servlet dopost called");
-        if(request.getParameter("deleteProfile").equals("true")){
-           //remove this and test
-        }else{
-               
+           
         
             HttpSession session = request.getSession();
-            ProfileInfo profile = (ProfileInfo)session.getAttribute("ProfileInfo");
+            profile = (ProfileInfo)session.getAttribute("ProfileInfo");
             User us = new User();
-            LoggedIn lg = new LoggedIn();
+            lg = new LoggedIn();
             String firstName,lastName,bio,email = null;
-            
+        //request.getParts(); should probably change the above to this as it would be more maintainable
         firstName = (String)request.getParameter("firstName");
         lastName = (String)request.getParameter("lastName");
         bio = (String)request.getParameter("bio");
         email = (String)request.getParameter("email");
+        /*the following is if the user enters blank information, 
+            the profile is just 'updated' with the existing info
+        */
         if(firstName == null) firstName = profile.getFirst_name();
         if(lastName == null) lastName = profile.getLast_name();
         if(bio == null) bio = profile.getBio();
         if(email == null) email = profile.getEmail();
-        //request.getParts(); should probably change the above to this as it would be more maintainable
+        
    
         lg = (LoggedIn)session.getAttribute("LoggedIn");
         
-        //String oldUsername = profile.getUsername();
-        //String oldBio = profile.getBio();
-        
-            //changing the store for the session 
-            //need to do if not all values are entered
-            setProfileStoreInfo(firstName, lastName, email, bio, request);
-            us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);            
+        setProfileStoreInfo(firstName, lastName, email, bio, request);
+        us.setProfileDatabaseInfo(lg.getUsername(),firstName, lastName, email, bio);            
             
-            session.setAttribute("ProfileInfo", profile);
+        session.setAttribute("ProfileInfo", profile);
             
-            System.out.println("Session in servlet "+session);
+        System.out.println("Session in servlet "+session);
 
-            response.sendRedirect("/Instagrim/profile/" + lg.getUsername());
-        }
+        response.sendRedirect("/Instagrim/profile/" + lg.getUsername());
+        
     }
     
-    
-    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,
-            HttpServletRequest request){
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     * Handles the editing of user profile from editprofile.jsp
+     *
+     * @param first_name users first name
+     * @param last_name users last name
+     * @param email users email address
+     * @param bio users bio
+     * @param request servlet request
+     * 
+     */
+    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,HttpServletRequest request){
         HttpSession session = request.getSession();
         profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
-        //need to pass the session into this or it cant update the store for the sesison
         System.out.println(first_name);
         System.out.println(last_name);
         System.out.println(email);
@@ -125,7 +123,7 @@ public class EditProfile extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles the editProfile.jsp data, for editing the users profile";
     }// </editor-fold>
 
 }

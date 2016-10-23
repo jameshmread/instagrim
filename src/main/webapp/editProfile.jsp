@@ -14,7 +14,7 @@
         <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
         <title>Profile Settings</title>
     </head>
-    
+    <body>
     <header>
         <%LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");%>
             <h1 id="instagrimHeader"> <a href="/Instagrim"> InstaGrim !</a> </h1>
@@ -25,10 +25,9 @@
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/profile/<%=lg.getUsername()%>"> Profile </a></li>
-                <li> <a  href="/Instagrim/Logout">  Log Out </a></li>
-                <%--Login link removed as this action is not possible on this page--%>        
+                <li> <a  href="/Instagrim/Logout">  Log Out </a></li>    
         </ul>
-        <body>
+        
         <% ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo"); %>
         <h1>Settings</h1>
         <%String firstName = (String)profileInfo.getFirst_name();%>
@@ -48,17 +47,14 @@
         </textarea>
         <br>
         <h2>Edit Email </h2>
-        <input type="text" name="email" value="<%=email%>">
+        <input type="email" name="email" value="<%=email%>">
         <br>
         <input type="submit" value="Apply Changes"> 
-        <%-- will need to validate input when fields are empty. 
-        basically a few if's check if empty field, then get from session store [DO THIS IN SERVLET]--%>
         </form>
-        
+        <br>
             <form method="POST" enctype="multipart/form-data" action="Image">
                 <% session.setAttribute("profilePic", true); %>
                 Edit Profile Picture <input type="file" name="profilePic"><br/>                
-                <%-- could have the 'set entering profile pic as a store element in profileInfo --%>
                 <br/>
                 <input type="submit" value="Edit Profile Picture">
             </form>

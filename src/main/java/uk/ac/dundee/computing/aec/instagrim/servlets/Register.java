@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
@@ -24,7 +19,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  *
- * @author Administrator
+ * @author AEC, James Read
  */
 @WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
@@ -75,23 +70,23 @@ public class Register extends HttpServlet {
         String last_name=request.getParameter("last_name");
         String email=request.getParameter("email");
                 
+        //checks if ANY of the mandatory fields are invalid, sends response back and prevents registration
         if(!password.equals(confirmPassword) || password.isEmpty() 
-                || username == null || username.isEmpty() || us.usernameAlreadyExists(username)) 
-        {
-            if(!password.equals(confirmPassword)) request.setAttribute("passwordError","true");
-            if(password.isEmpty()) request.setAttribute("emptyPassword", "true");
-            if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "true");
-            //if(!us.usernameAlreadyExists(username)) request.setAttribute("usernameError", "true");
+                || username == null || username.isEmpty() || us.usernameAlreadyExists(username)){
+            
+            if(!password.equals(confirmPassword)) request.setAttribute("passwordError","noMatch");
+            if(password.isEmpty()) request.setAttribute("passwordError", "empty");
+            if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "empty");
+            if(us.usernameAlreadyExists(username)) request.setAttribute("usernameError", "exists");
             RequestDispatcher rd=request.getRequestDispatcher("register.jsp");            
-            rd.include(request, response);
+            rd.forward(request, response);
         }
         else {
-
-        us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
-        pm = new PicModel();
-        pm.setCluster(cluster);
-        java.util.UUID uuid = java.util.UUID.randomUUID();
-        pm.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
+            us.RegisterUser(username, password, first_name, last_name, email); //creates a user in database
+            pm = new PicModel();
+            pm.setCluster(cluster);
+            java.util.UUID uuid = java.util.UUID.randomUUID();
+            pm.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
         
         //us.setUserInfo(first_name, last_name, email); //sets store with user information
         
@@ -108,7 +103,8 @@ public class Register extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles the registration process for the "
+                + "user and includes mandatory field validation";
     }// </editor-fold>
 
 }

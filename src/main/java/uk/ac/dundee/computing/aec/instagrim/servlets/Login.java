@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
@@ -23,7 +18,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  *
- * @author Administrator
+ * @author AEC, James Read
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
@@ -36,12 +31,19 @@ public class Login extends HttpServlet {
         cluster = CassandraHosts.getCluster();
     }
 
+     /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
         rd.forward(request, response);
-        
     }
 
     
@@ -60,7 +62,11 @@ public class Login extends HttpServlet {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
         System.out.println("Login Using post method on Login.java Servlet");
-        if(username.isEmpty()) {response.sendRedirect("/Instagrim"); return;}
+        
+        if(username.isEmpty()){
+            response.sendRedirect("/Instagrim"); 
+            return;
+        }
         User us=new User();
         us.setCluster(cluster);
         
@@ -85,16 +91,12 @@ public class Login extends HttpServlet {
            // request.setAttribute("ProfileInfo", profileInfo);
             session.setAttribute("ProfileInfo", profileInfo);
             
-            RequestDispatcher rd=request.getRequestDispatcher("index.jsp"); //index.jsp
+            RequestDispatcher rd=request.getRequestDispatcher("index.jsp"); 
 	    rd.forward(request,response);
             
         }else{
-            
             response.sendRedirect("/Instagrim/login.jsp");
-        }
-        
-
-        
+        }  
     }
 
     /**
@@ -104,7 +106,7 @@ public class Login extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles user validation of login and logging in";
     }// </editor-fold>
 
 }

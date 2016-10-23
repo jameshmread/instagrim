@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -26,34 +22,27 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  *
- * @author James
+ * @author James Read
  */
 @WebServlet(name = "pictureServlet", urlPatterns = 
         {"/pictureServlet", 
-         "/pictureServlet/*", 
-         
+         "/pictureServlet/*",
          "/delete/*",
-         "/comment/*"
         })
 public class pictureServlet extends HttpServlet {
-        Cluster cluster;
+        private Cluster cluster;
         private HashMap commandsMap = new HashMap();
-        
-        LoggedIn lg;
-        HttpSession session;
-        
-          // private HashMap CommandsMap = new HashMap();
+        private LoggedIn lg;
+        private HttpSession session;
+       
     public pictureServlet(){
         super();
         commandsMap.put("pictureServlet", 1);
-       
         commandsMap.put("delete", 3);
-        commandsMap.put("comment", 4);
     }
         public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
-        
     }
 
 
@@ -69,11 +58,13 @@ public class pictureServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            
         System.out.println("PICTURE SERVLET CALLED");
-            HttpSession session = request.getSession();
-            lg = (LoggedIn)session.getAttribute("LoggedIn");
-            String username = lg.getUsername();
-                String args[] = Convertors.SplitRequestPath(request);
+        HttpSession session = request.getSession();
+        lg = (LoggedIn)session.getAttribute("LoggedIn");
+        String username = lg.getUsername();
+        
+        String args[] = Convertors.SplitRequestPath(request);
         int command;
         try {
             command = (Integer) commandsMap.get(args[1]);
@@ -98,8 +89,6 @@ public class pictureServlet extends HttpServlet {
             default:
                 response.sendError(500);
         }
-        
-       
     }
 
     /**
@@ -119,12 +108,11 @@ public class pictureServlet extends HttpServlet {
         String picID = (String)request.getParameter("picID");
         PicModel pm = new PicModel();
         pm.setCluster(cluster);
-            
-       
+        
         if("true".equals(request.getParameter("postComment"))){ 
             String commentText = request.getParameter("commentText");
             String username = lg.getUsername();
-            //insert comment into database
+            
             pm.insertComment(commentText, username, picID);
             request.setAttribute("picID", picID);
             response.sendRedirect("/Instagrim/pictureServlet/" + picID);
@@ -134,7 +122,6 @@ public class pictureServlet extends HttpServlet {
             if("true".equals(request.getParameter("like"))){
                 String username = lg.getUsername();
                 //get the specific user if they have liked this, dont itterate through all the users
-                //who have ever liked this, you idiot
                 //if user has not liked this, set like, else if liked set unlike
                 if(!pm.userLikedPicture(username, picID)) pm.setLike(username, picID);
                 else pm.setUnlike(username, picID);
@@ -145,15 +132,15 @@ public class pictureServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Handles deleting a picture, only accepts delete if userame = the user who owns the picture
      *
-     * @return a String containing servlet description
+     * @param request servlet request
+     * @param response servlet response
+     * @param picID the picture id to delete
+     * @param username the username who is deleting the picture (security check)
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
     private void deletePicture(HttpServletRequest request, HttpServletResponse response, String picID, String username)
     throws ServletException, IOException{
            PicModel pm = new PicModel();
@@ -166,11 +153,19 @@ public class pictureServlet extends HttpServlet {
         
       }
 
+    /**
+     * Handles getting the page content for the picture.jsp
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @param picID the picture id which will be displayed
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private void getContent(HttpServletRequest request, HttpServletResponse response, String picID) 
     throws IOException, ServletException{
-        //String picturefromattribute = (String)request.getAttribute("picID");
+        
         String pictureIDToGo = (String)picID;
-        //String picturefromPARAM = (String)request.getParameter("picID");
         System.out.println("Picture serverlet recieved the PIC ID as(ARG): " + pictureIDToGo);
         
         PicModel pm = new PicModel();
@@ -179,16 +174,24 @@ public class pictureServlet extends HttpServlet {
         LinkedList<comment> comments = pm.getCommentList(pictureIDToGo);
         LinkedList<String> likes = pm.getLikes(pictureIDToGo);
         
-//        //request.setAttribute("users", users);
-
-        request.setAttribute("pictureID", pictureIDToGo); 
-        
+        request.setAttribute("pictureID", pictureIDToGo);
         request.setAttribute("picTitle", picTitle);
         request.setAttribute("likes", likes);
-        System.out.println("Pic Title is: " + picTitle);
         request.setAttribute("comments", comments);
+        
+        System.out.println("Pic Title is: " + picTitle);
         RequestDispatcher rd = request.getRequestDispatcher("/picture.jsp");
         rd.forward(request, response);
     }
+    
+        /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Handles the picture pages content along with likes/comments and deleting pictures";
+    }// </editor-fold>
 
 }

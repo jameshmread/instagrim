@@ -1,7 +1,7 @@
 <%-- 
     Document   : upload
     Created on : Sep 22, 2014, 6:31:50 PM
-    Author     : Administrator
+    Author     : AEC
 --%>
 
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*"%>
@@ -24,12 +24,8 @@
                 <li><a href="/Instagrim/browse">Browse</a> </li>
                 <li><a href="/Instagrim/profile/<%=username%>">Profile</a> </li>
                 <li><a href="/Instagrim/Register">Register</a></li>
-                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
                 <li><a href="/Instagrim">Home</a></li>
-                <li><a href="/Instagrim/Logout"> Log Out </a></li>
-                <%-- no profile nor upload --%>
-                <%-- Removed 'your images' as no user will be logged in to view 'their' images on this page--%>
-                <%--Login link removed as this action is not possible on this page--%>        
+                <li><a href="/Instagrim/Logout"> Log Out </a></li>       
         </ul>
  
         <article>
@@ -39,12 +35,12 @@
                 File to upload: <input type="file" name="upfile"><br/>
                 
                 <br/>
-                <input type="text" name="title"> Set Picture Title
+                    <input type="text" name="title"> Set Picture Title
                 <br/>
                     <input type="radio" name="filter" value="Light"> Light<br>
                     <input type="radio" name="filter" value="Dark"> Dark<br>
-                <%-- prevent picture upload title or it'll cause some bother --%>
-                <input type="submit" value="Press"> to upload the file!
+                        <%-- prevent picture upload title or it'll cause some bother --%>
+                    <input type="submit" value="Press"> to upload the file!
             </form>
 
         </article>

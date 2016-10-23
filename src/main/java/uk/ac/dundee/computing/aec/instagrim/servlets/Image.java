@@ -28,6 +28,7 @@ import uk.ac.dundee.computing.aec.instagrim.models.*;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
+ * @author AEC, James Read
  * Servlet implementation class Image
  */
 @WebServlet(urlPatterns = {
@@ -54,7 +55,6 @@ public class Image extends HttpServlet {
      */
     public Image() {
         super();
-        // TODO Auto-generated constructor stub
         CommandsMap.put("Image", 1);
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
@@ -67,13 +67,17 @@ public class Image extends HttpServlet {
         cluster = CassandraHosts.getCluster();
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
+     /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
         int command;
         try {
@@ -101,6 +105,15 @@ public class Image extends HttpServlet {
         }
     }
 
+     /**
+     * handles displaying the userpics to userpics.jsp
+     *
+     * @param User users name
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
@@ -111,10 +124,19 @@ public class Image extends HttpServlet {
 
     }
 
-    private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
+     /**
+     * Handles displaying a single image
+     *
+     * @param type the type of image
+     * @param Image the uuid of the image
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private void DisplayImage(int type,String Image, HttpServletResponse response) 
+            throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-  
         
         Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
         
@@ -131,8 +153,19 @@ public class Image extends HttpServlet {
         }
         out.close();
     }
+    
+     /**
+     * Handles the inserting of pictures into the database through the model
+     * also handles inserting of profile pictures
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
             
@@ -170,21 +203,28 @@ public class Image extends HttpServlet {
                     profileInfo.setProfilePicture(uuid);
                     }
                 else{
-                pm.setCluster(cluster);
-                pm.insertPic(b, type, filename, username, title, (String)request.getParameter("filter")); //added a title so user can name their pictures on upload
-                }
-                //
-
-                //
-                is.close();
+                    pm.setCluster(cluster);
+                    pm.insertPic(b, type, filename, username, title, (String)request.getParameter("filter")); 
+                    //added a title so user can name their pictures on upload
+                    }
+                    is.close();
             }
             RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
-             rd.forward(request, response);
+            rd.forward(request, response);
         }
 
     }
 
-    private void error(String mess, HttpServletResponse response) throws ServletException, IOException {
+     /**
+     * Handles errors which the switch statement produces
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private void error(String mess, HttpServletResponse response) 
+            throws ServletException, IOException {
 
         PrintWriter out = null;
         out = new PrintWriter(response.getOutputStream());
@@ -193,4 +233,14 @@ public class Image extends HttpServlet {
         out.close();
         return;
     }
+    
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Handles Image uploading and returning";
+    }// </editor-fold>
 }

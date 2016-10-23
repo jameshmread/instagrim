@@ -558,7 +558,7 @@ public class PicModel {
          cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT title FROM pics"); 
-        //yes, this searches through every title, but it (hopefully) works
+        //yes, this searches through every title, but it works
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         //System.out.println("Returning everything between: " + title.charAt(0) + " and: " + limit);
