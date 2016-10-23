@@ -2,9 +2,7 @@
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
 /**
@@ -24,9 +21,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
         })
 public class EditProfile extends HttpServlet {
 
-        Cluster cluster =null;
-        ProfileInfo profile;
-        LoggedIn lg;
+        private Cluster cluster =null;
+        private ProfileInfo profile;
+        private LoggedIn lg;
   
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -104,7 +101,7 @@ public class EditProfile extends HttpServlet {
      * @param request servlet request
      * 
      */
-    public void setProfileStoreInfo(String first_name, String last_name, String email, String bio,HttpServletRequest request){
+    private void setProfileStoreInfo(String first_name, String last_name, String email, String bio,HttpServletRequest request){
         HttpSession session = request.getSession();
         profile = (ProfileInfo)session.getAttribute("ProfileInfo"); 
         System.out.println(first_name);

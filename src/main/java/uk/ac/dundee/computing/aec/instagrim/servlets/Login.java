@@ -3,7 +3,6 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,7 +22,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
 
-    Cluster cluster=null;
+    private Cluster cluster=null;
 
     
     public void init(ServletConfig config) throws ServletException {

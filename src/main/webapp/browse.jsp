@@ -48,7 +48,7 @@
                 <li><a href="/Instagrim/browse"> Browse</a> </li>
                 <li><a href="/Instagrim">Home</a></li>
                 <li><a href="/Instagrim/EditProfile"> Edit Profile </a></li>
-                <li><a href="/Instagrim/Upload"> Upload </a></li>
+                <li><a href="/Instagrim/upload"> Upload </a></li>
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
         </ul>
                 <form method="GET" action="/Instagrim/browse">

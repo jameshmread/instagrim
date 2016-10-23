@@ -31,7 +31,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 public class browse extends HttpServlet {
         private Cluster cluster;
         private HashMap commandsMap = new HashMap();
-        PicModel pm = new PicModel();
+        private PicModel pm = new PicModel();
         
 
     /**

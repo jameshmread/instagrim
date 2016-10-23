@@ -25,14 +25,14 @@ import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 /**
  *
- * @author Administrator
+ * @author AEC, James Read
  */
 public class User {
-    Cluster cluster;
-    Session session;
-    ProfileInfo profile = new ProfileInfo();
+    private Cluster cluster;
+    private Session session;
+    private ProfileInfo profile = new ProfileInfo();
     private java.util.UUID profilePicid = null;
-    String username = null;
+    private String username = null;
     
     public User(){
         
@@ -185,13 +185,12 @@ public class User {
             
         } else {
             for(Row row: rs){
-                //does this need to be in a loop? is there some other way to get the Row object? of course there is...
             profileInfo.setFirst_name(row.getString(0));
             profileInfo.setLast_name(row.getString(1));
             profileInfo.setEmail(row.getString(2));
             profileInfo.setBio(row.getString(3));
             profileInfo.setProfilePicture(row.getUUID("profilePicID"));
-            //i know i know there should be a better way to do this
+            
              System.out.println("Profile Info set in user method" + 
                      profileInfo.getFirst_name() + profileInfo.getLast_name() 
                      + profileInfo.getEmail());

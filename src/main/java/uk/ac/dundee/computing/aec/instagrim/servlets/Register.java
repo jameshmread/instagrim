@@ -3,7 +3,6 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,11 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.*;
 
 /**
  *
@@ -23,9 +20,10 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
  */
 @WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
-    Cluster cluster=null;
-    User us;
-    PicModel pm;
+    
+    private Cluster cluster=null;
+    private User us;
+    private PicModel pm;
     
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
@@ -78,6 +76,7 @@ public class Register extends HttpServlet {
             if(password.isEmpty()) request.setAttribute("passwordError", "empty");
             if(username ==null || username.isEmpty()) request.setAttribute("usernameError", "empty");
             if(us.usernameAlreadyExists(username)) request.setAttribute("usernameError", "exists");
+            
             RequestDispatcher rd=request.getRequestDispatcher("register.jsp");            
             rd.forward(request, response);
         }
@@ -86,14 +85,10 @@ public class Register extends HttpServlet {
             pm = new PicModel();
             pm.setCluster(cluster);
             java.util.UUID uuid = java.util.UUID.randomUUID();
-            pm.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture
-        
-        //us.setUserInfo(first_name, last_name, email); //sets store with user information
-        
-	response.sendRedirect("/Instagrim");
+            pm.setDatabaseProfilePicture(username, uuid); //needed to create a place holder profile picture        
+            
+            response.sendRedirect("/Instagrim");
         }
-        
-        
     }
 
     /**

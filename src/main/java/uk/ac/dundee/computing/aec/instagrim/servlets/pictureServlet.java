@@ -3,10 +3,8 @@ package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -30,10 +28,11 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
          "/delete/*",
         })
 public class pictureServlet extends HttpServlet {
-        private Cluster cluster;
-        private HashMap commandsMap = new HashMap();
-        private LoggedIn lg;
-        private HttpSession session;
+        
+    private Cluster cluster;
+    private HashMap commandsMap = new HashMap();
+    private LoggedIn lg;
+    private HttpSession session;
        
     public pictureServlet(){
         super();

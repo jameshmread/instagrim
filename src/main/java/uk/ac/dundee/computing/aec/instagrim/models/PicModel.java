@@ -1,17 +1,6 @@
 package uk.ac.dundee.computing.aec.instagrim.models;
 
-/*
- * Expects a cassandra columnfamily defined as
- * use keyspace2;
- CREATE TABLE Tweets (
- user varchar,
- interaction_time timeuuid,
- tweet varchar,
- PRIMARY KEY (user,interaction_time)
- ) WITH CLUSTERING ORDER BY (interaction_time DESC);
- * To manually generate a UUID use:
- * http://www.famkruithof.net/uuid/uuidgen
- */
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import static com.datastax.driver.core.DataType.text;
@@ -47,8 +36,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.comment;
 
 public class PicModel {
 
-    Cluster cluster;
-    boolean enteringProfilePic;
+    private Cluster cluster;
+    private boolean enteringProfilePic;
+    
     public void PicModel() {
 
     }
@@ -65,28 +55,9 @@ public class PicModel {
         return this.enteringProfilePic;
     }
     
-    /*the method im using is primitive as itll only work for the starting char, however i just want to show how ajax could work in this
-    scenario, the problem is that cassandra doesnt have a 'like' command... or im being silly. since this is a late addition, itll have to do
     
-    could store each title with given letter in a different cluster or something, read it online somewhere, and then search via cluster
-    but that would mean some clusters are accessed far more often than others
-    */
-    public String setStartingChar(String title){
-        String[] alphabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
-        String startingChar = "";
-        for(int i = 0; i < alphabet.length; i++)
-        {
-            //if(title. == alphabet[i])
-            {
-                startingChar = (String)alphabet[i];
-                i = alphabet.length -1;
-            }
-        }System.out.println("Starting char of title: " + startingChar);
-        return startingChar;
-    }
     
     public void insertPic(byte[] b, String type, String name, String user, String title, String filter) {
-        String firstLetter = setStartingChar(title);
         
         try {
             Convertors convertor = new Convertors();
