@@ -145,10 +145,14 @@ public class browse extends HttpServlet {
     private void getSearchSuggestions(HttpServletRequest request, HttpServletResponse response, String searchString) 
     throws ServletException, IOException{
         pm.setCluster(cluster);
-        String returned = pm.getPictureTitles(searchString);
+        LinkedList<String> returned = pm.getPictureTitles(searchString);
         System.out.println("Returned suggestions: " + returned);
-        //RequestDispatcher rd = request.getRequestDispatcher("browse.jsp");
-        //rd.forward(request, response);
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter pw = response.getWriter();
+        pw.print(returned);
+        pw.flush();
+        pw.close();
         
      }
 

@@ -551,13 +551,14 @@ public class PicModel {
         return pictures;
     }
     
-    public String getPictureTitles(String title){
-        
-         String titles = "No Titles returned";
-         String titleRetrieved = "No Titles returned";
+    public LinkedList<String> getPictureTitles(String title){
+        LinkedList<String> titles = new LinkedList<>();
+        // String titles = null;
+         String titleRetrieved = null;
          cluster = CassandraHosts.getCluster();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT title FROM pics"); //yes, this searches through every title, but it (hopefully) works
+        PreparedStatement ps = session.prepare("SELECT title FROM pics"); 
+        //yes, this searches through every title, but it (hopefully) works
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         //System.out.println("Returning everything between: " + title.charAt(0) + " and: " + limit);
@@ -571,7 +572,7 @@ public class PicModel {
                 {
                 titleRetrieved = row.getString("title");
                 System.out.println("Title Retrieved: " + titleRetrieved + " Using chars: " + title);
-                titles += " " + titleRetrieved;
+                titles.add(titleRetrieved);
                 }
             }
         }

@@ -52,16 +52,11 @@
                 <li><a href="/Instagrim/Logout">  Log Out </a></li>
         </ul>
                 <form method="GET" action="/Instagrim/browse">
-                    
-                        <ul id="navBar">
+                     <ul id="navBar">
                             <li> <input id="picSearch" type="search" name="pictureTitle" onKeyup="findPicNames(this.value)" value="Search for Pictures"></li>
                         </ul>
-                    <div id="autoFill">
-                    </div>
-                    
-                    
                 </form>
-         
+                Search Suggestions: <div id="autoFill"></div>
                 <%--Login link removed as this action is not possible on this page--%>        
         
     
