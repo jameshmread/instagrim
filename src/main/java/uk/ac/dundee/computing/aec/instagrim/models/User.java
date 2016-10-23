@@ -14,12 +14,8 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Vector;
-import javax.servlet.http.HttpServletRequest;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.stores.*;
-import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 
@@ -150,7 +146,7 @@ public class User {
     public void setProfileDatabaseInfo(String username, String first_name, String last_name, String email, String bio){
        try{
         cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("UPDATE userprofiles SET first_name =?, last_name =?, email =?, bio =? WHERE login=?");
        
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -171,7 +167,7 @@ public class User {
     public ProfileInfo getUserInfo(String username, ProfileInfo profileInfo){
         this.profile = profileInfo;
         try{
-        Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
         PreparedStatement ps = 
                 session.prepare("SELECT first_name, last_name, email, bio, profilePicID FROM userprofiles WHERE login =?");
         ResultSet rs = null;
@@ -212,7 +208,7 @@ public class User {
         java.util.UUID uuid = null;
         //sometimes i had to use cassandrahosts.getcluster and sometimes not
         try{
-        Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT profilePicID FROM userprofiles WHERE login =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -243,7 +239,7 @@ public class User {
      public void deleteProfile(String username){
       
         cluster = CassandraHosts.getCluster();
-         Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
             System.out.println("Deleting Profile");
             PreparedStatement ps;
             ResultSet rs = null;

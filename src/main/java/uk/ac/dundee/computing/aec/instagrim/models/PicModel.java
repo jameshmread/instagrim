@@ -1,30 +1,21 @@
 package uk.ac.dundee.computing.aec.instagrim.models;
 
-
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
-import static com.datastax.driver.core.DataType.text;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.utils.Bytes;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.security.Timestamp;
 import java.util.Date;
-import java.sql.*;
 import java.util.LinkedList;
 import java.util.UUID;
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpSession;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
 
@@ -32,13 +23,12 @@ import org.imgscalr.Scalr.Method;
 import uk.ac.dundee.computing.aec.instagrim.lib.*;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 import uk.ac.dundee.computing.aec.instagrim.stores.comment;
-//import uk.ac.dundee.computing.aec.stores.TweetStore;
 
 public class PicModel {
 
     private Cluster cluster;
     private boolean enteringProfilePic;
-    
+    private Session session;
     public void PicModel() {
 
     }
@@ -56,9 +46,7 @@ public class PicModel {
     }
     
     
-    
     public void insertPic(byte[] b, String type, String name, String user, String title, String filter) {
-        
         try {
             Convertors convertor = new Convertors();
 
@@ -103,15 +91,22 @@ public class PicModel {
     }
     
     public void setDatabaseProfilePicture(String username, java.util.UUID uuid){
+        try{
         cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
                 PreparedStatement ps = session.prepare("UPDATE userprofiles SET profilePicID =? WHERE login=?");
         System.out.println("ProfilePicture Set as: " + uuid);
         BoundStatement boundStatement = new BoundStatement(ps);
         session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         uuid,username));
-        session.close();
+        }catch(Exception e)
+       {
+           System.out.println("Could not update user profile picture id: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
     }
 
     public byte[] picresize(String picid,String type, String filter) {
@@ -176,16 +171,19 @@ public class PicModel {
             }
         return pad(img, 4);
     }
-   // change this method and the following method to return the owner of the pictures
+   
     public java.util.LinkedList<Pic> getPicsForUser(String User) {
+        
         java.util.LinkedList<Pic> Pics = new java.util.LinkedList<>();
-        Session session = cluster.connect("instagrim");
+        try{
+        session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("select picid, user from userpiclist where user =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
                         User));
+        
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
@@ -200,13 +198,21 @@ public class PicModel {
                 Pics.add(pic);
             }
         }
+        }catch(Exception e)
+       {
+           System.out.println("Could not retrieve user images: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
         return Pics;
     }
     
     public LinkedList<Pic> getAllPics(){
          java.util.LinkedList<Pic> allPictures = new java.util.LinkedList<>();
-         cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
+         try{
+        cluster = CassandraHosts.getCluster();
+        session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT picid, user from pics LIMIT 500");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -225,11 +231,18 @@ public class PicModel {
                 allPictures.add(pic);
             }
         }
+        }catch(Exception e)
+       {
+           System.out.println("Could not return all pictures: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
         return allPictures;
     }
 
     public Pic getPic(int image_type, java.util.UUID picid) {
-        Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
         ByteBuffer bImage = null;
         String type = null;
         int length = 0;
@@ -283,12 +296,14 @@ public class PicModel {
         return p;
 
     }
+    
     //allowing a string in here is easier as only one conversion to uuid has to be done (inside this function)
     public String getPicTitle(String picID){ 
         String title =null;
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+        try{
         cluster = CassandraHosts.getCluster();
-         Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("select title from pics where picID =?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
@@ -302,25 +317,30 @@ public class PicModel {
             }
             
             System.out.println("Title taken at Picmodel: " + title);
-        session.close();
+        }catch(Exception e)
+       {
+           System.out.println("Could not retrieve picture title " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
         return title;
     }
     
     public void deletePicture(String picID, String username){
+        try{
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
-        
         cluster = CassandraHosts.getCluster();
-         Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
             //deletes from pics and userpiclist so it cant be referenced
             System.out.println("Deleting picture");
-            Date picDate = getDateFromPic(picID); //this needs to be called beforefirst delete or it'll never be found
-           /* PreparedStatement ps = session.prepare("delete from pics where picID =?");
+            Date picDate = getDateFromPic(picID);
+            
+            PreparedStatement ps = session.prepare("DELETE FROM pics WHERE picID =?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
-            rs = session.execute( // this is where the query is executed
-                    boundStatement.bind( // here you are binding the 'boundStatement'
-                            uuid));
-            */
+            rs = session.execute(boundStatement.bind(uuid));
+            
            //there is no user notification that they dont have permission to delete the picture
            //however, using the two PK's means that a user cannot delete anothers photo
             PreparedStatement psUserPicList = session.prepare("DELETE FROM userpiclist WHERE user =? AND pic_added =?");
@@ -330,35 +350,43 @@ public class PicModel {
                     boundStatementUPL.bind( // here you are binding the 'boundStatement'
                             username, picDate));
             //both statements combined should delete the picture from the database entirely
-            session.close();
+        }catch(Exception e)
+       {
+           System.out.println("Could not delete picture: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
     }
     
     public Date getDateFromPic(String picID){
-        java.util.UUID uuid = java.util.UUID.fromString(picID);
         Date picDate = new Date();
-        
+        try{
+        java.util.UUID uuid = java.util.UUID.fromString(picID);
         cluster = CassandraHosts.getCluster();
-         Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("select interaction_time from pics where picID =?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
                     boundStatement.bind( // here you are binding the 'boundStatement'
                             uuid));
-            
-            
             for (Row row : rs) {
                 picDate = (Date)row.getDate("interaction_time");
-                //cannot try and get a string straight from result set
-                //need to create a row using the RS
-
             }
             System.out.println("Pic Date: " + picDate);
-        
+        }catch(Exception e)
+       {
+           System.out.println("Could not get date from picture: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
         return picDate;
     }
     
     public void insertComment(String comment, String user, String picID){
+        try{
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
         Date commentID = new Date(); //creates a unique comment id as the primary key
         cluster = CassandraHosts.getCluster();
@@ -369,28 +397,32 @@ public class PicModel {
             rs = session.execute( // this is where the query is executed
                     boundStatement.bind( // here you are binding the 'boundStatement'
                             comment,user,uuid,commentID));
-           
-        session.close(); 
         System.out.println("SUCCESS! Comment Inserted: " + comment + " From User: " + user);
+        }catch(Exception e)
+       {
+           System.out.println("Could not post comment " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        }
+        
     }
     
-    //refactoring for third time, using a comment object and returning a list of those
-    //how i didnt think of this until now, i have no idea
     public java.util.LinkedList<comment> getCommentList(String picID){
+        LinkedList<comment> commentList = new LinkedList<>();
+        try{
         java.util.UUID uuid = java.util.UUID.fromString(picID);
         //java.util.LinkedList<String> userAndComments = new java.util.LinkedList<>();
         //java.util.LinkedList<String> user = new java.util.LinkedList<>();
         
-        
-        LinkedList<comment> commentList = new LinkedList<>();
-        
         cluster = CassandraHosts.getCluster();
-         Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT userCommenting, commentText FROM comments WHERE picID =?");
+        session = cluster.connect("instagrim");
+            
+        PreparedStatement ps = session.prepare("SELECT userCommenting, commentText FROM comments WHERE picID =?");
             //need to know which user made which comment 
-            ResultSet rs = null;
-            BoundStatement boundStatement = new BoundStatement(ps);
-            rs = session.execute( // this is where the query is executed
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
                     boundStatement.bind( // here you are binding the 'boundStatement'
                             uuid));
             
@@ -401,37 +433,23 @@ public class PicModel {
                comment.setUserCommenting(row.getString("userCommenting"));
                commentList.add(comment);
             }
-            
+        }catch(Exception e)
+       {
+           System.out.println("Could not return comment list: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
         return  commentList;
     }
-     /* dont really need this now as returning username and comments together
-    public java.util.LinkedList<String> getCommentsUser(String picID){
-        java.util.UUID uuid = java.util.UUID.fromString(picID);
-        java.util.LinkedList<String> user = new java.util.LinkedList<>();
-        cluster = CassandraHosts.getCluster();
-         Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT userCommenting FROM comments WHERE picID =?");
-            //need to know which user made which comment 
-            //this will probably break when i add multiple users, keep an eye... it did
-            ResultSet rs = null;
-            BoundStatement boundStatement = new BoundStatement(ps);
-            rs = session.execute( // this is where the query is executed
-                    boundStatement.bind( // here you are binding the 'boundStatement'
-                            uuid));
-            
-            for (Row row : rs) {
-                user.add(row.getString("userCommenting")); //seems too easy....
-            }
-        
-        return  user;
-    }
-    */
+     
     public void setLike(String username, String picID){
+        try{
         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
         //Date likeTime = new Date();
 
             cluster = CassandraHosts.getCluster();
-            Session session = cluster.connect("instagrim");
+            session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("INSERT into likes (username, picID) values(?,?)");
             // order of likes is not essential
             //you cannot like a photo twice so the pk of username and picID is unique
@@ -439,32 +457,44 @@ public class PicModel {
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
                     boundStatement.bind( // here you are binding the 'boundStatement'
-                            username,uuid));
-            
-        session.close(); 
+                            username,uuid)); 
         System.out.println("SUCCESS! LIKED by: " + username);
+        }catch(Exception e)
+       {
+           System.out.println("Could not like picture: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
     }
     
     public void setUnlike(String username, String picID){
-         java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
+        try{ 
+        java.util.UUID uuid = java.util.UUID.fromString(picID); //need to convert back to uuid for database
             cluster = CassandraHosts.getCluster();
-            Session session = cluster.connect("instagrim");
+            session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("DELETE FROM likes WHERE username =? AND picID =?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
             rs = session.execute( // this is where the query is executed
                     boundStatement.bind( // here you are binding the 'boundStatement'
                             username,uuid));
-           
-        session.close(); 
         System.out.println("SUCCESS! UNLIKED by: " + username);
+        }catch(Exception e)
+       {
+           System.out.println("Could not unlike picture: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
     }
     
     public LinkedList<String> getLikes(String picID){
-        UUID uuid = UUID.fromString(picID);
         LinkedList<String> likes = new LinkedList<>();
+        try{
+        UUID uuid = UUID.fromString(picID);        
         cluster = CassandraHosts.getCluster();
-            Session session = cluster.connect("instagrim");
+            session = cluster.connect("instagrim");
             PreparedStatement ps = session.prepare("SELECT username FROM likes WHERE picID=?");
             ResultSet rs = null;
             BoundStatement boundStatement = new BoundStatement(ps);
@@ -474,35 +504,51 @@ public class PicModel {
          for (Row row : rs) {
                 likes.push(row.getString("username")); 
                 System.out.println("Adding Like to list");
-            }
-        session.close(); 
+            } 
         System.out.println("SUCCESS! Returned likes from database");
+        }catch(Exception e)
+       {
+           System.out.println("Could not return likes: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
         return likes;
     }
     
-     public boolean userLikedPicture(String username, String picID){
-        UUID uuid = UUID.fromString(picID);
+    public boolean userLikedPicture(String username, String picID){
+        try{
+         UUID uuid = UUID.fromString(picID);
         String returnedUsername = null;
         cluster = CassandraHosts.getCluster();
-            Session session = cluster.connect("instagrim");
-            PreparedStatement ps = session.prepare("SELECT * FROM likes WHERE picID=?");
-            ResultSet rs = null;
-            BoundStatement boundStatement = new BoundStatement(ps);
-            rs = session.execute( // this is where the query is executed
-                    boundStatement.bind( // here you are binding the 'boundStatement'
-                            uuid));
+            
+        session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT * FROM likes WHERE picID=?");
+        ResultSet rs = null;
+        BoundStatement boundStatement = new BoundStatement(ps);
+        rs = session.execute( // this is where the query is executed
+                boundStatement.bind( // here you are binding the 'boundStatement'
+                        uuid));
          for (Row row : rs) {
                 if(username.equals(row.getString("username"))){ System.out.println("USER LIKED THIS, DISLIKING"); return true;}
             }
-         session.close();
+         
          System.out.println("USER HAS NOT LIKED THIS, LIKING");
+        }catch(Exception e)
+       {
+           System.out.println("Could not determine if user has liked photo: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
          return false;
     }
      
     public LinkedList<Pic> getPicsWithTitle(String title){
          java.util.LinkedList<Pic> pictures = new java.util.LinkedList<>();
+        try{
          cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
+        session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT picid FROM pics WHERE title =? ALLOW FILTERING");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
@@ -519,21 +565,28 @@ public class PicModel {
                 pictures.add(pic);
             }
         }
+        }catch(Exception e)
+       {
+           System.out.println("Could not search for pictures using a title: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
         return pictures;
     }
     
     public LinkedList<String> getPictureTitles(String title){
         LinkedList<String> titles = new LinkedList<>();
-        // String titles = null;
-         String titleRetrieved = null;
-         cluster = CassandraHosts.getCluster();
-        Session session = cluster.connect("instagrim");
+        try{
+        String titleRetrieved = null;
+        cluster = CassandraHosts.getCluster();
+        session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT title FROM pics"); 
         //yes, this searches through every title, but it works
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
-        //System.out.println("Returning everything between: " + title.charAt(0) + " and: " + limit);
         rs = session.execute(boundStatement.bind()); 
+        
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
@@ -547,6 +600,13 @@ public class PicModel {
                 }
             }
         }
+        }catch(Exception e)
+       {
+           System.out.println("Could not return list of suggested titles: " + e);
+       }
+       finally{
+            if(session!=null) session.close();
+        } 
         return titles;
     }
 }
