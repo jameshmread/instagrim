@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -24,7 +20,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.*;
 import uk.ac.dundee.computing.aec.instagrim.models.*;
 /**
  *
- * @author James
+ * @author James Read
  */
 @WebServlet(name = "profile", 
         urlPatterns = {
@@ -36,9 +32,9 @@ import uk.ac.dundee.computing.aec.instagrim.models.*;
 
 public class profile extends HttpServlet {
 
-    Cluster cluster=null;
-    HttpSession session;
-    ProfileInfo profileInfo = new ProfileInfo();
+    private Cluster cluster=null;
+    private HttpSession session;
+    private ProfileInfo profileInfo = new ProfileInfo();
     private HashMap commandsMap = new HashMap();
     
     public profile(){
@@ -63,7 +59,6 @@ public class profile extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -97,12 +92,7 @@ public class profile extends HttpServlet {
             default:
                 response.sendError(500);
         }
-        
-                //System.out.println("Returned profile pic");                       
-        //User user = new User();
-        //String usernameRequest = request.getParameter("username");
-        //String passwordRequest = request.getParameter("password");
-      
+   
         
     }
 
@@ -120,14 +110,22 @@ public class profile extends HttpServlet {
        
     }
     
+    /**
+     * Handles getting the profile information for the profile.jsp page
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @param user the userprofile being searched for
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     public void getProfile(HttpServletRequest request, HttpServletResponse response, String user)
             throws ServletException, IOException{
 
         session = request.getSession();
         LoggedIn loggedIn = (LoggedIn)session.getAttribute("LoggedIn");
         User us = new User();
-        us.setCluster(cluster);        
-        //ProfileInfo profileInfo = (ProfileInfo)session.getAttribute("ProfileInfo");
+        us.setCluster(cluster);
         String username = loggedIn.getUsername();
         //checks to see if user= userprofile being requested
         if(!user.equals(username)) {
@@ -137,11 +135,12 @@ public class profile extends HttpServlet {
             System.out.println("Visiting other users profile");
             username = user;
            }else {
-            //for currently logged in user
+            //for currently logged in user visiting their own profile
             request.setAttribute("userVisiting", false);
             request.setAttribute("ProfileInfo", us.getUserInfo(username, profileInfo));
         }
         
+        //gets all the pictures for the user
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
         java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(username);
@@ -151,66 +150,34 @@ public class profile extends HttpServlet {
         if(loggedIn.getlogedin()){
             System.out.println("user should be logged in");
             
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");        
-        rd.forward(request, response);
-        
+            RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");        
+            rd.forward(request, response);
         }
         else{
-        response.sendRedirect("/Instagrim");
+            response.sendRedirect("/Instagrim");
             System.out.println("user clearly not logged in");
         }
                         
     }
-     
-    
-    public void getUserPictures(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
-         System.out.println("Attempting to get user pictures");
-         response.setContentType("text/html");
-         PrintWriter pw = response.getWriter();
-         
-            java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics"); //Pics
-            if (lsPics == null) {
-        
-        System.out.println("request for pics:" + lsPics);
-        
-        } else {
-            Iterator<Pic> iterator;
-            iterator = lsPics.iterator();
-            while (iterator.hasNext()) {
-                
-                Pic p = (Pic) iterator.next();
-                //pw.println("<img id='userPic' src='" + iterator.next() + "' alt='userImage' style='width:100px;height:100px'>");
-                System.out.print("Iterating");
-                pw.println("<p><a href='/Instagrim/Image/" + p.getSUUID() + "<img id='userPic' src='/Instagrim/Thumb/" + p.getSUUID() + "' alt'userImage' </a></p><br/>");
 
-            }
-            }
-            pw.flush();
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp"); // /UsersPics.jsp
-        request.setAttribute("Pics", lsPics);
-        rd.forward(request, response);  
-        
-    }
-        
-
-    /**
-     * Returns a short description of the servlet.
+        /**
+     * Handles deleting the profile
      *
-     * @return a String containing servlet description
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
     private void deleteProfile(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException{
+        
             System.out.println("Deleting user");
             HttpSession session = request.getSession();
+            
             LoggedIn lg = (LoggedIn)session.getAttribute("LoggedIn");
             String username = lg.getUsername();
             User us = new User();
+            
             if(username !=null){
             us.deleteProfile(username);
             lg.setLogedout();
@@ -220,5 +187,16 @@ public class profile extends HttpServlet {
                 System.out.println("Unable to delete user.");
             }
      }
+    
+        /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Handles getting profile information to allow the creation of "
+                + "profile.jsp, handles visiting others profile pages via search";
+    }// </editor-fold>
 
 }
