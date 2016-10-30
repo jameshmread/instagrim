@@ -1,3 +1,6 @@
+Below is the assignment brief given to me. This assignment was to learn about the Model View Controler aspect of web development along
+with basic JSP programming. This was not a project about the website asthetic, rather it was about features and function.
+
 Instagrim  is an example web app using Cassandra as a back end.   The app allows picture uploads, creates a thumbnail and 
 a  B/W version of the picture, and a simple login.
 
